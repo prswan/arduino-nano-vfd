@@ -22,8 +22,8 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef IVfdLayout_h
-#define IVfdLayout_h
+#ifndef IVfdLayout7Seg_h
+#define IVfdLayout7Seg_h
 
 #include "Arduino.h"
 #include "Types.h"
@@ -77,7 +77,7 @@ typedef struct _SegmentGroup7Seg
 //
 // Interface for the data container class holding the characteristics of the VFD.
 //
-class IVfdLayout
+class IVfdLayout7Seg
 {
 public:
     //

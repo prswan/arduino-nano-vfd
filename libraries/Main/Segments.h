@@ -41,6 +41,7 @@ typedef enum {
     S_7SEG_e,
     S_7SEG_f,
     S_7SEG_g,
+    S_7SEG_DP, // Decimal Point
 
     //
     // 14 segment display additions
@@ -53,6 +54,7 @@ typedef enum {
     S_14SEG_k,  // Sony r
     S_14SEG_l,  // Sony p
     S_14SEG_m,  // Sony n
+    S_14SEG_DP, // Decimal Point
 
     //
     // 15 segment centre dot addition
@@ -68,7 +70,6 @@ typedef enum {
     S_16SEG_d2,
 
     // Character separators
-    S_DECIMAL_POINT,
     S_COLON,
 
     //

@@ -138,6 +138,8 @@ bool SonyTCWR775Layout::getSegmentGroup7Seg(
 }
 
 /*
+TODO: The "-" sign and Dp are not listed/mapped here.
+
 Right side symbols
 G1 S1 - "DOLBY NR" S_TEXT_DOLBY_NR
 G1 S2 - white square 'B' S_SYMBOL_WHITE_SQUARE_B

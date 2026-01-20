@@ -35,7 +35,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 
   IVfdPinout *vfdPinout = new SonyTCWR775Pinout();
-  IVfdLayout *vfdLayout = new SonyTCWR775Layout();
+  IVfdLayout7Seg *vfdLayout7Seg = new SonyTCWR775Layout();
 
-  Main(vfdPinout, vfdLayout);
+  Main(vfdPinout, vfdLayout7Seg);
 }

@@ -26,8 +26,8 @@
 #define Main_h
 
 #include "IVfdPinout.h"
-#include "IVfdLayout.h"
+#include "IVfdLayout7Seg.h"
 
-void Main(IVfdPinout *vfdPinout, IVfdLayout *vfdLayout);
+void Main(IVfdPinout *vfdPinout, IVfdLayout7Seg *vfdLayout7Seg);
 
 #endif

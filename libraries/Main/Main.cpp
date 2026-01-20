@@ -81,7 +81,7 @@ Step 1
 
 #define LED_BUILTIN (13)
 
-void Main(IVfdPinout *vfdPinout, IVfdLayout *vfdLayout)
+void Main(IVfdPinout *vfdPinout, IVfdLayout7Seg *vfdLayout7Seg)
 {
     Buttons *buttons = new Buttons(
         BUTTON_PIN_1,
@@ -100,7 +100,7 @@ void Main(IVfdPinout *vfdPinout, IVfdLayout *vfdLayout)
         AN5818_BLANK);
 
     ICharacter *char7seg = new Char7Seg(
-        vfdLayout,
+        vfdLayout7Seg,
         display);
 
     // The LayoutFinder app
