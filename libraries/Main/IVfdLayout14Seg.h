@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025, Paul R. Swan
+// Copyright (c) 2026, Paul R. Swan
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -22,19 +22,20 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef IVfdLayout7Seg_h
-#define IVfdLayout7Seg_h
+#ifndef IVfdLayout14Seg_h
+#define IVfdLayout14Seg_h
 
 #include "Arduino.h"
 #include "Types.h"
 #include "Segments.h"
 
 //
-// Segment group for 7 segment display characters.
+// Segment group for 14 segment display characters,
+// including 15 segment versions with the centre dot.
 // Character encoding is more efficient with direct index.
 // As an array, this can represent a group of characters.
 //
-typedef struct _SegmentGroup7Seg
+typedef struct _SegmentGroup14Seg
 {
     SegmentMap a;
     SegmentMap b;
@@ -42,18 +43,29 @@ typedef struct _SegmentGroup7Seg
     SegmentMap d;
     SegmentMap e;
     SegmentMap f;
-    SegmentMap g;
+    SegmentMap g1;
+    SegmentMap g2;
+    SegmentMap h;
+    SegmentMap i;
+    SegmentMap j;
+    SegmentMap k;
+    SegmentMap l;
+    SegmentMap m;
+    // Optional Decimal Point on some characters
+    SegmentMap dp;
+    // Optional centre dot for some displays
+    SegmentMap s;
 
-} SegmentGroup7Seg;
+} SegmentGroup14Seg;
 
 //
 // Interface for the data container class holding the characteristics of the VFD.
 //
-class IVfdLayout7Seg
+class IVfdLayout14Seg
 {
 public:
     //
-    // Returns the SegmentMap groups for one column of 7 segment digits
+    // Returns the SegmentMap groups for one column of 14 segment digits
     // Separate groups are used for each row of digits
     // e.g. for 2 digit rows call twice to get each map.
     //
@@ -61,9 +73,9 @@ public:
     //
     // returns false if a group doesn't exist.
     //
-    virtual bool getSegmentGroup7Seg(
+    virtual bool getSegmentGroup14Seg(
         UINT8 row,
-        const SegmentGroup7Seg **p_segGroup,
+        const SegmentGroup14Seg **p_segGroup,
         UINT8 *numEntries) = 0;
 };
 

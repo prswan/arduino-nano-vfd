@@ -72,16 +72,11 @@ Step 1
 #define BUTTON_PIN_2 (3)
 #define BUTTON_PIN_3 (7)
 
-// AN5818 Digital pin mappings
-
-#define AN5818_STROBE (1) // Rising edge clocked
-#define AN5818_BLANK (9)  // Hi == All outputs disabled
-
 // On board LED
 
 #define LED_BUILTIN (13)
 
-void Main(IVfdPinout *vfdPinout, IVfdLayout7Seg *vfdLayout7Seg)
+void Main(Display *display, ICharacter *character)
 {
     Buttons *buttons = new Buttons(
         BUTTON_PIN_1,
@@ -94,20 +89,11 @@ void Main(IVfdPinout *vfdPinout, IVfdLayout7Seg *vfdLayout7Seg)
         return;
     }
 
-    Display *display = new Display(
-        vfdPinout,
-        AN5818_STROBE,
-        AN5818_BLANK);
-
-    ICharacter *char7seg = new Char7Seg(
-        vfdLayout7Seg,
-        display);
-
     // The LayoutFinder app
     IApp *app = new LayoutFinder(
         buttons,
         display,
-        char7seg);
+        character);
 
     // Main loop
     while (1)

@@ -47,80 +47,82 @@
 // These were documented in the service manual.
 //
 static const SegmentGroup7Seg s_segmentGroup7Seg[] PROGMEM =
+{
+    // seg, row ,col, pinG, pinS
     {
-        //      seg,   row ,col, pinG, pinS
-        {
-            {S_7SEG_a, 0, 0, 5, 1},
-            {S_7SEG_b, 0, 0, 5, 2},
-            {S_7SEG_c, 0, 0, 5, 3},
-            {S_7SEG_d, 0, 0, 5, 4},
-            {S_7SEG_e, 0, 0, 5, 5},
-            {S_7SEG_f, 0, 0, 5, 6},
-            {S_7SEG_g, 0, 0, 5, 7}},
-        {
-            {S_7SEG_a, 0, 1, 5, 9},
-            {S_7SEG_b, 0, 1, 5, 10},
-            {S_7SEG_c, 0, 1, 5, 11},
-            {S_7SEG_d, 0, 1, 5, 12},
-            {S_7SEG_e, 0, 1, 5, 13},
-            {S_7SEG_f, 0, 1, 5, 14},
-            {S_7SEG_g, 0, 1, 5, 15}
-        },
-        {
-            {S_7SEG_a, 0, 2, 4, 1},
-            {S_7SEG_b, 0, 2, 4, 2},
-            {S_7SEG_c, 0, 2, 4, 3},
-            {S_7SEG_d, 0, 2, 4, 4},
-            {S_7SEG_e, 0, 2, 4, 5},
-            {S_7SEG_f, 0, 2, 4, 6},
-            {S_7SEG_g, 0, 2, 4, 7},
-        },
-        {
-            {S_7SEG_a, 0, 3, 4, 9},
-            {S_7SEG_b, 0, 3, 4, 10},
-            {S_7SEG_c, 0, 3, 4, 11},
-            {S_7SEG_d, 0, 3, 4, 12},
-            {S_7SEG_e, 0, 3, 4, 13},
-            {S_7SEG_f, 0, 3, 4, 14},
-            {S_7SEG_g, 0, 3, 4, 15},
-        },
-        {
-            {S_7SEG_a, 0, 4, 3, 1},
-            {S_7SEG_b, 0, 4, 3, 2},
-            {S_7SEG_c, 0, 4, 3, 3},
-            {S_7SEG_d, 0, 4, 3, 4},
-            {S_7SEG_e, 0, 4, 3, 5},
-            {S_7SEG_f, 0, 4, 3, 6},
-            {S_7SEG_g, 0, 4, 3, 7},
-        },
-        {
-            {S_7SEG_a, 0, 5, 3, 9},
-            {S_7SEG_b, 0, 5, 3, 10},
-            {S_7SEG_c, 0, 5, 3, 11},
-            {S_7SEG_d, 0, 5, 3, 12},
-            {S_7SEG_e, 0, 5, 3, 13},
-            {S_7SEG_f, 0, 5, 3, 14},
-            {S_7SEG_g, 0, 5, 3, 15},
-        },
-        {
-            {S_7SEG_a, 0, 6, 2, 1},
-            {S_7SEG_b, 0, 6, 2, 2},
-            {S_7SEG_c, 0, 6, 2, 3},
-            {S_7SEG_d, 0, 6, 2, 4},
-            {S_7SEG_e, 0, 6, 2, 5},
-            {S_7SEG_f, 0, 6, 2, 6},
-            {S_7SEG_g, 0, 6, 2, 7},
-        },
-        {
-            {S_7SEG_a, 0, 7, 2, 9},
-            {S_7SEG_b, 0, 7, 2, 10},
-            {S_7SEG_c, 0, 7, 2, 11},
-            {S_7SEG_d, 0, 7, 2, 12},
-            {S_7SEG_e, 0, 7, 2, 13},
-            {S_7SEG_f, 0, 7, 2, 14},
-            {S_7SEG_g, 0, 7, 2, 15},
-        },
-        {{S_NONE}}};
+        {S_7SEG_a, 0, 0, 5, 1},
+        {S_7SEG_b, 0, 0, 5, 2},
+        {S_7SEG_c, 0, 0, 5, 3},
+        {S_7SEG_d, 0, 0, 5, 4},
+        {S_7SEG_e, 0, 0, 5, 5},
+        {S_7SEG_f, 0, 0, 5, 6},
+        {S_7SEG_g, 0, 0, 5, 7},
+    },
+    {
+        {S_7SEG_a, 0, 1, 5, 9},
+        {S_7SEG_b, 0, 1, 5, 10},
+        {S_7SEG_c, 0, 1, 5, 11},
+        {S_7SEG_d, 0, 1, 5, 12},
+        {S_7SEG_e, 0, 1, 5, 13},
+        {S_7SEG_f, 0, 1, 5, 14},
+        {S_7SEG_g, 0, 1, 5, 15},
+    },
+    {
+        {S_7SEG_a, 0, 2, 4, 1},
+        {S_7SEG_b, 0, 2, 4, 2},
+        {S_7SEG_c, 0, 2, 4, 3},
+        {S_7SEG_d, 0, 2, 4, 4},
+        {S_7SEG_e, 0, 2, 4, 5},
+        {S_7SEG_f, 0, 2, 4, 6},
+        {S_7SEG_g, 0, 2, 4, 7},
+    },
+    {
+        {S_7SEG_a, 0, 3, 4, 9},
+        {S_7SEG_b, 0, 3, 4, 10},
+        {S_7SEG_c, 0, 3, 4, 11},
+        {S_7SEG_d, 0, 3, 4, 12},
+        {S_7SEG_e, 0, 3, 4, 13},
+        {S_7SEG_f, 0, 3, 4, 14},
+        {S_7SEG_g, 0, 3, 4, 15},
+    },
+    {
+        {S_7SEG_a, 0, 4, 3, 1},
+        {S_7SEG_b, 0, 4, 3, 2},
+        {S_7SEG_c, 0, 4, 3, 3},
+        {S_7SEG_d, 0, 4, 3, 4},
+        {S_7SEG_e, 0, 4, 3, 5},
+        {S_7SEG_f, 0, 4, 3, 6},
+        {S_7SEG_g, 0, 4, 3, 7},
+    },
+    {
+        {S_7SEG_a, 0, 5, 3, 9},
+        {S_7SEG_b, 0, 5, 3, 10},
+        {S_7SEG_c, 0, 5, 3, 11},
+        {S_7SEG_d, 0, 5, 3, 12},
+        {S_7SEG_e, 0, 5, 3, 13},
+        {S_7SEG_f, 0, 5, 3, 14},
+        {S_7SEG_g, 0, 5, 3, 15},
+    },
+    {
+        {S_7SEG_a, 0, 6, 2, 1},
+        {S_7SEG_b, 0, 6, 2, 2},
+        {S_7SEG_c, 0, 6, 2, 3},
+        {S_7SEG_d, 0, 6, 2, 4},
+        {S_7SEG_e, 0, 6, 2, 5},
+        {S_7SEG_f, 0, 6, 2, 6},
+        {S_7SEG_g, 0, 6, 2, 7},
+    },
+    {
+        {S_7SEG_a, 0, 7, 2, 9},
+        {S_7SEG_b, 0, 7, 2, 10},
+        {S_7SEG_c, 0, 7, 2, 11},
+        {S_7SEG_d, 0, 7, 2, 12},
+        {S_7SEG_e, 0, 7, 2, 13},
+        {S_7SEG_f, 0, 7, 2, 14},
+        {S_7SEG_g, 0, 7, 2, 15},
+    },
+    {{S_NONE}}
+};
 
 bool SonyTCWR775Layout::getSegmentGroup7Seg(
     UINT8 row,
@@ -139,6 +141,12 @@ bool SonyTCWR775Layout::getSegmentGroup7Seg(
 
 /*
 TODO: The "-" sign and Dp are not listed/mapped here.
+
+Layout Finder
+0308 - col 4 "-"
+0316 - col 5 DP
+0508 - col 0 "-"
+0516 - col 1 DP
 
 Right side symbols
 G1 S1 - "DOLBY NR" S_TEXT_DOLBY_NR

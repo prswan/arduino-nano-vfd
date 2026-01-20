@@ -29,7 +29,7 @@
 #include "IVfdPinout.h"
 
 //
-// VFD implementation for the Sony DVPNS725P DVD Player.
+// VFD pinout for the Sony DVP-NS725P DVD Player.
 // driven by an A6518 32-bit serial driver IC.
 //
 class SonyDVPNS725PPinout : public IVfdPinout

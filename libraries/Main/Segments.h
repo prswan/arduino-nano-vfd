@@ -41,11 +41,18 @@ typedef enum {
     S_7SEG_e,
     S_7SEG_f,
     S_7SEG_g,
-    S_7SEG_DP, // Decimal Point
+    S_7SEG_dp, // Decimal Point
 
     //
     // 14 segment display additions
     //
+    S_14SEG_a,
+    S_14SEG_b,
+    S_14SEG_c,
+    S_14SEG_d,
+    S_14SEG_e,
+    S_14SEG_f,
+    S_14SEG_g,
     S_14SEG_g1, // Sony g
     S_14SEG_g2, // Sony m
     S_14SEG_h,  // SOny h
@@ -54,12 +61,12 @@ typedef enum {
     S_14SEG_k,  // Sony r
     S_14SEG_l,  // Sony p
     S_14SEG_m,  // Sony n
-    S_14SEG_DP, // Decimal Point
+    S_14SEG_dp, // Decimal Point
 
     //
-    // 15 segment centre dot addition
+    // 14 segment centre dot addition
     //
-    S_15SEG_s,
+    S_14SEG_s,
 
     //
     // 16 segment display additions
@@ -81,5 +88,33 @@ typedef enum {
     S_END
 
 } Segment;
+
+//
+// Maps the display element (segments) to the Grid and Segment pins.
+//
+// Most displays have several of the same segment type (e.g. in digits).
+// To distinguish duplicate segments are counted by row and column
+// starting from a top left origin counting columns left to right and
+// rows top to bottom.
+//
+// e.g. 88:88
+//  - The segments in the 4 digits are addressed as row=0 and col=0,1,2,3
+//
+// e.g. 88
+//      88
+//  - The segments in the 4 digits are addressed as row=0,1 and col=0,1
+//
+// Since most consumer service manuals use G1...Gn and S1...Sn the same
+// is used here with 0 being invalid for ease of transcription.
+//
+typedef struct _SegmentMap
+{
+    Segment seg;
+    UINT8 row;  // The row instance count
+    UINT8 col;  // The column instance count
+    UINT8 pinG; // Grid pin
+    UINT8 pinS; // Segment pin
+
+} SegmentMap;
 
 #endif

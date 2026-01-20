@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025, Paul R. Swan
+// Copyright (c) 2026, Paul R. Swan
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -22,12 +22,30 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef Main_h
-#define Main_h
+#include "Main.h"
 
-#include "Display.h"
-#include "ICharacter.h"
+#include "SonyDVPNS725PPinout.h"
+#include "SonyDVPNS725PLayout.h"
+#include "Char14Seg.h"
 
-void Main(Display *display, ICharacter *character);
+// AN5818 Digital pin mappings
 
-#endif
+#define AN5818_STROBE (1)  // Rising edge clocked
+#define AN5818_BLANK  (9)  // Hi == All outputs disabled
+
+void setup() {
+  // put your setup code here, to run once:
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  IVfdPinout      *vfdPinout = new SonyDVPNS725PPinout();
+  IVfdLayout14Seg *vfdLayout = new SonyDVPNS725PLayout();
+
+  Display *display = new Display(vfdPinout, AN5818_STROBE, AN5818_BLANK);
+
+  ICharacter *character = new Char14Seg(vfdLayout, display);
+
+  Main(display, character);
+}

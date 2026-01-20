@@ -22,12 +22,30 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef Main_h
-#define Main_h
+#include "Main.h"
 
-#include "Display.h"
-#include "ICharacter.h"
+#include "SonyTCWR775Pinout.h"
+#include "SonyTCWR775Layout.h"
+#include "Char7Seg.h"
 
-void Main(Display *display, ICharacter *character);
+// AN5818 Digital pin mappings
 
-#endif
+#define AN5818_STROBE (1)  // Rising edge clocked
+#define AN5818_BLANK  (9)  // Hi == All outputs disabled
+
+void setup() {
+  // put your setup code here, to run once:
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  IVfdPinout     *vfdPinout     = new SonyTCWR775Pinout();
+  IVfdLayout7Seg *vfdLayout7Seg = new SonyTCWR775Layout();
+
+  Display *display = new Display(vfdPinout, AN5818_STROBE, AN5818_BLANK);
+
+  ICharacter *character = new Char7Seg(vfdLayout7Seg, display);
+
+  Main(display, character);
+}

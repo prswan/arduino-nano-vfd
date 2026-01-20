@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025, Paul R. Swan
+// Copyright (c) 2026, Paul R. Swan
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -22,12 +22,37 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef Main_h
-#define Main_h
+#ifndef Char14Seg_h
+#define Char14Seg_h
 
-#include "Display.h"
 #include "ICharacter.h"
+#include "IVfdLayout14Seg.h"
+#include "Display.h"
 
-void Main(Display *display, ICharacter *character);
+//
+// Character print implementation for a 7-Segment display.
+//
+class Char14Seg : public ICharacter
+{
+public:
+    Char14Seg(
+        IVfdLayout14Seg *vfd,
+        Display *display);
+
+    ~Char14Seg() {};
+
+    virtual bool print(
+        UINT8 row,
+        UINT8 col,
+        UCHAR ascii);
+
+private:
+    IVfdLayout14Seg *m_vfd;
+    Display *m_display;
+
+    UINT8 m_numEntriesSegmentGroup14Seg;
+
+    const SegmentGroup14Seg *p_segmentGroup14Seg;
+};
 
 #endif
