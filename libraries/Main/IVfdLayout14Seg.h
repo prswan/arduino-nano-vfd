@@ -51,10 +51,10 @@ typedef struct _SegmentGroup14Seg
     SegmentMap k;
     SegmentMap l;
     SegmentMap m;
-    // Optional Decimal Point on some characters
-    SegmentMap dp;
     // Optional centre dot for some displays
     SegmentMap s;
+    // Optional Decimal Point on some characters
+    SegmentMap dp;
 
 } SegmentGroup14Seg;
 

@@ -42,6 +42,20 @@
      - There is only one SPI block, so only 1 display could be driven this way.
        - There was a related idea to use up to 4 displays per Nano with a parallel
          scan (common CLOCK, STOBE, BLANK but D0,D1,D2,D3 data pins).
+
+
+ Design Notes for supporting 2 displays on 1 serial chain
+ --------------------------------------------------------
+ 
+ * Each pinout identifies the full chain length
+   - e.g. 64-bits even if only 32 bits are used.
+ * Each pinout defines only it's own, leaving the rest undefined.
+ * The scan double buffers, OR-ing in the individual bitMap registers into a single line
+ * The line is shifted out and latched as normal.
+ * Each display grid line is incremented & wrapped individually
+    - Treated independently, there is no loss of brightness due to missing grid lines and
+      the display characteristics don't matter (e.g. how many grids or segments each has). 
+
 */
 
 //
