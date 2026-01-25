@@ -60,6 +60,7 @@ class LayoutFinder : public IApp
         ~LayoutFinder() {};
 
         virtual void run(
+            bool firstSelect
         );
 
     private:
@@ -79,9 +80,6 @@ class LayoutFinder : public IApp
 
         UINT8 m_grid;
         UINT8 m_seg;
-
-        UINT8 m_b1State;
-
 };
 
 #endif

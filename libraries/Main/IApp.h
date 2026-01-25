@@ -37,11 +37,15 @@ class IApp
     public:
 
         //
-        // Run the app.
+        // Run the app. 
+        // firstSelect is true to on the first state transition
+        // to indicate the first call of this app.
+        // 
         // run() is intended to be called in between display scan
         // and should return immediately if there is nothing to do.
         //
         virtual void run(
+            bool firstSelect
         ) = 0;
 };
 

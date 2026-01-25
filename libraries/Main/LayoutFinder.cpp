@@ -33,13 +33,6 @@ LayoutFinder::LayoutFinder(
 {
     m_grid = 1;
     m_seg = 1;
-    m_b1State = 0;
-
-    m_display->clear();
-
-    m_display->setSegment(m_grid, m_seg, true);
-
-    printGridSeg();
 };
 
 void LayoutFinder::printGridSeg()
@@ -55,75 +48,24 @@ void LayoutFinder::printGridSeg()
     m_character->print(0, 3, '0' + (m_seg % 10));
 }
 
-void LayoutFinder::run()
+void LayoutFinder::run(
+    bool firstSelect
+)
 {
-    // B1 pressed
-    if (m_buttons->isB1Pressed())
+    if (firstSelect)
     {
         m_grid = 1;
         m_seg = 1;
 
-        switch (m_b1State)
-        {
-        case 0:
-        {
-            m_display->clear();
+        m_display->clear();
 
-            m_display->setSegment(m_grid, m_seg, true);
+        m_display->setSegment(m_grid, m_seg, true);
 
-            printGridSeg();
-            break;
-        }
-        case 1:
-        {
-            m_display->setAllSegmentsOn();
-            break;
-        }
-        case 2:
-        {
-            m_display->setAllPinsOn();
-            break;
-        }
-        case 3:
-        {
-            m_display->clear();
-            break;
-        }
-        default:
-            break;
-        }
-
-        if (++m_b1State > 3)
-        {
-            m_b1State = 0;
-        }
-    }
-
-    if (m_b1State == 0)
-    {
-        // This works because the run is only called when the display is scanned
-        static UINT32 previousTimeInUs = 0;
-
-        UINT32 currentTimeInUs = micros();
-        UINT16 elapsedTimeInUs = (UINT16)(currentTimeInUs - previousTimeInUs);
-
-        previousTimeInUs = currentTimeInUs;
-
-        if (m_buttons->isB2Pressed())
-        {
-            elapsedTimeInUs = (elapsedTimeInUs % 10000);
-            m_character->print(0, 0, '0' + (elapsedTimeInUs / 1000));
-            elapsedTimeInUs = (elapsedTimeInUs % 1000);
-            m_character->print(0, 1, '0' + (elapsedTimeInUs / 100));
-            elapsedTimeInUs = (elapsedTimeInUs % 100);
-            m_character->print(0, 2, '0' + (elapsedTimeInUs / 10));
-            elapsedTimeInUs = (elapsedTimeInUs % 10);
-            m_character->print(0, 3, '0' + (elapsedTimeInUs / 1));
-        }
+        printGridSeg();
     }
 
     // Increment grid
-    if ((m_b1State != 0) && m_buttons->isB2Pressed())
+    if (m_buttons->isB2Pressed())
     {
         m_display->setSegment(m_grid, m_seg, false);
 

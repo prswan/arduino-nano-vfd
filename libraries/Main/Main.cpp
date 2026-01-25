@@ -68,9 +68,9 @@ Step 1
 
 // Button Digitial pin mappings
 
-#define BUTTON_PIN_1 (2)
-#define BUTTON_PIN_2 (3)
-#define BUTTON_PIN_3 (7)
+#define BUTTON_PIN_1 (2) // App Select
+#define BUTTON_PIN_2 (3) // Increment
+#define BUTTON_PIN_3 (7) // Decrement
 
 // On board LED
 
@@ -95,12 +95,132 @@ void Main(Display *display, ICharacter *character)
         display,
         character);
 
+
+    UINT8 currentApp = 0;
+    bool newApp = true;
+
     // Main loop
     while (1)
-    {
+    {  
         if (display->scan())
         {
-            app->run();
+            switch (currentApp)
+            {
+                // The App
+                case 0:
+                {
+                    app->run(newApp);
+                    break;
+                }
+
+                // Set all the Segment pins active maintaining Grid scan
+                case 1:
+                {
+                    if (newApp)
+                    {
+                        display->setAllSegmentsOn();
+                    }
+                    break;
+                }
+
+                // Set all the pins on, effectively no scan.
+                case 2:
+                {
+                    if (newApp)
+                    {
+                        display->setAllPinsOn();
+                    }
+                    break;
+                }
+
+                // Clear all the Segments back to off
+                case 3:
+                {
+                    if (newApp)
+                    {
+                        display->clear();
+                    }
+                    break;
+                }
+
+                // Performance measurment for the scan overhead.
+                case 4:
+                {
+                    if (newApp)
+                    {
+                        display->clear();
+                        character->print(0, 0, '0');
+                    }
+
+                    // This works because the run is only called when the display is scanned
+                    static UINT32 previousTimeInUs = 0;
+
+                    UINT32 currentTimeInUs = micros();
+                    UINT16 elapsedTimeInUs = (UINT16)(currentTimeInUs - previousTimeInUs);
+
+                    previousTimeInUs = currentTimeInUs;
+
+                    if (buttons->isB2Pressed())
+                    {
+                        elapsedTimeInUs = (elapsedTimeInUs % 10000);
+                        character->print(0, 0, '0' + (elapsedTimeInUs / 1000));
+                        elapsedTimeInUs = (elapsedTimeInUs % 1000);
+                        character->print(0, 1, '0' + (elapsedTimeInUs / 100));
+                        elapsedTimeInUs = (elapsedTimeInUs % 100);
+                        character->print(0, 2, '0' + (elapsedTimeInUs / 10));
+                        elapsedTimeInUs = (elapsedTimeInUs % 10);
+                        character->print(0, 3, '0' + (elapsedTimeInUs / 1));
+                    }
+                    break;
+                }
+
+                // Walk through the ASCII character set
+                case 5:
+                {
+                    static UCHAR currentChar = 0;
+
+                    if (newApp)
+                    {
+                        currentChar = 0x20;
+
+                        display->clear();
+                        character->print(0, 0, '*');
+                    }
+
+                    if (buttons->isB2Pressed())
+                    {
+                        if (++currentChar >= 0x60)
+                        {
+                            currentChar = 0x20;
+                        }
+
+                        character->print(0, 0, ' ');
+                        character->print(0, 0, currentChar);
+
+                        UINT8 charValue = currentChar;
+                        character->print(0, 2, '0' + (charValue / 10));
+                        charValue = (charValue % 10);
+                        character->print(0, 3, '0' + (charValue / 1));
+                    }
+                    break;
+                }
+
+                default:
+                break;
+            }
+
+            if (buttons->isB1Pressed())
+            {
+                if (++currentApp > 5)
+                {
+                    currentApp = 0;
+                }
+                newApp = true;
+            }
+            else
+            {
+                newApp = false;
+            }
         }
     }
 };

@@ -41,7 +41,7 @@
 //
 // true = segment on.
 //
-typedef struct _DisplaytGroup7Seg
+typedef struct _DisplayGroup7Seg
 {
     UINT8 a;
     UINT8 b;
