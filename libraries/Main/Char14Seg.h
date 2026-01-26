@@ -41,10 +41,12 @@ public:
 
     ~Char14Seg() {};
 
+    virtual void clear();
+
     virtual bool print(
         UINT8 row,
         UINT8 col,
-        UCHAR ascii);
+        UINT8 ascii);
 
 private:
     IVfdLayout14Seg *m_vfd;

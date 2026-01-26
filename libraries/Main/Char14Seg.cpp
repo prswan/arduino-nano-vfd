@@ -135,10 +135,15 @@ Char14Seg::Char14Seg(
         &m_numEntriesSegmentGroup14Seg);
 };
 
+void Char14Seg::clear()
+{
+    m_display->clear();
+}
+
 bool Char14Seg::print(
     UINT8 row,
     UINT8 col,
-    UCHAR ascii)
+    UINT8 ascii)
 {
     UINT8 *p_on = NULL;
 

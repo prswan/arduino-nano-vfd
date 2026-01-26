@@ -36,6 +36,11 @@ class ICharacter
     public:
 
         //
+        // Clear the display back to blank
+        //
+        virtual void clear() = 0;
+
+        //
         // Prints a single ASCII character to the VFD.
         //
         // Returns false if row, col or ascii are invalid.
@@ -43,7 +48,7 @@ class ICharacter
         virtual bool print(
             UINT8 row,
             UINT8 col,
-            UCHAR ascii
+            UINT8 ascii
         ) = 0;
 };
 

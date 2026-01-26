@@ -80,10 +80,15 @@ Char7Seg::Char7Seg(
         &m_numEntriesSegmentGroup7Seg);
 };
 
+void Char7Seg::clear()
+{
+    m_display->clear();
+}
+
 bool Char7Seg::print(
     UINT8 row,
     UINT8 col,
-    UCHAR ascii)
+    UINT8 ascii)
 {
     if ((row > 0) || (col >= m_numEntriesSegmentGroup7Seg))
     {
@@ -109,14 +114,6 @@ bool Char7Seg::print(
 
         m_display->setSegment(pinG, pinS, on);
     }
-    /*
-        setSegment(&p_segmentGroup7Seg[col].a, (pgm_read_byte_near(&s_displayGroup7Seg[index].a) != 0));
-        setSegment(&p_segmentGroup7Seg[col].b, (pgm_read_byte_near(&s_displayGroup7Seg[index].b) != 0));
-        setSegment(&p_segmentGroup7Seg[col].c, (pgm_read_byte_near(&s_displayGroup7Seg[index].c) != 0));
-        setSegment(&p_segmentGroup7Seg[col].d, (pgm_read_byte_near(&s_displayGroup7Seg[index].d) != 0));
-        setSegment(&p_segmentGroup7Seg[col].e, (pgm_read_byte_near(&s_displayGroup7Seg[index].e) != 0));
-        setSegment(&p_segmentGroup7Seg[col].f, (pgm_read_byte_near(&s_displayGroup7Seg[index].f) != 0));
-        setSegment(&p_segmentGroup7Seg[col].g, (pgm_read_byte_near(&s_displayGroup7Seg[index].g) != 0));
-    */
+
     return true;
 };

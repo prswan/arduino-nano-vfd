@@ -41,10 +41,12 @@ public:
 
     ~Char7Seg() {};
 
+    virtual void clear();
+
     virtual bool print(
-        UINT8 row,
-        UINT8 col,
-        UCHAR ascii);
+    UINT8 row,
+    UINT8 col,
+    UINT8 ascii);
 
 private:
     IVfdLayout7Seg *m_vfd;

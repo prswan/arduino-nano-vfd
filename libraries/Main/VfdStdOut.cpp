@@ -65,12 +65,11 @@ bool VfdStdOut::printf(
         }
 
         // FF - Form Feed, reset back to 0,0
-        if (ascii == '\n')
+        if (ascii == '\f')
         {
             m_currentCol = 0;
             m_currentRow = 0;
-
-            // TODO: We also need to clear the display.
+            m_char->clear();
             continue;
         }
 

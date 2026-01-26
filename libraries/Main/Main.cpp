@@ -152,8 +152,8 @@ void Main(Display *display, ICharacter *character)
                     {
                         display->clear();
 
-                        stdOut->printf("%s", "HELLO");
-                        // character->print(0, 0, '0');
+                        character->print(0, 6, '0');
+                        stdOut->printf("\f%s", "HELLO");
                     }
 
                     // This works because the run is only called when the display is scanned
