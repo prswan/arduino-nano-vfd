@@ -28,6 +28,7 @@
 #include "Display.h"
 #include "Char7Seg.h"
 #include "LayoutFinder.h"
+#include "VfdStdOut.h"
 
 /* TODO
 
@@ -95,6 +96,7 @@ void Main(Display *display, ICharacter *character)
         display,
         character);
 
+    VfdStdOut *stdOut = new VfdStdOut(character);
 
     UINT8 currentApp = 0;
     bool newApp = true;
@@ -149,7 +151,9 @@ void Main(Display *display, ICharacter *character)
                     if (newApp)
                     {
                         display->clear();
-                        character->print(0, 0, '0');
+
+                        stdOut->printf("%s", "HELLO");
+                        // character->print(0, 0, '0');
                     }
 
                     // This works because the run is only called when the display is scanned
