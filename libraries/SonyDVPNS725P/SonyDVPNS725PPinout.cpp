@@ -102,7 +102,7 @@ void SonyDVPNS725PPinout::getScanConfig(
     UINT8 *registerLenInBits,
     UINT8 *numGrids)
 {
-    *registerLenInBits = 32;
+    *registerLenInBits = 64;
     *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
 };
 
