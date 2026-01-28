@@ -22,34 +22,30 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef SonyDVPNS725PPinout_h
-#define SonyDVPNS725PPinout_h
+#include "Main.h"
 
-#include "Arduino.h"
-#include "IVfdPinout.h"
+#include "PanasonicDVDRV32Pinout.h"
+#include "PanasonicDVDRV32Layout.h"
+#include "Char14Seg.h"
 
-//
-// VFD pinout for the Sony DVP-NS725P DVD Player.
-// driven by an A6518 32-bit serial driver IC.
-//
-class SonyDVPNS725PPinout : public IVfdPinout
-{
-public:
-    SonyDVPNS725PPinout() {};
+// AN5818 Digital pin mappings
 
-    ~SonyDVPNS725PPinout() {};
+#define AN5818_STROBE (1)  // Rising edge clocked
+#define AN5818_BLANK  (9)  // Hi == All outputs disabled
 
-    virtual void getScanConfig(
-        UINT8 *registerLenInBits,
-        UINT8 *numGrids);
+void setup() {
+  // put your setup code here, to run once:
+}
 
-    virtual void getPinMapGrid(
-        const PinMap **p_pinMap,
-        UINT8 *numEntries);
+void loop() {
+  // put your main code here, to run repeatedly:
 
-    virtual void getPinMapSegment(
-        const PinMap **p_pinMap,
-        UINT8 *numEntries);
-};
+  IVfdPinout      *vfdPinout = new PanasonicDVDRV32Pinout();
+  IVfdLayout14Seg *vfdLayout = new PanasonicDVDRV32Layout();
 
-#endif
+  Display *display = new Display(vfdPinout, AN5818_STROBE, AN5818_BLANK);
+
+  ICharacter *character = new Char14Seg(vfdLayout, display);
+
+  Main(display, character);
+}

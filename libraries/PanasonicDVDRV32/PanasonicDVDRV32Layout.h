@@ -22,33 +22,26 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef SonyDVPNS725PPinout_h
-#define SonyDVPNS725PPinout_h
+#ifndef PanasonicDVDRV32Layout_h
+#define PanasonicDVDRV32Layout_h
 
 #include "Arduino.h"
-#include "IVfdPinout.h"
+#include "IVfdLayout14Seg.h"
 
 //
-// VFD pinout for the Sony DVP-NS725P DVD Player.
-// driven by an A6518 32-bit serial driver IC.
+// VFD layout for the Sony DVP-NS725P DVD Player.
+// driven by a single A6518 32-bit serial driver IC.
 //
-class SonyDVPNS725PPinout : public IVfdPinout
+class PanasonicDVDRV32Layout : public IVfdLayout14Seg
 {
 public:
-    SonyDVPNS725PPinout() {};
+    PanasonicDVDRV32Layout() {};
 
-    ~SonyDVPNS725PPinout() {};
+    ~PanasonicDVDRV32Layout() {};
 
-    virtual void getScanConfig(
-        UINT8 *registerLenInBits,
-        UINT8 *numGrids);
-
-    virtual void getPinMapGrid(
-        const PinMap **p_pinMap,
-        UINT8 *numEntries);
-
-    virtual void getPinMapSegment(
-        const PinMap **p_pinMap,
+    virtual bool getSegmentGroup14Seg(
+        UINT8 row,
+        const SegmentGroup14Seg **p_segGroup,
         UINT8 *numEntries);
 };
 

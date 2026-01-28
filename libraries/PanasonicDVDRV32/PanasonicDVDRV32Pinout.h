@@ -22,22 +22,22 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef SonyDVPNS725PPinout_h
-#define SonyDVPNS725PPinout_h
+#ifndef PanasonicDVDRV32Pinout_h
+#define PanasonicDVDRV32Pinout_h
 
 #include "Arduino.h"
 #include "IVfdPinout.h"
 
 //
-// VFD pinout for the Sony DVP-NS725P DVD Player.
+// VFD pinout for the Panasonic DVD-RV32 DVD Player.
 // driven by an A6518 32-bit serial driver IC.
 //
-class SonyDVPNS725PPinout : public IVfdPinout
+class PanasonicDVDRV32Pinout : public IVfdPinout
 {
 public:
-    SonyDVPNS725PPinout() {};
+    PanasonicDVDRV32Pinout() {};
 
-    ~SonyDVPNS725PPinout() {};
+    ~PanasonicDVDRV32Pinout() {};
 
     virtual void getScanConfig(
         UINT8 *registerLenInBits,

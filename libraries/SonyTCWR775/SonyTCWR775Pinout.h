@@ -22,8 +22,8 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef SonyTCWR775_h
-#define SonyTCWR775_h
+#ifndef SonyTCWR775Pinout_h
+#define SonyTCWR775Pinout_h
 
 #include "Arduino.h"
 #include "IVfdPinout.h"
