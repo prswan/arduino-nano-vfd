@@ -331,3 +331,38 @@ bool PanasonicDVDRV32Layout::getSegmentGroup14Seg(
 
     return false;
 }
+
+
+/*
+Symbols
+
+1301 - DVD (red back)
+1302 - PGM
+1303 - A-
+1304 - B
+1305 - VIDEO (red back)
+1306 - RND
+1307 - repeat symbol
+1308 - AUDIO (red back)
+1309 - WMA (red back)
+1310 - play symbol
+1311 - CD (red back)
+1312 - VR (red back)
+1313 - MP3 (red back)
+1314 - pause symbol
+
+0215 - D.ENH
+0315 - CINEMA
+0415 - BASS
+0515 - A.SRD
+0615 - D.MIX
+0715 - PG
+0815 - D.N.R.
+0915 - CHAP
+1015 - TRACK
+1115 - TITLE
+1215 - GROUP
+
+0216 - col 10 colon
+0416 - col  8 colon
+*/

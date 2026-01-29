@@ -174,3 +174,27 @@ bool SonyDVPNS725PLayout::getSegmentGroup14Seg(
 
     return false;
 }
+/*
+Symbols
+
+0104 - pause symbol
+0120 - "MP3"
+0121 - repeat symbol
+0122 - "1" next to repeat symbol
+0123 - play symbol
+0204 - "DVD"
+0220 - dolby double D symbol and "D"
+0221 - "V"
+0222 - "CD" after "V"
+0223 - col 5 dp
+0304 - col 4 colon
+0323 - col 4 dp
+0423 - col 3 dp
+0523 - col 2 dp
+0623 - col 1 dp
+0723 - col 0 dp
+0704 - "TRK"
+0720 - "Dts" symbol
+0722 - movie camera symbol
+
+*/
