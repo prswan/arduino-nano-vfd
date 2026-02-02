@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a hardware & software project to utilize various Vacuum Fluorescent Displays (VFD) in art projects driven from an Arduino Nano system. Most of the displays are sourced from recycled consumer electronics. In almost all volume consumer products the displays themselves were customized for each product, necessitating both the hardware & software being flexible enough to efficiently accommodate each displays uniqueness.
+This is a hardware \& software project to utilize various Vacuum Fluorescent Displays (VFD) in art projects driven from an Arduino Nano system. Most of the displays are sourced from recycled consumer electronics. In almost all volume consumer products the displays themselves were customized for each product, necessitating both the hardware \& software being flexible enough to efficiently accommodate each displays uniqueness.
 
 ## Hardware
 
@@ -14,18 +14,34 @@ This PCB is designed for raw serial shift register drive using up to three SN755
 
 Features:
 
- - 210mm maximum display width
- - 96-pin 2mm pitch VFD connector
- - 80-pin 0.1" pitch VFD connector
- - 3-row patch area to facilitate rewiring.
- - Filament voltage tuning resistors.
+* 210mm maximum display width
+* 96-pin 2mm pitch VFD connector
+* 80-pin 0.1" pitch VFD connector
+* 3-row patch area to facilitate rewiring.
+* Filament voltage tuning resistors.
 
-## Software
+### Controller PCB (in progress)
+
+Arduino Nano microcontroller based main controller board.
+
+Features:
+
+* 8 multiplexed "Universal VFD" display ports
+* 1 dedicated bidirectional (master or slave) SPI port
+* 1 I2C port
+* Up, Down \& Select buttons
+* 40V anode linear power supply, selectable + or - configuration
+* +5V/-5V linear regulated power supplies
+* Filament bias circuit
+* Battery backed real time clock module
+* 6-Band Graphic Equalizer Display stereo audio input
+
+# Software
 
 The software design aims to minimize the effort needed to use the diverse range of VFDs.
 
 ## Further Reading
 
- - **[Wikipedia Vacuum Fluorescent Display](https://en.wikipedia.org/wiki/Vacuum_fluorescent_display)**
- - **[Wikipedia 7-Segment Display](https://en.wikipedia.org/wiki/Seven-segment_display)**
- - **[Wikipedia 14-Segment Display](https://en.wikipedia.org/wiki/Fourteen-segment_display)**
+* [**Wikipedia Vacuum Fluorescent Display**](https://en.wikipedia.org/wiki/Vacuum_fluorescent_display)
+* [**Wikipedia 7-Segment Display**](https://en.wikipedia.org/wiki/Seven-segment_display)
+* [**Wikipedia 14-Segment Display**](https://en.wikipedia.org/wiki/Fourteen-segment_display)
