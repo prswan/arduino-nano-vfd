@@ -31,9 +31,7 @@
 typedef enum {
     S_NONE = 0,
 
-    //
     // 7 segment display
-    //
     S_7SEG_a,
     S_7SEG_b,
     S_7SEG_c,
@@ -43,9 +41,7 @@ typedef enum {
     S_7SEG_g,
     S_7SEG_dp, // Decimal Point
 
-    //
     // 14 segment display additions
-    //
     S_14SEG_a,
     S_14SEG_b,
     S_14SEG_c,
@@ -63,14 +59,10 @@ typedef enum {
     S_14SEG_m,  // Sony n
     S_14SEG_dp, // Decimal Point
 
-    //
     // 14 segment centre dot addition
-    //
     S_14SEG_s,
 
-    //
     // 16 segment display additions
-    //
     S_16SEG_a1,
     S_16SEG_a2,
     S_16SEG_d1,
@@ -79,12 +71,37 @@ typedef enum {
     // Character separators
     S_COLON,
 
-    //
     // Bar graph
-    //
-    S_BAR_0,    // On some displays this is permanent on coupled with the associated scale graphics
-    S_BAR_n,    // Pure segments
+    S_BAR_0,  // On some displays this is permanent on coupled with the associated scale graphics
+    S_BAR_1,
+    S_BAR_2,
+    S_BAR_3,
+    S_BAR_4,
+    S_BAR_5,
+    S_BAR_6,
+    S_BAR_7,
+    S_BAR_8,
+    S_BAR_9,
+    S_BAR_10,
+    S_BAR_11,
+    S_BAR_12,
+    S_BAR_13,
+    S_BAR_14,
+    S_BAR_15,
 
+    // Begin Symbols
+    S_SYM_BEGIN,
+
+    S_SYM_PLAY_FORWARD,
+    S_SYM_PLAY_REVERSE,
+    S_SYM_PAUSE,
+    S_SYM_TEXT_PLAY,
+    S_SYM_TEXT_REC,
+
+    S_SYM_END,
+    // End Symbols
+
+    //
     S_END
 
 } Segment;
