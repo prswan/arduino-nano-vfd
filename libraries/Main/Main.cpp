@@ -69,23 +69,18 @@ Step 1
 
 // Button Digitial pin mappings
 
-#define BUTTON_PIN_1 (2) // App Select
-#define BUTTON_PIN_2 (3) // Increment
-#define BUTTON_PIN_3 (7) // Decrement
-
-// On board LED
-
-#define LED_BUILTIN (13)
+#define BUTTON_PIN_NEXT   (3) // Increment
+#define BUTTON_PIN_SELECT (2) // App Select
 
 void Main(Display *display, ICharacter *character)
 {
     Buttons *buttons = new Buttons(
-        BUTTON_PIN_1,
-        BUTTON_PIN_2,
-        BUTTON_PIN_3);
+        BUTTON_PIN_NEXT,
+        BUTTON_PIN_SELECT
+    );
 
     // in case we crash
-    if (buttons->isB1Pressed())
+    if (buttons->isSelectActive())
     {
         return;
     }
@@ -164,7 +159,7 @@ void Main(Display *display, ICharacter *character)
 
                     previousTimeInUs = currentTimeInUs;
 
-                    if (buttons->isB2Pressed())
+                    if (buttons->isNextShortPressed())
                     {
                         elapsedTimeInUs = (elapsedTimeInUs % 10000);
                         character->print(0, 0, '0' + (elapsedTimeInUs / 1000));
@@ -191,7 +186,7 @@ void Main(Display *display, ICharacter *character)
                         character->print(0, 0, '*');
                     }
 
-                    if (buttons->isB2Pressed())
+                    if (buttons->isNextShortPressed())
                     {
                         if (++currentChar >= 0x60)
                         {
@@ -213,7 +208,7 @@ void Main(Display *display, ICharacter *character)
                 break;
             }
 
-            if (buttons->isB1Pressed())
+            if (buttons->isSelectShortPressed())
             {
                 if (++currentApp > 5)
                 {

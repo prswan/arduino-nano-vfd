@@ -27,64 +27,135 @@
 
 // Button sample period
 static const UINT32 s_samplePeriodInMs = 50;
-
+static const UINT32 s_longPressPeriodInMs = 1000;
 
 Buttons::Buttons(
-    int b1pin,
-    int b2pin,
-    int b3pin
+    int pinNext,
+    int pinSelect
 )
 {
     UINT32 nextUpdateTime = millis() + s_samplePeriodInMs;
 
-    m_state[0].pin = b1pin;
-    m_state[1].pin = b2pin;
-    m_state[2].pin = b3pin;
+    m_stateNext.pin   = pinNext;
+    m_stateSelect.pin = pinSelect;
 
-    m_state[0].nextUpdateTime = nextUpdateTime;
-    m_state[1].nextUpdateTime = nextUpdateTime;
-    m_state[2].nextUpdateTime = nextUpdateTime;
-
+    m_stateNext.nextUpdateTime   = nextUpdateTime;
+    m_stateSelect.nextUpdateTime = nextUpdateTime;
+ 
     // Set the pin modes
-    pinMode(b1pin, INPUT_PULLUP);
-    pinMode(b2pin, INPUT_PULLUP);
-    pinMode(b3pin, INPUT_PULLUP);
+    pinMode(pinNext,   INPUT_PULLUP);
+    pinMode(pinSelect, INPUT_PULLUP);
 };
 
 
-bool
-Buttons::isPressed(
-    int button
+void
+Buttons::updateButtonState(
+    ButtonState *state
 )
 {
     UINT32 currentTime = millis();
 
-    if (currentTime < m_state[button].nextUpdateTime)
+    if (currentTime < state->nextUpdateTime)
     {
         return false;
     }
 
     // Set the next sample time
-    m_state[button].nextUpdateTime = currentTime + s_samplePeriodInMs;
+    state->nextUpdateTime = currentTime + s_samplePeriodInMs;
 
     // Button is pressed
-    if (digitalRead(m_state[button].pin) == LOW)
+    if (digitalRead(state->pin) == LOW)
     {
-        // We already reported it pressed, don't report again.
-        if (m_state[button].wasReported)
+        // We already saw it was pressed
+        if (state->wasPressed)
         {
-            return false;
+            //
+            // If it's been held down for a long time, report the press
+            // and update the press time. The net effect is that every
+            // long press period a long key press (auto-repeat) will be
+            // generated.
+            //
+            if (currentTime > (state->wasPressedTime + s_longPressPeriodInMs))
+            {
+                state->reportLong = true;
+                state->autoRepeat = true;
+
+                state->wasPressedTime = currentTime;
+            }
+
+            return;
         }
 
         // New press, we'll report in this call.
-        m_state[button].wasReported = true;
+        state->wasPressed = true;
+        state->wasPressedTime = currentTime;
     }
     else
     {
-        // Button not pressed, clear press state
-        m_state[button].wasReported = false;
-    }
+        // Button was previously pressed, determine what type of press
+        if (state->wasPressed)
+        {
+            // If auto repeating long presses, clear state, otherwise report a short press
+            if (state->autoRepeat)
+            {
+                state->autoRepeat = false;
+            }
+            else
+            {
+                state->reportShort = true;
+            }
 
-    return m_state[button].wasReported;
+            // Clear the press state
+            state->wasPressed = false;
+            state->wasPressedTime = 0;
+        }
+    }
 };
 
+
+bool
+Buttons::isActive(
+    ButtonState *state
+)
+{
+    if (digitalRead(state->pin) == LOW)
+    {
+        return true;
+    }
+
+    return false;
+};
+
+
+bool
+Buttons::isShortPressed(
+    ButtonState *state
+)
+{
+    updateButtonState(state);
+
+    if (state->reportShort)
+    {
+        state->reportShort = false;
+        return true;
+    }
+
+    return false;
+};
+
+
+bool
+Buttons::isLongPressed(
+    ButtonState *state
+)
+{
+    updateButtonState(state);
+
+    if (state->reportLong)
+    {
+        state->reportLong = false;
+        return true;
+    }
+
+    return false;
+};

@@ -34,41 +34,64 @@
 // * Caller must spin poll for button presses at least every 50ms.
 // * Debounce is performed by 50ms sample
 // * Ensures each press is reported only once on first press.
-//   - Button must be released to activate unable press.
+//   - Button must be released to activate press.
 //
 class Buttons
 {
     public:
 
         Buttons(
-            int b1pin,
-            int b2pin,
-            int b3pin
+            int pinNext,
+            int pinSelect
         );
 
-        bool isB1Pressed()
-        { return isPressed(0); };
+        // Live state of the button pin
+        bool isSelectActive()
+        { return isActive(&m_stateSelect); };
 
-        bool isB2Pressed()
-        { return isPressed(1); };
+        bool isSelectShortPressed()
+        { return isShortPressed(&m_stateSelect); };
 
-        bool isB3Pressed()
-        { return isPressed(2); };
+        bool isSelectLongPressed()
+        { return isLongPressed(&m_stateSelect); };
+
+        bool isNextShortPressed()
+        { return isShortPressed(&m_stateNext); };
+
+        bool isNextLongPressed()
+        { return isLongPressed(&m_stateNext); };
 
     private:
-
-        bool isPressed(
-            int button
-        );
 
         typedef struct _ButtonState
         {
             int    pin;
             UINT32 nextUpdateTime;
-            bool   wasReported;
+            UINT32 wasPressedTime;
+            bool   wasPressed;
+            bool   reportShort;
+            bool   reportLong;
+            bool   autoRepeat;
         } ButtonState;
 
-        ButtonState m_state[3] = {0};
+        void updateButtonState(
+            ButtonState *state
+        );
+
+        bool isActive(
+            ButtonState *state
+        );
+
+        bool isShortPressed(
+            ButtonState *state
+        );
+
+        bool isLongPressed(
+            ButtonState *state
+        );
+
+        ButtonState m_stateNext   = {0};
+        ButtonState m_stateSelect = {0};
 };
 
 #endif

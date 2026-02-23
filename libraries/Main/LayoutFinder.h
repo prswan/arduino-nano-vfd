@@ -77,6 +77,7 @@ class LayoutFinder : public IApp
         Buttons    *m_buttons;
         Display    *m_display;
         ICharacter *m_character;
+        bool        m_gridSelected;
 
         UINT8 m_grid;
         UINT8 m_seg;

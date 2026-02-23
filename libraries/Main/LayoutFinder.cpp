@@ -31,6 +31,8 @@ LayoutFinder::LayoutFinder(
                              m_display(display),
                              m_character(character)
 {
+    m_gridSelected = true;
+
     m_grid = 1;
     m_seg = 1;
 };
@@ -54,6 +56,8 @@ void LayoutFinder::run(
 {
     if (firstSelect)
     {
+        m_gridSelected = true;
+
         m_grid = 1;
         m_seg = 1;
 
@@ -64,35 +68,46 @@ void LayoutFinder::run(
         printGridSeg();
     }
 
-    // Increment grid
-    if (m_buttons->isB2Pressed())
+    bool nextShortPress = m_buttons->isNextShortPressed();
+    bool nextLongPress  = m_buttons->isNextLongPressed();
+
+    if (nextLongPress)
     {
-        m_display->setSegment(m_grid, m_seg, false);
-
-        m_grid++;
-
-        if (!m_display->setSegment(m_grid, m_seg, true))
+        if (m_gridSelected)
         {
-            m_grid = 1;
-
-            m_display->setSegment(m_grid, m_seg, true);
+            m_gridSelected = false;
         }
-
-        printGridSeg();
+        else
+        {
+            m_gridSelected = true;
+        }
     }
 
-    // Increment seg
-    if (m_buttons->isB3Pressed())
+    if (nextShortPress || nextLongPress)
     {
         m_display->setSegment(m_grid, m_seg, false);
 
-        m_seg++;
-
-        if (!m_display->setSegment(m_grid, m_seg, true))
+        if (m_gridSelected)
         {
-            m_seg = 1;
+            m_grid++;
 
-            m_display->setSegment(m_grid, m_seg, true);
+            if (!m_display->setSegment(m_grid, m_seg, true))
+            {
+                m_grid = 1;
+
+                m_display->setSegment(m_grid, m_seg, true);
+            }
+        }
+        else
+        {
+            m_seg++;
+
+            if (!m_display->setSegment(m_grid, m_seg, true))
+            {
+                m_seg = 1;
+
+                m_display->setSegment(m_grid, m_seg, true);
+            }
         }
 
         printGridSeg();
