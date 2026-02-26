@@ -75,10 +75,21 @@ static const PinMap s_pinMapSegment[] PROGMEM =
         {13, 8}   // r - S18
 };
 
+//
+// The resulting registerMask for this display.
+// The driver IC chain is 32-bits or 4 bytes.
+//
+static const UINT8 s_registerMask[] PROGMEM =
+{
+    0xFF,0xFF,0xFF,0xFF
+};
+
 void SonyTCWR775Pinout::getScanConfig(
+    const UINT8 **registerMask,
     UINT8 *registerLenInBits,
     UINT8 *numGrids)
 {
+    *registerMask = s_registerMask;
     *registerLenInBits = 32;
     *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
 };

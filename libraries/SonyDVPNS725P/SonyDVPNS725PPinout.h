@@ -40,6 +40,7 @@ public:
     ~SonyDVPNS725PPinout() {};
 
     virtual void getScanConfig(
+        const UINT8 **registerMask,
         UINT8 *registerLenInBits,
         UINT8 *numGrids);
 

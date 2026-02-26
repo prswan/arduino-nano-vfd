@@ -70,11 +70,11 @@ static const DisplayGroup7Seg s_displayGroup7SegNumbers[] PROGMEM =
 };
 
 Char7Seg::Char7Seg(
-    IVfdLayout7Seg *vfd,
-    Display *display) : m_vfd(vfd),
-                        m_display(display)
+    IVfdLayout7Seg *vfdLayout,
+    IDisplay *display) : m_vfdLayout(vfdLayout),
+                         m_display(display)
 {
-    vfd->getSegmentGroup7Seg(
+    vfdLayout->getSegmentGroup7Seg(
         0,
         &p_segmentGroup7Seg,
         &m_numEntriesSegmentGroup7Seg);

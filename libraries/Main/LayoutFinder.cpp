@@ -26,7 +26,7 @@
 
 LayoutFinder::LayoutFinder(
     Buttons *buttons,
-    Display *display,
+    IDisplay *display,
     ICharacter *character) : m_buttons(buttons),
                              m_display(display),
                              m_character(character)

@@ -125,11 +125,11 @@ static const DisplayGroup14Seg s_displayGroup14SegLetters[] PROGMEM =
 };
 
 Char14Seg::Char14Seg(
-    IVfdLayout14Seg *vfd,
-    Display *display) : m_vfd(vfd),
-                        m_display(display)
+    IVfdLayout14Seg *vfdLayout,
+    IDisplay *display) : m_vfdLayout(vfdLayout),
+                         m_display(display)
 {
-    vfd->getSegmentGroup14Seg(
+    vfdLayout->getSegmentGroup14Seg(
         0,
         &p_segmentGroup14Seg,
         &m_numEntriesSegmentGroup14Seg);

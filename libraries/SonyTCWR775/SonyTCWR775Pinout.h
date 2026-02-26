@@ -40,6 +40,7 @@ public:
     ~SonyTCWR775Pinout() {};
 
     virtual void getScanConfig(
+        const UINT8 **registerMask,
         UINT8 *registerLenInBits,
         UINT8 *numGrids);
 

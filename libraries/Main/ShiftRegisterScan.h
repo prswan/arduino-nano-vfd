@@ -22,36 +22,52 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#include "Main.h"
+#ifndef ShiftRegisterScan_h
+#define ShiftRegisterScan_h
 
-#include "SonyDVPNS725PPinout.h"
-#include "SonyDVPNS725PLayout.h"
+#include "Arduino.h"
+#include "SPI.h"
+#include "Types.h"
 #include "ShiftRegisterBitMap.h"
-#include "ShiftRegisterScan.h"
-#include "Char14Seg.h"
 
+//
+// VFD serial driver scan.
+//
+class ShiftRegisterScan
+{
+public:
+    ShiftRegisterScan(
+        ShiftRegisterBitMap *bitMap,
+        int pinStrobe,
+        int pinBlank);
 
-// AN5818 Digital pin mappings
+    ~ShiftRegisterScan();
 
-#define AN5818_STROBE (1)  // Rising edge clocked
-#define AN5818_BLANK  (9)  // Hi == All outputs disabled
+    //
+    // Update the display with the bitmap content.
+    // scan should be spin-called and will return immediately if no update
+    // is needed.
+    //
+    // The return value can be used to synchronize other operations to the start of
+    // a new grid.
+    // - false - No action.
+    // - true  - Grid update was performed
+    //
+    bool run();
 
-void setup() {
-  // put your setup code here, to run once:
-}
+private:
+    ShiftRegisterBitMap *m_bitMap;
 
-void loop() {
-  // put your main code here, to run repeatedly:
+    UINT8 m_registerLenInBytes;
+    
+    UINT8 *m_register;
 
-  IVfdPinout      *vfdPinout = new SonyDVPNS725PPinout();
-  IVfdLayout14Seg *vfdLayout = new SonyDVPNS725PLayout();
+    SPISettings m_spiSettings{1000000, MSBFIRST, SPI_MODE0};
 
-  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
-  ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
+    int m_pinStrobe;
+    int m_pinBlank;
 
-  IDisplay *display1 = bitMap->getDisplay(0);
+    UINT32 m_nextUpdateTimeInUS;
+};
 
-  ICharacter *character = new Char14Seg(vfdLayout, display1);
-
-  Main(bitMap, scan, character);
-}
+#endif

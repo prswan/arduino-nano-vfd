@@ -78,6 +78,7 @@ Display::Display(
                     m_pinBlank(pinBlank)
 {
     vfd->getScanConfig(
+        &p_registerMask,
         &m_registerLenInBits,
         &m_numGrids);
 

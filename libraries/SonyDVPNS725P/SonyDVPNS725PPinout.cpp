@@ -98,10 +98,22 @@ static const PinMap s_pinMapSegment[] PROGMEM =
     {34, ( 1-1)}  // S23 - Dp
 };
 
+//
+// The resulting registerMask for this display.
+// The driver IC chain is 64-bits or 8 bytes.
+// The first 32-bits are used for this display that are the last 32-bits shifted in.
+//
+static const UINT8 s_registerMask[] PROGMEM =
+{
+    0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF
+};
+
 void SonyDVPNS725PPinout::getScanConfig(
+    const UINT8 **registerMask,
     UINT8 *registerLenInBits,
     UINT8 *numGrids)
 {
+    *registerMask = s_registerMask;
     *registerLenInBits = 64;
     *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
 };

@@ -22,36 +22,41 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#include "Main.h"
+#ifndef IDisplay_h
+#define IDisplay_h
 
-#include "SonyDVPNS725PPinout.h"
-#include "SonyDVPNS725PLayout.h"
-#include "ShiftRegisterBitMap.h"
-#include "ShiftRegisterScan.h"
-#include "Char14Seg.h"
+#include "Arduino.h"
+#include "Types.h"
 
+//
+// Primary interface for elemental use of VFDs.
+//
+class IDisplay
+{
+public:
+    //
+    // Clear the display back to blank
+    //
+    virtual void clear() = 0;
 
-// AN5818 Digital pin mappings
+    //
+    // Set all the segments of every grid scan to on.
+    // This is a test function to easily see if a grid or segment pin was missed.
+    //
+    virtual void setAllSegmentsOn() = 0;
 
-#define AN5818_STROBE (1)  // Rising edge clocked
-#define AN5818_BLANK  (9)  // Hi == All outputs disabled
+    //
+    // Turn on/off the segment pinS on grid pinG where the pins are the
+    // display logical pins G1..Gx and S1..Sx. The function will translate
+    // the logical pins to physical pins driven by the driver IC.
+    //
+    // returns true on success or false if failed, e.g. pinG or pinS out of bounds.
+    //
+    virtual bool setSegment(
+        UINT8 pinG,
+        UINT8 pinS,
+        bool on
+    ) = 0;
+};
 
-void setup() {
-  // put your setup code here, to run once:
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
-  IVfdPinout      *vfdPinout = new SonyDVPNS725PPinout();
-  IVfdLayout14Seg *vfdLayout = new SonyDVPNS725PLayout();
-
-  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
-  ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
-
-  IDisplay *display1 = bitMap->getDisplay(0);
-
-  ICharacter *character = new Char14Seg(vfdLayout, display1);
-
-  Main(bitMap, scan, character);
-}
+#endif

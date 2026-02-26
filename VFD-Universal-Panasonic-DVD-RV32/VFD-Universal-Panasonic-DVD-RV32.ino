@@ -43,9 +43,12 @@ void loop() {
   IVfdPinout      *vfdPinout = new PanasonicDVDRV32Pinout();
   IVfdLayout14Seg *vfdLayout = new PanasonicDVDRV32Layout();
 
-  Display *display = new Display(vfdPinout, AN5818_STROBE, AN5818_BLANK);
+  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
+  ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
 
-  ICharacter *character = new Char14Seg(vfdLayout, display);
+  IDisplay *display1 = bitMap->getDisplay(0);
 
-  Main(display, character);
+  ICharacter *character = new Char14Seg(vfdLayout, display1);
+
+  Main(bitMap, scan, character);
 }

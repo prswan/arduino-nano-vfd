@@ -27,7 +27,7 @@
 
 #include "ICharacter.h"
 #include "IVfdLayout14Seg.h"
-#include "Display.h"
+#include "IDisplay.h"
 
 //
 // Character print implementation for a 7-Segment display.
@@ -36,8 +36,8 @@ class Char14Seg : public ICharacter
 {
 public:
     Char14Seg(
-        IVfdLayout14Seg *vfd,
-        Display *display);
+        IVfdLayout14Seg *vfdLayout,
+        IDisplay *display);
 
     ~Char14Seg() {};
 
@@ -49,8 +49,8 @@ public:
         UINT8 ascii);
 
 private:
-    IVfdLayout14Seg *m_vfd;
-    Display *m_display;
+    IVfdLayout14Seg *m_vfdLayout;
+    IDisplay        *m_display;
 
     UINT8 m_numEntriesSegmentGroup14Seg;
 

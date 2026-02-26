@@ -60,10 +60,13 @@ public:
     //
     // Returns the scan configuration information
     //
+    // registerMask - Pointer to the driver IC register mask for this display
+    //                in PROGMEN bytes rounded up from registerLenInBits.
     // registerLenInBits - The number of bits in the driver IC shift register.
     // numGrids - The number of grids for the bitmap scan, usually the same as the grid pin count.
     //
     virtual void getScanConfig(
+        const UINT8 **registerMask,
         UINT8 *registerLenInBits,
         UINT8 *numGrids) = 0;
 

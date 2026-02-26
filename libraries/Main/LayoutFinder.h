@@ -27,20 +27,23 @@
 
 #include "IApp.h"
 #include "Buttons.h"
-#include "Display.h"
+#include "ShiftRegisterBitMap.h"
 #include "ICharacter.h"
 
 //
 // Utility app that can be used to find the pin and segment pins, and
 // the display elements they enable.
+// The "display" used for the layout find does not need to be the same
+// display used for the "character" display - one display can be used to
+// show the grid/segment pointers for another.
 //
 // Inputs:
 //
-//  Button 3 - Increment Grid
-//             After the last grid pin the grid pin is reset back to 1
-//  Button 2 - Increment Segment
-//             After the last segment pin the segment pin is reset back to 1
-//  Button 1 - 1) Clear Display
+//  Next (Short Press) - Increment Grid or Segment
+//             After the last grid or segment pin the grid pin is reset back to 1
+//  Next (Long Press) - Switch between Grid and Segement increments
+//             
+//  Select   - 1) Clear Display
 //                - Clear the display bitmap back to all OFF.
 //             2) Enable All Segments
 //                - Set all the segement pins in every grid scan to ON.
@@ -53,7 +56,7 @@ class LayoutFinder : public IApp
 
         LayoutFinder(
             Buttons *buttons,
-            Display *display,
+            IDisplay *display,
             ICharacter *character // Optional, use NULL if no character print available
         );
 
@@ -75,9 +78,10 @@ class LayoutFinder : public IApp
     private:
 
         Buttons    *m_buttons;
-        Display    *m_display;
+        IDisplay   *m_display;
         ICharacter *m_character;
-        bool        m_gridSelected;
+
+        bool m_gridSelected;
 
         UINT8 m_grid;
         UINT8 m_seg;

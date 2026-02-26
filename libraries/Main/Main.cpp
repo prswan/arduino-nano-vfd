@@ -72,7 +72,7 @@ Step 1
 #define BUTTON_PIN_NEXT   (3) // Increment
 #define BUTTON_PIN_SELECT (2) // App Select
 
-void Main(Display *display, ICharacter *character)
+void Main(ShiftRegisterBitMap *bitMap, ShiftRegisterScan *scan, ICharacter *character)
 {
     Buttons *buttons = new Buttons(
         BUTTON_PIN_NEXT,
@@ -84,6 +84,8 @@ void Main(Display *display, ICharacter *character)
     {
         return;
     }
+
+    IDisplay *display = bitMap->getDisplay(0);
 
     // The LayoutFinder app
     IApp *app = new LayoutFinder(
@@ -99,7 +101,7 @@ void Main(Display *display, ICharacter *character)
     // Main loop
     while (1)
     {  
-        if (display->scan())
+        if (scan->run())
         {
             switch (currentApp)
             {
@@ -125,7 +127,14 @@ void Main(Display *display, ICharacter *character)
                 {
                     if (newApp)
                     {
-                        display->setAllPinsOn();
+                        //
+                        // Only applicable to the ShiftRegister implementation.
+                        // The integrated bit map driver IC's don't have pin control.
+                        //
+                        ShiftRegisterDisplay *shiftRegisterDisplay = (ShiftRegisterDisplay *) display;
+
+                        shiftRegisterDisplay->clear();
+                        shiftRegisterDisplay->setAllPins(true);
                     }
                     break;
                 }
@@ -147,8 +156,7 @@ void Main(Display *display, ICharacter *character)
                     {
                         display->clear();
 
-                        character->print(0, 6, '0');
-                        stdOut->printf("\f%s", "HELLO");
+                        stdOut->printf("\f%s", "TIME");
                     }
 
                     // This works because the run is only called when the display is scanned

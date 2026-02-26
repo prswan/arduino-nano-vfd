@@ -95,10 +95,22 @@ static const PinMap s_pinMapSegment[] PROGMEM =
     {20, 32 + ( 8-1)}  // S16
 };
 
+//
+// The resulting registerMask for this display.
+// The driver IC chain is 64-bits or 8 bytes.
+// The second 32-bits are used for this display that are the first shifted in.
+//
+static const UINT8 s_registerMask[] PROGMEM =
+{
+    0xFF,0xFF,0xFF,0xFF, 0x00,0x00,0x00,0x00 
+};
+
 void PanasonicDVDRV32Pinout::getScanConfig(
+    const UINT8 **registerMask,
     UINT8 *registerLenInBits,
     UINT8 *numGrids)
 {
+    *registerMask = s_registerMask;
     *registerLenInBits = 64;
     *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
 };

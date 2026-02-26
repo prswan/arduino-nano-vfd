@@ -99,6 +99,7 @@ private:
     UINT8 m_numEntriesPinMapGrid;
     UINT8 m_numEntriesPinMapSegment;
 
+    const UINT8  *p_registerMask; // Not used in this implementation
     const PinMap *p_pinMapGrid;
     const PinMap *p_pinMapSegment;
 
