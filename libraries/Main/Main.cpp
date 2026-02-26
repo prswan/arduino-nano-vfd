@@ -25,7 +25,7 @@
 
 #include "Main.h"
 #include "Buttons.h"
-#include "Display.h"
+#include "ShiftRegisterDisplay.h"
 #include "Char7Seg.h"
 #include "LayoutFinder.h"
 #include "VfdStdOut.h"
