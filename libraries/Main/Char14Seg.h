@@ -30,7 +30,7 @@
 #include "IDisplay.h"
 
 //
-// Character print implementation for a 7-Segment display.
+// Character print implementation for a 14 or 15 segment display.
 //
 class Char14Seg : public ICharacter
 {

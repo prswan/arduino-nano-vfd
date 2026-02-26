@@ -40,7 +40,7 @@ public:
 
     ~VfdStdOut() {};
 
-    virtual bool printf(
+    bool printf(
         const UINT8 *format, 
         ...
     );
