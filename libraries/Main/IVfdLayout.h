@@ -22,36 +22,25 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#include "Main.h"
+#ifndef IVfdLayout_h
+#define IVfdLayout_h
 
-#include "SonyDVPNS725PPinout.h"
-#include "SonyDVPNS725PLayout.h"
-#include "ShiftRegisterBitMap.h"
-#include "ShiftRegisterScan.h"
-#include "Char14Seg.h"
+#include "Arduino.h"
+#include "Types.h"
 
+//
+// Aggregate container interface class for all the display layout information.
+//
+// In future, it may be a place to put something that describes the overall layout if needed?
+// e.g. random example: TEAC RW-CD22
+// - row 0, col 0, 8-segment bar    (IVfdLayoutBar)
+// - row 1, col 0, 8-segment bar    (IVfdLayoutBar)
+// - row 2, col  0,  2 digit  7-seg (IVfdLayout7Seg)
+// - row 2, col  2,  9 digit 14-seg (IVfdLayout7Seg)
+// - row 2, col 11,  2 digit  7-seg (IVfdLayout7Seg)
+//
+class IVfdLayout
+{
+};
 
-// AN5818 Digital pin mappings
-
-#define AN5818_STROBE (1)  // Rising edge clocked
-#define AN5818_BLANK  (9)  // Hi == All outputs disabled
-
-void setup() {
-  // put your setup code here, to run once:
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
-  IVfdPinout *vfdPinout = new SonyDVPNS725PPinout();
-  IVfdLayout *vfdLayout = new SonyDVPNS725PLayout();
-
-  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
-  ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
-
-  IDisplay *display1 = bitMap->getDisplay(0);
-
-  ICharacter *character = new Char14Seg((IVfdLayout14Seg*) vfdLayout, display1);
-
-  Main(bitMap, scan, character);
-}
+#endif

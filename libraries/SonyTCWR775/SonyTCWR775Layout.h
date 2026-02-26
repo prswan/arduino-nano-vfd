@@ -26,13 +26,14 @@
 #define SonyTCWR775Layout_h
 
 #include "Arduino.h"
+#include "IVfdLayout.h"
 #include "IVfdLayout7Seg.h"
 
 //
 // VFD implementation for the Sony TC-WR775 Twin Cassette Deck.
 // driven by a single A6518 32-bit serial driver IC.
 //
-class SonyTCWR775Layout : public IVfdLayout7Seg
+class SonyTCWR775Layout : public IVfdLayout, IVfdLayout7Seg
 {
 public:
     SonyTCWR775Layout() {};

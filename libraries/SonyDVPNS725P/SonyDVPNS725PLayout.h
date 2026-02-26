@@ -26,13 +26,14 @@
 #define SonyDVPNS725PLayout_h
 
 #include "Arduino.h"
+#include "IVfdLayout.h"
 #include "IVfdLayout14Seg.h"
 
 //
 // VFD layout for the Sony DVP-NS725P DVD Player.
 // driven by a single A6518 32-bit serial driver IC.
 //
-class SonyDVPNS725PLayout : public IVfdLayout14Seg
+class SonyDVPNS725PLayout : public IVfdLayout, IVfdLayout14Seg
 {
 public:
     SonyDVPNS725PLayout() {};

@@ -40,15 +40,15 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  IVfdPinout     *vfdPinout = new SonyTCWR775Pinout();
-  IVfdLayout7Seg *vfdLayout = new SonyTCWR775Layout();
+  IVfdPinout *vfdPinout = new SonyTCWR775Pinout();
+  IVfdLayout *vfdLayout = new SonyTCWR775Layout();
 
   ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
   ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
 
   IDisplay *display1 = bitMap->getDisplay(0);
 
-  ICharacter *character = new Char7Seg(vfdLayout, display1);
+  ICharacter *character = new Char7Seg((IVfdLayout7Seg*) vfdLayout, display1);
 
   Main(bitMap, scan, character);
 }

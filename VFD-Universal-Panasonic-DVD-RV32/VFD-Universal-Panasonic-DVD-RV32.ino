@@ -40,15 +40,15 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  IVfdPinout      *vfdPinout = new PanasonicDVDRV32Pinout();
-  IVfdLayout14Seg *vfdLayout = new PanasonicDVDRV32Layout();
+  IVfdPinout *vfdPinout = new PanasonicDVDRV32Pinout();
+  IVfdLayout *vfdLayout = new PanasonicDVDRV32Layout();
 
   ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
   ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
 
   IDisplay *display1 = bitMap->getDisplay(0);
 
-  ICharacter *character = new Char14Seg(vfdLayout, display1);
+  ICharacter *character = new Char14Seg((IVfdLayout14Seg*) vfdLayout, display1);
 
   Main(bitMap, scan, character);
 }
