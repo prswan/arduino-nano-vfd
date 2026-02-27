@@ -125,11 +125,12 @@ static const DisplayGroup14Seg s_displayGroup14SegLetters[] PROGMEM =
 };
 
 Char14Seg::Char14Seg(
-    IVfdLayout14Seg *vfdLayout,
+    IVfdLayout *vfdLayout,
     IDisplay *display) : m_vfdLayout(vfdLayout),
                          m_display(display)
 {
     vfdLayout->getSegmentGroup14Seg(
+        0,
         0,
         &p_segmentGroup14Seg,
         &m_numEntriesSegmentGroup14Seg);
@@ -194,6 +195,83 @@ bool Char14Seg::print(
         if (pinS != 0)
         {
             m_display->setSegment(pinG, pinS, on);
+        }
+    }
+
+    return true;
+};
+
+
+static bool Char14Seg::print(
+    Vfd *vfd,
+    UINT8 row,
+    UINT8 col,
+    UINT8 ascii)
+{
+    UINT8 numEntriesSegmentGroup14Seg;
+    const SegmentGroup14Seg *p_segmentGroup14Seg;
+    bool success;
+
+    success = vfd->layout->getSegmentGroup14Seg(
+        0,
+        0,
+        &p_segmentGroup14Seg,
+        &numEntriesSegmentGroup14Seg);
+
+    if (!success || (row > 0) || (col >= numEntriesSegmentGroup14Seg))
+    {
+        return false;
+    }
+
+    UINT8 *p_on = NULL;
+
+    if ((ascii >= '0') && (ascii <= '9'))
+    {
+        UINT8 index = ascii - '0';
+        p_on = (UINT8 *) &s_displayGroup14SegNumbers[index];
+    }
+    else if ((ascii >= 'A') && (ascii <= 'Z'))
+    {
+        UINT8 index = ascii - 'A';
+        p_on = (UINT8 *) &s_displayGroup14SegLetters[index];
+    }
+    else
+    {
+        for (UCHAR x = 0 ; x < ARRAYSIZE(s_symbolDisplayGroup14Seg) ; x++)
+        {
+            UCHAR value = pgm_read_byte_near(&s_symbolDisplayGroup14Seg[x].value);
+
+            if (ascii == value)
+            {
+                p_on = (UINT8 *) &s_symbolDisplayGroup14Seg[x].group;
+                break;
+            }
+        }
+    }
+
+    // Nothing found
+    if (p_on == NULL)
+    {
+        return false;
+    }
+
+    SegmentMap *p_seg = (SegmentMap *)&p_segmentGroup14Seg[col];
+
+    for (int s = 0; s < 15; s++)
+    {
+        UINT8 pinG = pgm_read_byte_near(&p_seg[s].pinG);
+        UINT8 pinS = pgm_read_byte_near(&p_seg[s].pinS);
+        UINT8 on = pgm_read_byte_near(&p_on[s]);
+
+        // Check for a defined segment, this accounts for the optional "s" centre dot.
+        if (pinS != 0)
+        {
+            success = vfd->display->setSegment(pinG, pinS, on);
+
+            if (!success)
+            {
+                break;
+            }
         }
     }
 

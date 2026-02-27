@@ -27,13 +27,12 @@
 
 #include "Arduino.h"
 #include "IVfdLayout.h"
-#include "IVfdLayout14Seg.h"
 
 //
 // VFD layout for the Sony DVP-NS725P DVD Player.
 // driven by a single A6518 32-bit serial driver IC.
 //
-class PanasonicDVDRV32Layout : public IVfdLayout, IVfdLayout14Seg
+class PanasonicDVDRV32Layout : public IVfdLayout
 {
 public:
     PanasonicDVDRV32Layout() {};
@@ -42,6 +41,7 @@ public:
 
     virtual bool getSegmentGroup14Seg(
         UINT8 row,
+        UINT8 col,
         const SegmentGroup14Seg **p_segGroup,
         UINT8 *numEntries);
 };

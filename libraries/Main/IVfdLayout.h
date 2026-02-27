@@ -27,6 +27,56 @@
 
 #include "Arduino.h"
 #include "Types.h"
+#include "Segments.h"
+
+
+//
+// Segment group for 7 segment display characters.
+// Character encoding is more efficient with direct index.
+// As an array, this can represent a group of characters.
+//
+typedef struct _SegmentGroup7Seg
+{
+    SegmentMap a;
+    SegmentMap b;
+    SegmentMap c;
+    SegmentMap d;
+    SegmentMap e;
+    SegmentMap f;
+    SegmentMap g;
+
+} SegmentGroup7Seg;
+
+
+//
+// Segment group for 14 segment display characters,
+// including 15 segment versions with the centre dot.
+// Character encoding is more efficient with direct index.
+// As an array, this can represent a group of characters.
+//
+typedef struct _SegmentGroup14Seg
+{
+    SegmentMap a;
+    SegmentMap b;
+    SegmentMap c;
+    SegmentMap d;
+    SegmentMap e;
+    SegmentMap f;
+    SegmentMap g1;
+    SegmentMap g2;
+    SegmentMap h;
+    SegmentMap i;
+    SegmentMap j;
+    SegmentMap k;
+    SegmentMap l;
+    SegmentMap m;
+    // Optional centre dot for some displays
+    SegmentMap s;
+    // Optional Decimal Point on some characters
+    SegmentMap dp;
+
+} SegmentGroup14Seg;
+
 
 //
 // Aggregate container interface class for all the display layout information.
@@ -36,11 +86,69 @@
 // - row 0, col 0, 8-segment bar    (IVfdLayoutBar)
 // - row 1, col 0, 8-segment bar    (IVfdLayoutBar)
 // - row 2, col  0,  2 digit  7-seg (IVfdLayout7Seg)
-// - row 2, col  2,  9 digit 14-seg (IVfdLayout7Seg)
+// - row 2, col  2,  9 digit 14-seg (IVfdLayout14Seg)
 // - row 2, col 11,  2 digit  7-seg (IVfdLayout7Seg)
 //
+
+//
+// This should be part of IVfdLayout, and can also add programatic Manufacturer & Model strings.
+// Should we also git rid of the inheritance and just use a single API with false returns by default?
+//
+// Defines one layout map entry with logically approximate but contiguous rows & columns.
+//
+// There is ALWAYS a IvfdLayoutSymbol on every display.
+//
+// Notes:
+// We can pass Vfd to Char14Seg in the API call and make it global to save RAM.
+//
+//typedef struct _VfdLayoutRegionMap
+//{
+//    UINT8 row;
+//    UINT8 col;
+//    UINT8 len;
+//    RegionType type; // 7Seg, 14Seg, HorzBar, VertBar, Circle etc.
+//
+//} VfdLayoutRegionMap;
+
+
 class IVfdLayout
 {
+public:
+
+    //
+    // Returns the SegmentMap groups of 7 segment digits based on
+    // row and column general coordinates. 
+    //
+    // numEntries is also equivalent to the number of digits in the group.
+    //
+    // returns false if a group doesn't exist.
+    //
+    virtual bool getSegmentGroup7Seg(
+        UINT8 row,
+        UINT8 col,
+        const SegmentGroup7Seg **p_segGroup,
+        UINT8 *numEntries)
+    {
+        return false;
+    };
+
+    //
+    // Returns the SegmentMap groups of 14 or 15 segment digits based on
+    // row and column general coordinates. 
+    //
+    // numEntries is also equivalent to the number of digits in the group.
+    //
+    // returns false if a group doesn't exist.
+    //
+    virtual bool getSegmentGroup14Seg(
+        UINT8 row,
+        UINT8 col,
+        const SegmentGroup14Seg **p_segGroup,
+        UINT8 *numEntries)
+    {
+        return false;
+    };
+
 };
 
 #endif

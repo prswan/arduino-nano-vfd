@@ -27,13 +27,12 @@
 
 #include "Arduino.h"
 #include "IVfdLayout.h"
-#include "IVfdLayout7Seg.h"
 
 //
 // VFD implementation for the Sony TC-WR775 Twin Cassette Deck.
 // driven by a single A6518 32-bit serial driver IC.
 //
-class SonyTCWR775Layout : public IVfdLayout, IVfdLayout7Seg
+class SonyTCWR775Layout : public IVfdLayout
 {
 public:
     SonyTCWR775Layout() {};
@@ -42,16 +41,9 @@ public:
 
     virtual bool getSegmentGroup7Seg(
         UINT8 row,
+        UINT8 col,
         const SegmentGroup7Seg **p_segGroup,
         UINT8 *numEntries);
 };
-
-/*
-//
-// print a 0..9 single hex digit into the display map.
-//
-PERROR print7Seg(DisplayMap *map, UINT8 row, UINT8 col, UINT8 value);
-
-*/
 
 #endif

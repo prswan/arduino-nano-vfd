@@ -25,10 +25,9 @@
 #ifndef Main_h
 #define Main_h
 
-#include "ShiftRegisterBitMap.h"
-#include "ShiftRegisterScan.h"
+#include "Controller.h"
 #include "ICharacter.h"
 
-void Main(ShiftRegisterBitMap *bitMap, ShiftRegisterScan *scan, ICharacter *character);
+void Main(Controller *controller, ICharacter *character);
 
 #endif

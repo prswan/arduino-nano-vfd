@@ -319,17 +319,19 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
 
 bool PanasonicDVDRV32Layout::getSegmentGroup14Seg(
     UINT8 row,
+    UINT8 col,
     const SegmentGroup14Seg **p_segGroup,
     UINT8 *numEntries)
 {
-    if (row == 0)
+    if ((row > 0) || (col > 0))
     {
-        *p_segGroup = s_segmentGroup14Seg;
-        *numEntries = ARRAYSIZE(s_segmentGroup14Seg);
-        return true;
+        return false;
     }
 
-    return false;
+    *p_segGroup = s_segmentGroup14Seg;
+    *numEntries = ARRAYSIZE(s_segmentGroup14Seg);
+
+    return true;
 }
 
 

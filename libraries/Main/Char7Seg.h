@@ -26,7 +26,7 @@
 #define Char7Seg_h
 
 #include "ICharacter.h"
-#include "IVfdLayout7Seg.h"
+#include "IVfdLayout.h"
 #include "IDisplay.h"
 
 //
@@ -36,7 +36,7 @@ class Char7Seg : public ICharacter
 {
 public:
     Char7Seg(
-        IVfdLayout7Seg *vfdLyout,
+        IVfdLayout *vfdLyout,
         IDisplay *display);
 
     ~Char7Seg() {};
@@ -49,8 +49,8 @@ public:
         UINT8 ascii);
 
 private:
-    IVfdLayout7Seg *m_vfdLayout;
-    IDisplay       *m_display;
+    IVfdLayout *m_vfdLayout;
+    IDisplay   *m_display;
 
     UINT8 m_numEntriesSegmentGroup7Seg;
 

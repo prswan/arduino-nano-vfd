@@ -72,12 +72,9 @@ Step 1
 #define BUTTON_PIN_NEXT   (3) // Increment
 #define BUTTON_PIN_SELECT (2) // App Select
 
-void Main(ShiftRegisterBitMap *bitMap, ShiftRegisterScan *scan, ICharacter *character)
+void Main(Controller *controller, ICharacter *character)
 {
-    Buttons *buttons = new Buttons(
-        BUTTON_PIN_NEXT,
-        BUTTON_PIN_SELECT
-    );
+    Buttons *buttons = controller->buttons;
 
     // in case we crash
     if (buttons->isSelectActive())
@@ -85,7 +82,7 @@ void Main(ShiftRegisterBitMap *bitMap, ShiftRegisterScan *scan, ICharacter *char
         return;
     }
 
-    IDisplay *display = bitMap->getDisplay(0);
+    IDisplay *display = controller->vfd[0][0].display;
 
     // The LayoutFinder app
     IApp *app = new LayoutFinder(
@@ -101,7 +98,7 @@ void Main(ShiftRegisterBitMap *bitMap, ShiftRegisterScan *scan, ICharacter *char
     // Main loop
     while (1)
     {  
-        if (scan->run())
+        if (controller->scan->run())
         {
             switch (currentApp)
             {

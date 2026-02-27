@@ -25,9 +25,8 @@
 #ifndef Char14Seg_h
 #define Char14Seg_h
 
+#include "Controller.h"
 #include "ICharacter.h"
-#include "IVfdLayout14Seg.h"
-#include "IDisplay.h"
 
 //
 // Character print implementation for a 14 or 15 segment display.
@@ -36,7 +35,7 @@ class Char14Seg : public ICharacter
 {
 public:
     Char14Seg(
-        IVfdLayout14Seg *vfdLayout,
+        IVfdLayout *vfdLayout,
         IDisplay *display);
 
     ~Char14Seg() {};
@@ -48,9 +47,15 @@ public:
         UINT8 col,
         UINT8 ascii);
 
+    static bool print(
+        Vfd *vfd,
+        UINT8 row,
+        UINT8 col,
+        UINT8 ascii);
+
 private:
-    IVfdLayout14Seg *m_vfdLayout;
-    IDisplay        *m_display;
+    IVfdLayout *m_vfdLayout;
+    IDisplay   *m_display;
 
     UINT8 m_numEntriesSegmentGroup14Seg;
 

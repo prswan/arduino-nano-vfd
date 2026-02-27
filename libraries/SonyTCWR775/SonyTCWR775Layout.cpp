@@ -126,17 +126,23 @@ static const SegmentGroup7Seg s_segmentGroup7Seg[] PROGMEM =
 
 bool SonyTCWR775Layout::getSegmentGroup7Seg(
     UINT8 row,
+    UINT8 col,
     const SegmentGroup7Seg **p_segGroup,
     UINT8 *numEntries)
 {
-    if (row == 0)
+    //
+    // TODO: This should be 2 groups of 4 characters not one group of 8,
+    //       but the caller doesn't yet handle groups.
+    //
+    if ((row > 0) || (col > 0))
     {
-        *p_segGroup = s_segmentGroup7Seg;
-        *numEntries = ARRAYSIZE(s_segmentGroup7Seg);
-        return true;
+        return false;
     }
 
-    return false;
+    *p_segGroup = s_segmentGroup7Seg;
+    *numEntries = ARRAYSIZE(s_segmentGroup7Seg);
+
+    return true;
 }
 
 /*

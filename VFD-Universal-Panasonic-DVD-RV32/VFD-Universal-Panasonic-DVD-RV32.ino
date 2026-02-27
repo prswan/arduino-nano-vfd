@@ -24,21 +24,23 @@
 //
 #include "Main.h"
 
-#include "PanasonicDVDRV32Pinout.h"
-#include "PanasonicDVDRV32Layout.h"
+#include "Controller.h"
 #include "Char14Seg.h"
 
-// AN5818 Digital pin mappings
+#include "PanasonicDVDRV32Pinout.h"
+#include "PanasonicDVDRV32Layout.h"
 
+// AN5818 Digital pin mappings
 #define AN5818_STROBE (1)  // Rising edge clocked
 #define AN5818_BLANK  (9)  // Hi == All outputs disabled
 
+#define BUTTON_PIN_NEXT   (3)
+#define BUTTON_PIN_SELECT (2)
+
+static Controller controller;
+
 void setup() {
   // put your setup code here, to run once:
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
 
   IVfdPinout *vfdPinout = new PanasonicDVDRV32Pinout();
   IVfdLayout *vfdLayout = new PanasonicDVDRV32Layout();
@@ -46,9 +48,19 @@ void loop() {
   ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
   ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
 
-  IDisplay *display1 = bitMap->getDisplay(0);
+  controller.vfd[0][0].layout  = vfdLayout;
+  controller.vfd[0][0].display = bitMap->getDisplay(0);
 
-  ICharacter *character = new Char14Seg((IVfdLayout14Seg*) vfdLayout, display1);
+  controller.bitMap[0] = bitMap;
+  controller.scan      = scan;
 
-  Main(bitMap, scan, character);
+  controller.buttons = new Buttons(BUTTON_PIN_NEXT, BUTTON_PIN_SELECT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  ICharacter *character = new Char14Seg(controller.vfd[0][0].layout, controller.vfd[0][0].display);
+
+  Main(&controller, character);
 }
