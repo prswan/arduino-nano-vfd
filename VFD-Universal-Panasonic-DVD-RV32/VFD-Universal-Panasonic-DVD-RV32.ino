@@ -30,6 +30,9 @@
 #include "PanasonicDVDRV32Pinout.h"
 #include "PanasonicDVDRV32Layout.h"
 
+#include "SonyDVPNS725PPinout.h"
+#include "SonyDVPNS725PLayout.h"
+
 // AN5818 Digital pin mappings
 #define AN5818_STROBE (1)  // Rising edge clocked
 #define AN5818_BLANK  (9)  // Hi == All outputs disabled
@@ -42,25 +45,34 @@ static Controller controller;
 void setup() {
   // put your setup code here, to run once:
 
-  IVfdPinout *vfdPinout = new PanasonicDVDRV32Pinout();
-  IVfdLayout *vfdLayout = new PanasonicDVDRV32Layout();
+  IVfdPinout *vfdPinout0 = new PanasonicDVDRV32Pinout();
+  IVfdLayout *vfdLayout0 = new PanasonicDVDRV32Layout();
 
-  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
+  IVfdPinout *vfdPinout1 = new SonyDVPNS725PPinout();
+  IVfdLayout *vfdLayout1 = new SonyDVPNS725PLayout();
+
+  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout0, vfdPinout1);
   ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
 
-  controller.vfd[0][0].layout  = vfdLayout;
+  controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap->getDisplay(0);
+
+  controller.vfd[0][1].layout  = vfdLayout1;
+  controller.vfd[0][1].display = bitMap->getDisplay(1);
 
   controller.bitMap[0] = bitMap;
   controller.scan      = scan;
 
   controller.buttons = new Buttons(BUTTON_PIN_NEXT, BUTTON_PIN_SELECT);
 
-  controller.stdOutVfd = &controller.vfd[0][0];
+  controller.stdOutVfd = &controller.vfd[0][1]; // Sony for StdOut
   controller.stdOutRegionId = 0;
 
   controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
   controller.regionSubTypeMap[0].ichar = new Char14Seg();
+
+  controller.uutVfd = &controller.vfd[0][0]; // Panasonic as the UUT 
+  controller.uutRegionId = 0;
 }
 
 void loop() {

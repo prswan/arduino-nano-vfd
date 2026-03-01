@@ -61,6 +61,9 @@ void setup() {
 
   controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
   controller.regionSubTypeMap[0].ichar = new Char14Seg();
+
+  controller.uutVfd = controller.stdOutVfd;
+  controller.uutRegionId = controller.stdOutRegionId;
 }
 
 void loop() {

@@ -83,7 +83,8 @@ void Main(Controller *controller)
         return;
     }
 
-    IDisplay *display = controller->stdOutVfd->display;
+    IDisplay *stdOutDisplay = controller->stdOutVfd->display;
+    IDisplay *uutDisplay = controller->uutVfd->display;
 
     // The LayoutFinder app
     IApp *app = new LayoutFinder(
@@ -91,7 +92,7 @@ void Main(Controller *controller)
         controller->stdOutVfd,
         controller->stdOutRegionId,
         character,
-        controller->stdOutVfd);
+        controller->uutVfd);
 
     VfdStdOut *stdOut = new VfdStdOut(controller->regionSubTypeMap,
                                       ARRAYSIZE(controller->regionSubTypeMap),
@@ -120,7 +121,12 @@ void Main(Controller *controller)
                 {
                     if (newApp)
                     {
-                        display->setAllSegmentsOn();
+                        if (uutDisplay != stdOutDisplay)
+                        {
+                            stdOut->printf("\f%s", "SEG ON");
+                        }
+
+                        uutDisplay->setAllSegmentsOn();
                     }
                     break;
                 }
@@ -130,11 +136,16 @@ void Main(Controller *controller)
                 {
                     if (newApp)
                     {
+                        if (uutDisplay != stdOutDisplay)
+                        {
+                            stdOut->printf("\f%s", "PIN ON");
+                        }
+
                         //
                         // Only applicable to the ShiftRegister implementation.
                         // The integrated bit map driver IC's don't have pin control.
                         //
-                        ShiftRegisterDisplay *shiftRegisterDisplay = (ShiftRegisterDisplay *) display;
+                        ShiftRegisterDisplay *shiftRegisterDisplay = (ShiftRegisterDisplay *) uutDisplay;
 
                         shiftRegisterDisplay->clear();
                         shiftRegisterDisplay->setAllPins(true);
@@ -147,7 +158,12 @@ void Main(Controller *controller)
                 {
                     if (newApp)
                     {
-                        display->clear();
+                        if (uutDisplay != stdOutDisplay)
+                        {
+                            stdOut->printf("\f%s", "CLEAR");
+                        }
+
+                        uutDisplay->clear();
                     }
                     break;
                 }
@@ -170,21 +186,12 @@ void Main(Controller *controller)
 
                     if (buttons->isNextShortPressed())
                     {
-                        stdOut->printf("\r%4.4d", elapsedTimeInUs);
-
-                        // The above appears to be so slow that it glitches the display.
+                        //
+                        // This print appears to be so slow that it glitches the display.
                         // The \f clear is really expensive. Still slight glitch though.
                         // The math parsing must be terrible.
- /*
-                        elapsedTimeInUs = (elapsedTimeInUs % 10000);
-                        character->print(0, 0, '0' + (elapsedTimeInUs / 1000));
-                        elapsedTimeInUs = (elapsedTimeInUs % 1000);
-                        character->print(0, 1, '0' + (elapsedTimeInUs / 100));
-                        elapsedTimeInUs = (elapsedTimeInUs % 100);
-                        character->print(0, 2, '0' + (elapsedTimeInUs / 10));
-                        elapsedTimeInUs = (elapsedTimeInUs % 10);
-                        character->print(0, 3, '0' + (elapsedTimeInUs / 1));
- */
+                        //
+                        stdOut->printf("\r%4.4d", elapsedTimeInUs);
                     }
                     break;
                 }
@@ -198,7 +205,12 @@ void Main(Controller *controller)
                     {
                         currentChar = 0x20;
 
-                        display->clear();
+                        if (uutDisplay != stdOutDisplay)
+                        {
+                            uutDisplay->clear();
+                        }
+
+                        stdOutDisplay->clear();
                         character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, '*');
                     }
 
@@ -211,6 +223,12 @@ void Main(Controller *controller)
 
                         character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, ' ');
                         character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, currentChar);
+
+                        if (uutDisplay != stdOutDisplay)
+                        {
+                            character->print(controller->uutVfd, controller->uutRegionId, 0, ' ');
+                            character->print(controller->uutVfd, controller->uutRegionId, 0, currentChar);
+                        }
 
                         UINT8 charValue = currentChar;
                         character->print(controller->stdOutVfd, controller->stdOutRegionId, 2, '0' + (charValue / 10));

@@ -81,11 +81,13 @@ ShiftRegisterBitMap::ShiftRegisterBitMap(
     if (vfd1 != NULL)
     {
         m_display[0] = new ShiftRegisterDisplay(vfd1, m_bitMap, m_bitMapSizeInBytes);
+        m_display[0]->clear();
     }
 
     if (vfd2 != NULL)
     {
         m_display[1] = new ShiftRegisterDisplay(vfd2, m_bitMap, m_bitMapSizeInBytes);
+        m_display[1]->clear();
     }
 };
 

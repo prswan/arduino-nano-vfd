@@ -80,8 +80,13 @@ typedef struct _Controller
     // VfdStdOut for the character implementations.
     //
     RegionSubTypeCharMap regionSubTypeMap[2];
-    Vfd *stdOutVfd;
+
+    Vfd  *stdOutVfd;
     UINT8 stdOutRegionId;
+
+    // Unit Under Test VFD for bring-up and layout.
+    Vfd  *uutVfd;
+    UINT8 uutRegionId;
 
 } Controller;
 
