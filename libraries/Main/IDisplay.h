@@ -27,6 +27,25 @@
 
 #include "Arduino.h"
 #include "Types.h"
+#include "IVfdLayout.h"
+
+// Forward declaration
+class IDisplay;
+
+//
+// A physical VFD comprises two primatives:
+// 1) The layout map of the displays characters and symbols in terms of grid & segment coordinates.
+// 2) The display object used to update the visual state.
+//
+// IVfdPinout - Not needed because it's integrated into the BitMap display object.
+// ..BitMap   - Not needed because it's integrated into the Scan & Display objects.
+//
+typedef struct _Vfd 
+{
+    IVfdLayout *layout;
+    IDisplay   *display;
+} Vfd;
+
 
 //
 // Primary interface for elemental use of VFDs.

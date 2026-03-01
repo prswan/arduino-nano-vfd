@@ -26,10 +26,14 @@
 
 LayoutFinder::LayoutFinder(
     Buttons *buttons,
-    IDisplay *display,
-    ICharacter *character) : m_buttons(buttons),
-                             m_display(display),
-                             m_character(character)
+    Vfd *stdOutVfd,
+    UINT8 stdOutRegionId,
+    ICharacter *stdOutIChar,
+    Vfd *uutVfd) : m_buttons(buttons),
+                   m_stdOutVfd(stdOutVfd),
+                   m_stdOutRegionId(stdOutRegionId),
+                   m_stdOutIChar(stdOutIChar),
+                   m_uutVfd(uutVfd)
 {
     m_gridSelected = true;
 
@@ -39,15 +43,15 @@ LayoutFinder::LayoutFinder(
 
 void LayoutFinder::printGridSeg()
 {
-    if (m_character == NULL)
+    if (m_stdOutIChar == NULL)
     {
         return;
     }
 
-    m_character->print(0, 0, '0' + (m_grid / 10));
-    m_character->print(0, 1, '0' + (m_grid % 10));
-    m_character->print(0, 2, '0' + (m_seg / 10));
-    m_character->print(0, 3, '0' + (m_seg % 10));
+    m_stdOutIChar->print(m_stdOutVfd, m_stdOutRegionId, 0, '0' + (m_grid / 10));
+    m_stdOutIChar->print(m_stdOutVfd, m_stdOutRegionId, 1, '0' + (m_grid % 10));
+    m_stdOutIChar->print(m_stdOutVfd, m_stdOutRegionId, 2, '0' + (m_seg / 10));
+    m_stdOutIChar->print(m_stdOutVfd, m_stdOutRegionId, 3, '0' + (m_seg % 10));
 }
 
 void LayoutFinder::run(
@@ -61,9 +65,9 @@ void LayoutFinder::run(
         m_grid = 1;
         m_seg = 1;
 
-        m_display->clear();
+        m_uutVfd->display->clear();
 
-        m_display->setSegment(m_grid, m_seg, true);
+        m_uutVfd->display->setSegment(m_grid, m_seg, true);
 
         printGridSeg();
     }
@@ -85,28 +89,28 @@ void LayoutFinder::run(
 
     if (nextShortPress || nextLongPress)
     {
-        m_display->setSegment(m_grid, m_seg, false);
+       m_uutVfd->display->setSegment(m_grid, m_seg, false);
 
         if (m_gridSelected)
         {
             m_grid++;
 
-            if (!m_display->setSegment(m_grid, m_seg, true))
+            if (!m_uutVfd->display->setSegment(m_grid, m_seg, true))
             {
                 m_grid = 1;
 
-                m_display->setSegment(m_grid, m_seg, true);
+                m_uutVfd->display->setSegment(m_grid, m_seg, true);
             }
         }
         else
         {
             m_seg++;
 
-            if (!m_display->setSegment(m_grid, m_seg, true))
+            if (!m_uutVfd->display->setSegment(m_grid, m_seg, true))
             {
                 m_seg = 1;
 
-                m_display->setSegment(m_grid, m_seg, true);
+                m_uutVfd->display->setSegment(m_grid, m_seg, true);
             }
         }
 

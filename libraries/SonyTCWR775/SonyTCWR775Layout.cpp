@@ -44,9 +44,20 @@
 
 //
 // 8x 7-segment displays in two groups of 4
+// 2x 16-segement horizontal bar graphs.
+//
+static const Region s_region[] PROGMEM =
+{
+    // type,          subType,               id, len
+    {RegionTypeChar,  RegionSubTypeChar7Seg,  0,  4},
+    {RegionTypeChar,  RegionSubTypeChar7Seg,  1,  4},
+};
+
+//
+// 8x 7-segment displays in two groups of 4
 // These were documented in the service manual.
 //
-static const SegmentGroup7Seg s_segmentGroup7Seg[] PROGMEM =
+static const SegmentGroup7Seg s_segmentGroup7Seg0[] PROGMEM =
 {
     // seg, row ,col, pinG, pinS
     {
@@ -85,6 +96,11 @@ static const SegmentGroup7Seg s_segmentGroup7Seg[] PROGMEM =
         {S_7SEG_f, 0, 3, 4, 14},
         {S_7SEG_g, 0, 3, 4, 15},
     },
+};
+
+static const SegmentGroup7Seg s_segmentGroup7Seg1[] PROGMEM =
+{
+    // seg, row ,col, pinG, pinS
     {
         {S_7SEG_a, 0, 4, 3, 1},
         {S_7SEG_b, 0, 4, 3, 2},
@@ -121,26 +137,42 @@ static const SegmentGroup7Seg s_segmentGroup7Seg[] PROGMEM =
         {S_7SEG_f, 0, 7, 2, 14},
         {S_7SEG_g, 0, 7, 2, 15},
     },
-    {{S_NONE}}
+};
+
+void SonyTCWR775Layout::getRegionMap(
+    const Region **p_region,
+    UINT8 *numEntries)
+{
+    *p_region = s_region;
+    *numEntries = ARRAYSIZE(s_region);
 };
 
 bool SonyTCWR775Layout::getSegmentGroup7Seg(
-    UINT8 row,
-    UINT8 col,
+    UINT8 regionId,
     const SegmentGroup7Seg **p_segGroup,
     UINT8 *numEntries)
 {
-    //
-    // TODO: This should be 2 groups of 4 characters not one group of 8,
-    //       but the caller doesn't yet handle groups.
-    //
-    if ((row > 0) || (col > 0))
+    switch (regionId)
     {
-        return false;
-    }
+        case 0:
+        {
+            *p_segGroup = s_segmentGroup7Seg0;
+            *numEntries = ARRAYSIZE(s_segmentGroup7Seg0);
+            break;
+        }
 
-    *p_segGroup = s_segmentGroup7Seg;
-    *numEntries = ARRAYSIZE(s_segmentGroup7Seg);
+        case 1:
+        {
+            *p_segGroup = s_segmentGroup7Seg1;
+            *numEntries = ARRAYSIZE(s_segmentGroup7Seg1);
+            break;
+        }
+
+        default:
+        {
+            return false;
+        }
+    }
 
     return true;
 }

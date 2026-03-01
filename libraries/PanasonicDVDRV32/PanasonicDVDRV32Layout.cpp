@@ -115,6 +115,15 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
 
 //
 // 12x 14-segment standard display.
+//
+static const Region s_region[] PROGMEM =
+{
+    // type,          subType,                id, len
+    {RegionTypeChar,  RegionSubTypeChar14Seg,  0,  12}
+};
+
+//
+// 12x 14-segment standard display.
 // The manual didn't document the layout, reverse engineered using the LayoutFinder.
 //
 static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
@@ -314,16 +323,22 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_l,   0, 11,  1, 12},
         {S_14SEG_m,   0, 11,  1, 13},
     },
-    {{S_NONE}}
+};
+
+void PanasonicDVDRV32Layout::getRegionMap(
+    const Region **p_region,
+    UINT8 *numEntries)
+{
+    *p_region = s_region;
+    *numEntries = ARRAYSIZE(s_region);
 };
 
 bool PanasonicDVDRV32Layout::getSegmentGroup14Seg(
-    UINT8 row,
-    UINT8 col,
+    UINT8 regionId,
     const SegmentGroup14Seg **p_segGroup,
     UINT8 *numEntries)
 {
-    if ((row > 0) || (col > 0))
+    if (regionId > 0)
     {
         return false;
     }

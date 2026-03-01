@@ -29,11 +29,111 @@
 static const UINT8 s_bufferSize = 32;
 
 VfdStdOut::VfdStdOut(
-    ICharacter *ichar) : m_char(ichar)
+    RegionSubTypeCharMap *regionTypeCharMap,
+    UINT8  numRegionTypeCharMapEntries,
+    Vfd   *stdOutVfd,
+    UINT8  stdOutRegionId) : m_regionTypeCharMap(regionTypeCharMap),
+                             m_numRegionTypeCharMapEntries(numRegionTypeCharMapEntries),
+                             m_stdOutVfd(stdOutVfd),
+                             m_stdOutRegionId(stdOutRegionId)
 {
-    m_currentRow = 0;
     m_currentCol = 0;
 };
+
+
+bool VfdStdOut::print(
+        Vfd   *vfd,
+        UINT8  regionId,
+        const UINT8 *string)
+{
+    const Region *p_region;
+    UINT8 numRegions;
+    Region region;
+
+    bool success = false;
+    ICharacter *ichar = NULL;
+
+    // 
+    // Step 1 - Get the region map and find the matching Char region.
+    //
+    vfd->layout->getRegionMap(&p_region, &numRegions);
+
+    for (UINT8 i = 0 ; i < numRegions ; i++)
+    {
+        memcpy_P(&region, &p_region[i], sizeof(region));
+
+        if ((RegionTypeChar == region.type) && (regionId == region.id))
+        {
+            success = true;
+        }
+    }
+
+    if (!success)
+    {
+        return false;
+    }
+
+    //
+    // Step 2 - Find the matching character implementation
+    //
+    for (UINT8 i = 0 ; i < m_numRegionTypeCharMapEntries ; i++)
+    {
+        if (m_regionTypeCharMap[i].subChar == region.subType.subChar)
+        {
+            ichar = m_regionTypeCharMap[i].ichar;
+        }
+    }
+
+    if (ichar == NULL)
+    {
+        return false;
+    }
+ 
+    for (UINT8 x = 0 ; string[x] != 0 ; x++)
+    {
+        UINT8 ascii = string[x];
+
+        // CR - carriage return, to col 0
+        if (ascii == '\r')
+        {
+            m_currentCol = 0;
+            continue;
+        }
+
+        // FF - Form Feed, reset back to 0 & clear. NOTE: this is quite slow.
+        if (ascii == '\f')
+        {
+            m_currentCol = 0;
+
+            // Loop through writing space characters.
+            for (int i = 0 ; i < region.len ; i++)
+            {
+                ichar->print(
+                    vfd,
+                    regionId,
+                    i,
+                    ' ');
+            }
+            continue;
+        }
+
+        success = ichar->print(
+            vfd,
+            regionId,
+            m_currentCol,
+            ascii);
+
+        if (!success)
+        {
+            break;
+        }
+
+        m_currentCol++;
+    }
+
+    return success;
+};
+
 
 bool VfdStdOut::printf(
         const UINT8 *format, 
@@ -45,45 +145,21 @@ bool VfdStdOut::printf(
     va_start(args, format);
     vsnprintf(buffer, sizeof(buffer), format, args);
  
-    bool success = true;
-    for (UINT8 x = 0 ; x < sizeof(buffer) ; x++)
-    {
-        UINT8 ascii = buffer[x];
+    return print(m_stdOutVfd, m_stdOutRegionId, buffer);
+};    
 
-        // CR - carriage return, to col 0
-        if (ascii == '\r')
-        {
-            m_currentCol = 0;
-            continue;
-        }
 
-        // LF - line feed, new line
-        if (ascii == '\n')
-        {
-            m_currentRow++;
-            continue;
-        }
+bool VfdStdOut::printf(
+        Vfd   *vfd,
+        UINT8  regionId,
+        const UINT8 *format, 
+        ...)
+{
+    UINT8 buffer[s_bufferSize];
 
-        // FF - Form Feed, reset back to 0,0
-        if (ascii == '\f')
-        {
-            m_currentCol = 0;
-            m_currentRow = 0;
-            m_char->clear();
-            continue;
-        }
-
-        success = m_char->print(
-            m_currentRow,
-            m_currentCol,
-            buffer[x]
-        );
-
-        if (!success)
-            break;
-
-        m_currentCol++;
-    }
-
-    return success;
-};
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
+ 
+    return print(vfd, regionId, buffer);
+};    

@@ -32,20 +32,7 @@
 #include "ShiftRegisterBitMap.h"
 #include "ShiftRegisterScan.h"
 #include "Buttons.h"
-
-//
-// A physical VFD comprises two primatives:
-// 1) The layout map of the displays characters and symbols in terms of grid & segment coordinates.
-// 2) The display object used to update the visual state.
-//
-// IVfdPinout - Not needed because it's integrated into the BitMap display object.
-// ..BitMap   - Not needed because it's integrated into the Scan & Display objects.
-//
-typedef struct _Vfd 
-{
-    IVfdLayout *layout;
-    IDisplay   *display;
-} Vfd;
+#include "VfdStdOut.h"
 
 //
 // There can be up to 16 displays visually arranged right to left and top to bottom
@@ -75,6 +62,26 @@ typedef struct _Controller
     ShiftRegisterScan*   scan;
 
     Buttons* buttons;
+
+    //
+    // A small cheat to specify where to find a primary output.
+    //
+    // e.g. Vfd[port][display] in character region regionId. 
+    //
+    struct {
+
+        UINT8 port;
+        UINT8 display;
+        UINT8 regionId;
+
+    } primary;
+
+    // 
+    // VfdStdOut for the character implementations.
+    //
+    RegionSubTypeCharMap regionSubTypeMap[2];
+    Vfd *stdOutVfd;
+    UINT8 stdOutRegionId;
 
 } Controller;
 

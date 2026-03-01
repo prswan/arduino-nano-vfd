@@ -27,6 +27,7 @@
 
 #include "Arduino.h"
 #include "Types.h"
+#include "IDisplay.h"
 
 //
 // Interface for the data container class holding the characteristics of the VFD.
@@ -36,17 +37,13 @@ class ICharacter
     public:
 
         //
-        // Clear the display back to blank
-        //
-        virtual void clear() = 0;
-
-        //
         // Prints a single ASCII character to the VFD.
         //
-        // Returns false if row, col or ascii are invalid.
+        // Returns false if regionId, col or ascii are invalid.
         //
         virtual bool print(
-            UINT8 row,
+            Vfd  *vfd,
+            UINT8 regionId,
             UINT8 col,
             UINT8 ascii
         ) = 0;

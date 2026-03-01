@@ -26,6 +26,15 @@
 
 //
 // 7x 14-segment display with centre dot.
+//
+static const Region s_region[] PROGMEM =
+{
+    // type,          subType,                 id, len
+    {RegionTypeChar,  RegionSubTypeChar14Seg,   0,  12}
+};
+
+//
+// 7x 14-segment display with centre dot.
 // These were documented in the service manual.
 //
 static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
@@ -157,16 +166,22 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_s,   0, 6, 1, 12},
         {S_14SEG_dp,  0, 6, 1, 23},
     },
-    {{S_NONE}}
+};
+
+void SonyDVPNS725PLayout::getRegionMap(
+    const Region **p_region,
+    UINT8 *numEntries)
+{
+    *p_region = s_region;
+    *numEntries = ARRAYSIZE(s_region);
 };
 
 bool SonyDVPNS725PLayout::getSegmentGroup14Seg(
-    UINT8 row,
-    UINT8 col,
+    UINT8 regionId,
     const SegmentGroup14Seg **p_segGroup,
     UINT8 *numEntries)
 {
-    if ((row > 0) || (col > 0))
+    if (regionId > 0)
     {
         return false;
     }

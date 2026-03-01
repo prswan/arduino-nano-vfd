@@ -55,12 +55,15 @@ void setup() {
   controller.scan      = scan;
 
   controller.buttons = new Buttons(BUTTON_PIN_NEXT, BUTTON_PIN_SELECT);
+
+  controller.stdOutVfd = &controller.vfd[0][0];
+  controller.stdOutRegionId = 0;
+
+  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
+  controller.regionSubTypeMap[0].ichar = new Char14Seg();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
-  ICharacter *character = new Char14Seg(controller.vfd[0][0].layout, controller.vfd[0][0].display);
-
-  Main(&controller, character);
+  Main(&controller);
 }

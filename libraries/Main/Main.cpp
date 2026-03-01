@@ -72,9 +72,10 @@ Step 1
 #define BUTTON_PIN_NEXT   (3) // Increment
 #define BUTTON_PIN_SELECT (2) // App Select
 
-void Main(Controller *controller, ICharacter *character)
+void Main(Controller *controller)
 {
     Buttons *buttons = controller->buttons;
+    ICharacter *character = controller->regionSubTypeMap[0].ichar; 
 
     // in case we crash
     if (buttons->isSelectActive())
@@ -82,15 +83,20 @@ void Main(Controller *controller, ICharacter *character)
         return;
     }
 
-    IDisplay *display = controller->vfd[0][0].display;
+    IDisplay *display = controller->stdOutVfd->display;
 
     // The LayoutFinder app
     IApp *app = new LayoutFinder(
         buttons,
-        display,
-        character);
+        controller->stdOutVfd,
+        controller->stdOutRegionId,
+        character,
+        controller->stdOutVfd);
 
-    VfdStdOut *stdOut = new VfdStdOut(character);
+    VfdStdOut *stdOut = new VfdStdOut(controller->regionSubTypeMap,
+                                      ARRAYSIZE(controller->regionSubTypeMap),
+                                      controller->stdOutVfd,
+                                      controller->stdOutRegionId);
 
     UINT8 currentApp = 0;
     bool newApp = true;
@@ -151,8 +157,6 @@ void Main(Controller *controller, ICharacter *character)
                 {
                     if (newApp)
                     {
-                        display->clear();
-
                         stdOut->printf("\f%s", "TIME");
                     }
 
@@ -166,6 +170,12 @@ void Main(Controller *controller, ICharacter *character)
 
                     if (buttons->isNextShortPressed())
                     {
+                        stdOut->printf("\r%4.4d", elapsedTimeInUs);
+
+                        // The above appears to be so slow that it glitches the display.
+                        // The \f clear is really expensive. Still slight glitch though.
+                        // The math parsing must be terrible.
+ /*
                         elapsedTimeInUs = (elapsedTimeInUs % 10000);
                         character->print(0, 0, '0' + (elapsedTimeInUs / 1000));
                         elapsedTimeInUs = (elapsedTimeInUs % 1000);
@@ -174,6 +184,7 @@ void Main(Controller *controller, ICharacter *character)
                         character->print(0, 2, '0' + (elapsedTimeInUs / 10));
                         elapsedTimeInUs = (elapsedTimeInUs % 10);
                         character->print(0, 3, '0' + (elapsedTimeInUs / 1));
+ */
                     }
                     break;
                 }
@@ -188,7 +199,7 @@ void Main(Controller *controller, ICharacter *character)
                         currentChar = 0x20;
 
                         display->clear();
-                        character->print(0, 0, '*');
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, '*');
                     }
 
                     if (buttons->isNextShortPressed())
@@ -198,13 +209,13 @@ void Main(Controller *controller, ICharacter *character)
                             currentChar = 0x20;
                         }
 
-                        character->print(0, 0, ' ');
-                        character->print(0, 0, currentChar);
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, ' ');
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, currentChar);
 
                         UINT8 charValue = currentChar;
-                        character->print(0, 2, '0' + (charValue / 10));
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 2, '0' + (charValue / 10));
                         charValue = (charValue % 10);
-                        character->print(0, 3, '0' + (charValue / 1));
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (charValue / 1));
                     }
                     break;
                 }

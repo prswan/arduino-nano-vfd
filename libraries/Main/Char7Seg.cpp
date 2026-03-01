@@ -28,11 +28,6 @@
 
  * DisplayGroup7Seg should be a bitfield to save space
    - memcpy out of PROGMEM into DisplayGroup7Seg and bit deref that.
-
- * Addition of reasonably displayable letters?
-   - A,C,E,F,H,L,P,S,U,Y
-   - b,c,d,h,o,u
-   - At least the hexadecimal letters.
 */
 
 //
@@ -53,59 +48,106 @@ typedef struct _DisplayGroup7Seg
 
 } DisplayGroup7Seg;
 
+//
+// Symbols include various but not all ASCII punctuation
+//
+typedef struct _SymbolDisplayGroup7Seg
+{
+    UINT8 value;
+    DisplayGroup7Seg group;
+
+} SymbolDisplayGroup14Seg;
+
+static const SymbolDisplayGroup14Seg s_symbolDisplayGroup7Seg[] PROGMEM =
+{
+//   val,  a  b  c  d  e  f  g 
+    {' ',  0, 0, 0, 0, 0, 0, 0},
+    {'-',  0, 0, 0, 0, 0, 0, 1},
+    {'=',  0, 0, 0, 1, 0, 0, 1},
+    {'_',  0, 0, 0, 1, 0, 0, 0},
+// Limited choice for letters, small selection with enough for hex.
+    {'A',  1, 1, 1, 0, 1, 1, 1}, // A
+    {'b',  0, 0, 1, 1, 1, 1, 1}, // b
+    {'C',  1, 0, 0, 1, 1, 1, 0}, // C
+    {'d',  0, 1, 1, 1, 1, 0, 1}, // d
+    {'E',  1, 0, 0, 1, 1, 1, 1}, // E
+    {'F',  1, 0, 0, 0, 1, 1, 1}, // F
+    {'H',  0, 1, 1, 0, 1, 1, 1}, // H
+    {'J',  0, 1, 1, 1, 1, 0, 0}, // J
+    {'L',  0, 0, 0, 1, 1, 1, 0}, // L
+    {'O',  1, 1, 1, 1, 1, 1, 0}, // O
+    {'P',  1, 1, 0, 0, 1, 1, 1}, // P
+    {'S',  1, 0, 1, 1, 0, 1, 1}, // S
+    {'U',  0, 1, 1, 1, 1, 1, 0}  // U
+//
+};
+
 static const DisplayGroup7Seg s_displayGroup7SegNumbers[] PROGMEM =
-    {
-    //   a  b  c  d  e  f  g
-        {1, 1, 1, 1, 1, 1, 0}, // 0
-        {0, 1, 1, 0, 0, 0, 0}, // 1
-        {1, 1, 0, 1, 1, 0, 1}, // 2
-        {1, 1, 1, 1, 0, 0, 1}, // 3
-        {0, 1, 1, 0, 0, 1, 1}, // 4
-        {1, 0, 1, 1, 0, 1, 1}, // 5
-        {1, 0, 1, 1, 1, 1, 1}, // 6
-        {1, 1, 1, 0, 0, 0, 0}, // 7
-        {1, 1, 1, 1, 1, 1, 1}, // 8
-        {1, 1, 1, 1, 0, 1, 1}  // 9
-                               //
+{
+//   a  b  c  d  e  f  g
+    {1, 1, 1, 1, 1, 1, 0}, // 0
+    {0, 1, 1, 0, 0, 0, 0}, // 1
+    {1, 1, 0, 1, 1, 0, 1}, // 2
+    {1, 1, 1, 1, 0, 0, 1}, // 3
+    {0, 1, 1, 0, 0, 1, 1}, // 4
+    {1, 0, 1, 1, 0, 1, 1}, // 5
+    {1, 0, 1, 1, 1, 1, 1}, // 6
+    {1, 1, 1, 0, 0, 0, 0}, // 7
+    {1, 1, 1, 1, 1, 1, 1}, // 8
+    {1, 1, 1, 1, 0, 1, 1}  // 9
+//
 };
 
-Char7Seg::Char7Seg(
-    IVfdLayout *vfdLayout,
-    IDisplay *display) : m_vfdLayout(vfdLayout),
-                         m_display(display)
-{
-    vfdLayout->getSegmentGroup7Seg(
-        0,
-        0,
-        &p_segmentGroup7Seg,
-        &m_numEntriesSegmentGroup7Seg);
-};
-
-void Char7Seg::clear()
-{
-    m_display->clear();
-}
 
 bool Char7Seg::print(
-    UINT8 row,
+    Vfd *vfd,
+    UINT8 regionId,
     UINT8 col,
     UINT8 ascii)
 {
-    if ((row > 0) || (col >= m_numEntriesSegmentGroup7Seg))
+    UINT8 numEntriesSegmentGroup7Seg;
+    const SegmentGroup7Seg *p_segmentGroup7Seg;
+    bool success;
+
+    success = vfd->layout->getSegmentGroup7Seg(
+        regionId,
+        &p_segmentGroup7Seg,
+        &numEntriesSegmentGroup7Seg);
+
+    if (!success || (col >= numEntriesSegmentGroup7Seg))
     {
         return false;
     }
 
-    if ((ascii > '9') || (ascii < '0'))
+    UINT8 *p_on = NULL;
+
+    if ((ascii >= '0') && (ascii <= '9'))
+    {
+        UINT8 index = ascii - '0';
+        p_on = (UINT8 *) &s_displayGroup7SegNumbers[index];
+    }
+    else
+    {
+        for (UCHAR x = 0 ; x < ARRAYSIZE(s_symbolDisplayGroup7Seg) ; x++)
+        {
+            UCHAR value = pgm_read_byte_near(&s_symbolDisplayGroup7Seg[x].value);
+
+            // Limited choice for letters, small selection with enough for hex.
+            if ((ascii == value) || (toupper(ascii) == value) || (tolower(ascii) == value))
+            {
+                p_on = (UINT8 *) &s_symbolDisplayGroup7Seg[x].group;
+                break;
+            }
+        }
+    }
+
+    // Nothing found
+    if (p_on == NULL)
     {
         return false;
     }
-
-    UINT8 index = ascii - '0';
 
     SegmentMap *p_seg = (SegmentMap *)&p_segmentGroup7Seg[col];
-
-    UINT8 *p_on = (UINT8 *)&s_displayGroup7SegNumbers[index];
 
     for (int s = 0; s < 7; s++)
     {
@@ -113,7 +155,12 @@ bool Char7Seg::print(
         UINT8 pinS = pgm_read_byte_near(&p_seg[s].pinS);
         UINT8 on = pgm_read_byte_near(&p_on[s]);
 
-        m_display->setSegment(pinG, pinS, on);
+        success = vfd->display->setSegment(pinG, pinS, on);
+
+        if (!success)
+        {
+            break;
+        }
     }
 
     return true;

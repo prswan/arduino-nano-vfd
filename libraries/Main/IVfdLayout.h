@@ -29,6 +29,71 @@
 #include "Types.h"
 #include "Segments.h"
 
+//
+// Type identification for basic logical visual element regions.
+//
+typedef enum 
+{
+    RegionTypeChar,
+    RegionTypeBar,
+    RegionTypeCircle,
+    RegionTypeNumberList
+
+} RegionType;
+
+//
+// Sub types for the specific implementations of the basic ASCII character
+// element region implementations.
+//
+typedef enum 
+{
+    RegionSubTypeChar5x7,
+    RegionSubTypeChar14Seg,
+    RegionSubTypeChar7Seg,
+    RegionSubTypeChar123,
+
+} RegionSubTypeChar;
+
+//
+// Aggregation of the the various region sub types.
+//
+typedef union _RegionSubType
+{
+    RegionSubTypeChar subChar;
+
+} RegionSubType;
+
+//
+// Defines one region entry with logically approximate but contiguous id's & groups.
+// Composite graphics such as bars, circles and number lists are considered single characters.
+//
+// Some elements are so specfic in their design there is no generic representation requiring
+// one off special handling.
+//
+// Real maximally complex example: Aiwa NSX-520
+//
+//   type        subtype       id len
+// ----------------------------------
+// - Char        Char14Seg,     0,  5
+// - Char        Char7Seg,      1,  4
+// - Char        Char123        2,  1
+// - Char        Char123        3,  1
+// - Char        Char123        4,  1
+// - Bar,                       0,  2
+// - Bar,                       1,  9
+// - NumberList,                0,  1
+// - Circle,                    0,  1
+// - Circle,                    1,  1
+// - Circle,                    2,  1
+//
+typedef struct _Region
+{
+    RegionType    type;
+    RegionSubType subType;
+    UINT8         id;
+    UINT8         len;
+
+} Region;
 
 //
 // Segment group for 7 segment display characters.
@@ -46,7 +111,6 @@ typedef struct _SegmentGroup7Seg
     SegmentMap g;
 
 } SegmentGroup7Seg;
-
 
 //
 // Segment group for 14 segment display characters,
@@ -79,53 +143,36 @@ typedef struct _SegmentGroup14Seg
 
 
 //
-// Aggregate container interface class for all the display layout information.
-//
-// In future, it may be a place to put something that describes the overall layout if needed?
-// e.g. random example: TEAC RW-CD22
-// - row 0, col 0, 8-segment bar    (IVfdLayoutBar)
-// - row 1, col 0, 8-segment bar    (IVfdLayoutBar)
-// - row 2, col  0,  2 digit  7-seg (IVfdLayout7Seg)
-// - row 2, col  2,  9 digit 14-seg (IVfdLayout14Seg)
-// - row 2, col 11,  2 digit  7-seg (IVfdLayout7Seg)
-//
-
-//
 // This should be part of IVfdLayout, and can also add programatic Manufacturer & Model strings.
 // Should we also git rid of the inheritance and just use a single API with false returns by default?
 //
-// Defines one layout map entry with logically approximate but contiguous rows & columns.
+// Defines one layout map entry with logically approximate but contiguous, unique rows & columns.
 //
 // There is ALWAYS a IvfdLayoutSymbol on every display.
 //
 // Notes:
 // We can pass Vfd to Char14Seg in the API call and make it global to save RAM.
 //
-//typedef struct _VfdLayoutRegionMap
-//{
-//    UINT8 row;
-//    UINT8 col;
-//    UINT8 len;
-//    RegionType type; // 7Seg, 14Seg, HorzBar, VertBar, Circle etc.
-//
-//} VfdLayoutRegionMap;
-
-
 class IVfdLayout
 {
 public:
 
     //
-    // Returns the SegmentMap groups of 7 segment digits based on
-    // row and column general coordinates. 
+    // Returns the region map for all the group elements in the display.
     //
-    // numEntries is also equivalent to the number of digits in the group.
+    virtual void getRegionMap(
+        const Region **p_region,
+        UINT8 *numEntries) = 0;
+
     //
-    // returns false if a group doesn't exist.
+    // Returns the SegmentMap groups of 7 segment digits for the Region::id.
+    //
+    // numEntries is also equivalent to the number of digits in the region, Region::len.
+    //
+    // returns false if the region doesn't exist.
     //
     virtual bool getSegmentGroup7Seg(
-        UINT8 row,
-        UINT8 col,
+        UINT8 regionId,
         const SegmentGroup7Seg **p_segGroup,
         UINT8 *numEntries)
     {
@@ -133,16 +180,14 @@ public:
     };
 
     //
-    // Returns the SegmentMap groups of 14 or 15 segment digits based on
-    // row and column general coordinates. 
+    // Returns the SegmentMap groups of 14 or 15 segment digits for the Region::id.
     //
-    // numEntries is also equivalent to the number of digits in the group.
+    // numEntries is also equivalent to the number of digits in the region, Region::len.
     //
-    // returns false if a group doesn't exist.
+    // returns false if the region doesn't exist.
     //
     virtual bool getSegmentGroup14Seg(
-        UINT8 row,
-        UINT8 col,
+        UINT8 regionId,
         const SegmentGroup14Seg **p_segGroup,
         UINT8 *numEntries)
     {

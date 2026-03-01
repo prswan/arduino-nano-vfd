@@ -25,7 +25,6 @@
 #ifndef Char14Seg_h
 #define Char14Seg_h
 
-#include "Controller.h"
 #include "ICharacter.h"
 
 //
@@ -34,32 +33,17 @@
 class Char14Seg : public ICharacter
 {
 public:
-    Char14Seg(
-        IVfdLayout *vfdLayout,
-        IDisplay *display);
+    Char14Seg() {};
 
     ~Char14Seg() {};
 
-    virtual void clear();
-
     virtual bool print(
-        UINT8 row,
+        Vfd  *vfd,
+        UINT8 regionId,
         UINT8 col,
-        UINT8 ascii);
+        UINT8 ascii
+    );
 
-    static bool print(
-        Vfd *vfd,
-        UINT8 row,
-        UINT8 col,
-        UINT8 ascii);
-
-private:
-    IVfdLayout *m_vfdLayout;
-    IDisplay   *m_display;
-
-    UINT8 m_numEntriesSegmentGroup14Seg;
-
-    const SegmentGroup14Seg *p_segmentGroup14Seg;
 };
 
 #endif

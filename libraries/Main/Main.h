@@ -26,8 +26,7 @@
 #define Main_h
 
 #include "Controller.h"
-#include "ICharacter.h"
 
-void Main(Controller *controller, ICharacter *character);
+void Main(Controller *controller);
 
 #endif

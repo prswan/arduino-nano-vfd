@@ -39,9 +39,12 @@ public:
 
     ~SonyDVPNS725PLayout() {};
 
+    virtual void getRegionMap(
+        const Region **p_region,
+        UINT8 *numEntries);
+
     virtual bool getSegmentGroup14Seg(
-        UINT8 row,
-        UINT8 col,
+        UINT8 regionId,
         const SegmentGroup14Seg **p_segGroup,
         UINT8 *numEntries);
 };

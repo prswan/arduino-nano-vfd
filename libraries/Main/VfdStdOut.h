@@ -25,7 +25,20 @@
 #ifndef VfdStdOut_h
 #define VfdStdOut_h
 
+#include "IVfdLayout.h"
 #include "ICharacter.h"
+
+//
+// Provide the object with a mapping between the character sub type and
+// the implementation to print using that specific sub type.
+//
+typedef struct _RegionSubTypeCharMap
+{
+    RegionSubTypeChar  subChar;
+    ICharacter        *ichar;
+
+} RegionSubTypeCharMap;
+
 
 //
 // Standard output functions.
@@ -35,11 +48,37 @@ class VfdStdOut
 public:
 
     VfdStdOut(
-        ICharacter *ichar
+        RegionSubTypeCharMap *regionTypeCharMap,
+        UINT8  numRegionTypeCharMapEntries,
+        Vfd   *stdOutVfd,
+        UINT8  stdOutRegionId
     );
 
     ~VfdStdOut() {};
 
+    //
+    // Print a simple unformatted NULL terminated string to the Vfd region.
+    // This is faster that the formatted string print.
+    //
+    bool print(
+        Vfd   *vfd,
+        UINT8  regionId,
+        const UINT8 *string
+    );
+
+    //
+    // Print a formatted string to the Vfd display region regionId.
+    //
+    bool printf(
+        Vfd   *vfd,
+        UINT8  regionId,
+        const UINT8 *format, 
+        ...
+    );
+
+    //
+    // Default formatted string print to the primary display region defined as StdOut.
+    //
     bool printf(
         const UINT8 *format, 
         ...
@@ -47,9 +86,14 @@ public:
 
 private:
 
-    ICharacter *m_char;
+private:
 
-    UINT8 m_currentRow;
+    RegionSubTypeCharMap *m_regionTypeCharMap;
+    UINT8 m_numRegionTypeCharMapEntries;
+
+    Vfd   *m_stdOutVfd;
+    UINT8  m_stdOutRegionId;
+
     UINT8 m_currentCol;
 };
 

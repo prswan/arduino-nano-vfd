@@ -26,8 +26,6 @@
 #define Char7Seg_h
 
 #include "ICharacter.h"
-#include "IVfdLayout.h"
-#include "IDisplay.h"
 
 //
 // Character print implementation for a 7-Segment display.
@@ -35,26 +33,17 @@
 class Char7Seg : public ICharacter
 {
 public:
-    Char7Seg(
-        IVfdLayout *vfdLyout,
-        IDisplay *display);
+    Char7Seg() {};
 
     ~Char7Seg() {};
 
-    virtual void clear();
-
     virtual bool print(
-        UINT8 row,
+        Vfd  *vfd,
+        UINT8 regionId,
         UINT8 col,
-        UINT8 ascii);
+        UINT8 ascii
+    );
 
-private:
-    IVfdLayout *m_vfdLayout;
-    IDisplay   *m_display;
-
-    UINT8 m_numEntriesSegmentGroup7Seg;
-
-    const SegmentGroup7Seg *p_segmentGroup7Seg;
 };
 
 #endif

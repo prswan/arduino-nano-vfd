@@ -56,8 +56,10 @@ class LayoutFinder : public IApp
 
         LayoutFinder(
             Buttons *buttons,
-            IDisplay *display,
-            ICharacter *character // Optional, use NULL if no character print available
+            Vfd *stdOutVfd,          // Optional, use NULL if no character print available, blind use.
+            UINT8 stdOutRegionId,
+            ICharacter *stdOutIChar, // Optional, use NULL if no character print available, blind use.
+            Vfd *uutVfd              // The Vfd to Layout Find.
         );
 
         ~LayoutFinder() {};
@@ -78,8 +80,11 @@ class LayoutFinder : public IApp
     private:
 
         Buttons    *m_buttons;
-        IDisplay   *m_display;
-        ICharacter *m_character;
+        Vfd        *m_stdOutVfd;
+        UINT8       m_stdOutRegionId;
+        ICharacter *m_stdOutIChar;
+        
+        Vfd        *m_uutVfd;
 
         bool m_gridSelected;
 
