@@ -30,7 +30,7 @@
 static const Region s_region[] PROGMEM =
 {
     // type,          subType,                 id, len
-    {RegionTypeChar,  RegionSubTypeChar14Seg,   0,  12}
+    {RegionTypeChar,  RegionSubTypeChar14Seg,   0,   7}
 };
 
 //
