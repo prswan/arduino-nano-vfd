@@ -25,7 +25,7 @@
 #include "SamsungBDP1590Layout.h"
 
 //
-// 7x 14-segment display with centre dot.
+// 6x 14-segment display.
 //
 static const Region s_region[] PROGMEM =
 {

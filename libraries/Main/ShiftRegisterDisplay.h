@@ -67,37 +67,6 @@ public:
     void setAllPins(bool on);
 
     //
-    // On display "d" turn on/off the segment pinS on grid pinG where the pins are the
-    // display logical pins G1..Gx and S1..Sx. The function will translate
-    // the logical pins to physical pins driven by the driver IC shift register.
-    //
-/*
-    //
-    // Return the maximal register length defined by the VFD driver.
-    //
-    UINT8 getRegisterLenInBytes()
-    {
-        return m_registerLenInBytes;
-    };
-
-    //
-    // Get the current register data to display out in the scan.
-    // This is an aggregate for multiple displays as follows:
-    //
-    // - "data" buffer cleared
-    // - Register content for Display 0 Grid x read & masked into "data"
-    // - Register content for Display 1 Grid y read & masked into "data"
-    // - true returned.
-    //
-    // false (failure) is returned if the supplied data buffer doesn't
-    // match the registerLenInBytes.
-    //
-    bool getCurrentRegisterData(
-        UINT8 *data, 
-        UINT8 dataLenInBytes
-    );
-*/
-    //
     // Return the current grid for the scan, incremented and wrapped around by incGrid()
     //
     const UINT8* getScanRegisterMask()
@@ -140,16 +109,6 @@ private:
     UINT8 m_currentGrid; // 0 based.
 
     UINT8 *m_bitMap;
-
-/*
-    Display m_display[2];
-
-    UINT8 m_registerLenInBits;
-    UINT8 m_maxNumGrids;
-    UINT8 m_registerLenInBytes;
-    UINT8 m_bitMapSizeInBytes;
-
-*/
 };
 
 #endif
