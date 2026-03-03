@@ -11,8 +11,7 @@
 5. PT6315 DOUT (SDOUT) is open drain and needs a pull up adding to use it.
 6. The two buttons have incorrect pitch to properly flush mount a VSG1024 button. They should be changed to the common 4-pin square button type used everywhere.
 7. Some consumer front panels use DC filament power and it would be clearer to rename FIL1 to FIL+ and FIL2 to FIL-.
-
-
+8. When using a SMPSU from consumer electronics to power the board, not enough 5V power is consumed to keep the Vbb rail at voltage. Two 1W dummy load resistors can be added on Vcc+.
 
 
 
