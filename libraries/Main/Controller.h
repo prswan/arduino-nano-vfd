@@ -28,6 +28,7 @@
 #include "Types.h"
 #include "IVfdPinout.h"
 #include "IVfdLayout.h"
+#include "MuxSpi.h"
 #include "IDisplay.h"
 #include "ShiftRegisterBitMap.h"
 #include "ShiftRegisterScan.h"
@@ -58,6 +59,8 @@ typedef struct _Controller
 {
     Vfd vfd[8][2];
 
+    MuxSpi *muxSpi;
+    
     ShiftRegisterBitMap* bitMap[8];
     ShiftRegisterScan*   scan;
 

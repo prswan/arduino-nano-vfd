@@ -49,14 +49,22 @@ void setup() {
   IVfdPinout *vfdPinout = new SamsungBDP1590Pinout();
   IVfdLayout *vfdLayout = new SamsungBDP1590Layout();
 
-  //ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
-  //ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
+  MuxSpi *muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
+                              CONTROLLER_PIN_BLANK,
+                              CONTROLLER_PIN_SEL0,
+                              CONTROLLER_PIN_SEL1,
+                              CONTROLLER_PIN_SEL2);
+
+//  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
+//  ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, CONTROLLER_PIN_STROBE, CONTROLLER_PIN_BLANK);
 
   controller.vfd[0][0].layout  = vfdLayout;
-  //controller.vfd[0][0].display = bitMap->getDisplay(0);
+//  controller.vfd[0][0].display = bitMap->getDisplay(0);
 
-  //controller.bitMap[0] = bitMap;
-  //controller.scan      = scan;
+  controller.muxSpi = muxSpi;
+
+//  controller.bitMap[0] = bitMap;
+//  controller.scan      = scan;
 
   controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, CONTROLLER_PIN_SELECT);
 
@@ -72,5 +80,5 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  // Main(&controller);
+//  Main(&controller);
 }
