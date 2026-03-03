@@ -22,87 +22,49 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef MuxSpi_h
-#define MuxSpi_h
+#ifndef PT631xDriverIC_h
+#define PT631xDriverIC_h
 
 #include "Arduino.h"
-#include "SPI.h"
 #include "Types.h"
+#include "MuxSpi.h"
+#include "IDriverIC.h"
 
 //
-// Wrapper for the Arduino SPI port and the additional control pins
-// for the display and multiplexor.
+// Driver for the Princeton PT6311, PT6315 and the many clones.
 //
-// bitOrder is pramaterized because:
-// - Universal shift register is MSB first
-// - PT631x driver IC is LSB first.
-//
-class MuxSpi
+class PT631xDriverIC : public IDriverIC
 {
 public:
-    MuxSpi(
-        int pinStrobe,
-        int pinBlank,
-        int pinSel0,
-        int pinSel1,
-        int pinSel2,
-        UINT8 bitOrder);
-
-    ~MuxSpi();
-
-    //
-    // Set the SPI multiplexor port to use via SEL0,1,2.
-    // "port" is 0 to 7 for physical ports 1 to 8.
-    //
-    void setPort(
-        UINT8 port
+    PT631xDriverIC(
+        MuxSpi *muxSpi
     );
 
-    //
-    // Set the strobe pin to the supplied value.
-    //
-    void setStrobe(
-        bool hi
-    )
-    {
-        digitalWrite(m_pinStrobe, (hi ? HIGH : LOW));
-    };
+    ~PT631xDriverIC() {};
 
-    //
-    // Set the blank pin to the supplied value.
-    //
-    void setBlank(
-        bool hi
-    )
-    {
-        digitalWrite(m_pinBlank, (hi ? HIGH : LOW));
-    };
+    bool setDisplayMode(
+        UINT8 numGrids,
+        UINT8 numSegments
+    );
 
-    //
-    // Write "dataLenInBytes" amount of "data" out of the SPI port.
-    //
-    void writeData(
+    bool write(
+        UINT8 gridAddress,
+        const UINT8 *segData,
+        UINT8 segDataLenInBytes
+    );
+
+private:
+
+    void writeCommandData(
+        UINT8 command,
         const UINT8 *data,
         UINT8 dataLenInBytes
     );
-/*
-    //
-    // Read "dataLenInBytes" amount of "data" from the SPI port.
-    //
-    void readData(
-        UINT8 *data,
-        UINT8 dataLenInBytes
-    );
-*/
+
 private:
 
-    int m_pinStrobe;
-    int m_pinBlank;
-    int m_pinSel0;
-    int m_pinSel1;
-    int m_pinSel2;
+    MuxSpi *m_muxSpi;
 
-    UINT8 m_currentPort;
 };
 
 #endif

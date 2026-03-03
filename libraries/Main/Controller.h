@@ -29,6 +29,7 @@
 #include "IVfdPinout.h"
 #include "IVfdLayout.h"
 #include "MuxSpi.h"
+#include "PT631xDriverIC.h"
 #include "IDisplay.h"
 #include "ShiftRegisterBitMap.h"
 #include "ShiftRegisterScan.h"
@@ -60,11 +61,31 @@ typedef struct _Controller
     Vfd vfd[8][2];
 
     MuxSpi *muxSpi;
-    
+
+    // TODO: Move the system to use the system union.
     ShiftRegisterBitMap* bitMap[8];
     ShiftRegisterScan*   scan;
 
     Buttons* buttons;
+
+    union {
+
+        // Universal PCB shift register based system.
+        struct {
+
+            ShiftRegisterBitMap* bitMap[8];
+            ShiftRegisterScan*   scan;
+
+        } un;
+
+        // Front Panel based integrated display system.
+        struct {
+
+            IDriverIC* idic[8];
+
+        } fp;
+    
+    } sys;
 
     //
     // A small cheat to specify where to find a primary output.

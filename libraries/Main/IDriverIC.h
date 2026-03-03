@@ -22,87 +22,43 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef MuxSpi_h
-#define MuxSpi_h
+#ifndef IDriverIC_h
+#define IDriverIC_h
 
 #include "Arduino.h"
-#include "SPI.h"
 #include "Types.h"
 
 //
-// Wrapper for the Arduino SPI port and the additional control pins
-// for the display and multiplexor.
+// Interface to VFD Integrated Driver/Controller IC's based on simple integrated bit maps.
+// e.g. PT6311, PT6315, MC3401 etc. there are many clones and variants.
 //
-// bitOrder is pramaterized because:
-// - Universal shift register is MSB first
-// - PT631x driver IC is LSB first.
+// This is intended to be a stateless transport layer implementation.
 //
-class MuxSpi
+class IDriverIC
 {
-public:
-    MuxSpi(
-        int pinStrobe,
-        int pinBlank,
-        int pinSel0,
-        int pinSel1,
-        int pinSel2,
-        UINT8 bitOrder);
+    public:
 
-    ~MuxSpi();
+        //
+        // Must be called ONCE before any data is written, set the display characteristics.
+        // This is used to determine the memory layout & addressing.
+        //
+        virtual bool setDisplayMode(
+            UINT8 numGrids,
+            UINT8 numSegments
+        ) = 0;
 
-    //
-    // Set the SPI multiplexor port to use via SEL0,1,2.
-    // "port" is 0 to 7 for physical ports 1 to 8.
-    //
-    void setPort(
-        UINT8 port
-    );
-
-    //
-    // Set the strobe pin to the supplied value.
-    //
-    void setStrobe(
-        bool hi
-    )
-    {
-        digitalWrite(m_pinStrobe, (hi ? HIGH : LOW));
-    };
-
-    //
-    // Set the blank pin to the supplied value.
-    //
-    void setBlank(
-        bool hi
-    )
-    {
-        digitalWrite(m_pinBlank, (hi ? HIGH : LOW));
-    };
-
-    //
-    // Write "dataLenInBytes" amount of "data" out of the SPI port.
-    //
-    void writeData(
-        const UINT8 *data,
-        UINT8 dataLenInBytes
-    );
-/*
-    //
-    // Read "dataLenInBytes" amount of "data" from the SPI port.
-    //
-    void readData(
-        UINT8 *data,
-        UINT8 dataLenInBytes
-    );
-*/
-private:
-
-    int m_pinStrobe;
-    int m_pinBlank;
-    int m_pinSel0;
-    int m_pinSel1;
-    int m_pinSel2;
-
-    UINT8 m_currentPort;
+        //
+        // Writes a sequence of consecutive segment data bytes to the IDIC bit map at the indicated grid address. 
+        // The implementation converts the grid address into an IDIC memory address.
+        //
+        // returns false on failure, e.g. the address was out of range.
+        //
+        virtual bool write(
+            UINT8 gridAddress,
+            const UINT8 *segData,
+            UINT8 segDataLenInBytes
+        ) = 0;
 };
+
 
 #endif

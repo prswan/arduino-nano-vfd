@@ -30,11 +30,12 @@ MuxSpi::MuxSpi(
     int pinBlank,
     int pinSel0,
     int pinSel1,
-    int pinSel2) : m_pinStrobe(pinStrobe),
-                   m_pinBlank(pinBlank),
-                   m_pinSel0(pinSel0),
-                   m_pinSel1(pinSel1),
-                   m_pinSel2(pinSel2)
+    int pinSel2,
+    UINT8 bitOrder) : m_pinStrobe(pinStrobe),
+                      m_pinBlank(pinBlank),
+                      m_pinSel0(pinSel0),
+                      m_pinSel1(pinSel1),
+                      m_pinSel2(pinSel2)
 {
     pinMode(pinStrobe, OUTPUT);
     pinMode(pinBlank, OUTPUT);
@@ -51,7 +52,7 @@ MuxSpi::MuxSpi(
     m_currentPort = 0xFF;
     setPort(0);
 
-    SPIClass::beginTransaction(m_spiSettings);
+    SPIClass::beginTransaction(SPISettings(1000000, bitOrder, SPI_MODE0));
 };
 
 MuxSpi::~MuxSpi()
