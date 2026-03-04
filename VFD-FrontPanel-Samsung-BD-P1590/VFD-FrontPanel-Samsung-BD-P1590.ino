@@ -30,6 +30,7 @@
 #include "SamsungBDP1590Pinout.h"
 #include "SamsungBDP1590Layout.h"
 #include "PT631xDriverIC.h"
+#include "TimerScan.h"
 
 // Controller Digital pin mappings
 #define CONTROLLER_PIN_STROBE (8)  // Rising edge clocked
@@ -58,15 +59,15 @@ void setup() {
                               LSBFIRST);
 
   IDriverIC *idic = new PT631xDriverIC(muxSpi);
-
   idic->setDisplayMode(7, 19);
+
+  TimerScan *scan = new TimerScan();
 
   controller.isDriverIC = true;
 
   controller.sys.dr.idic[0] = idic;
 
 //  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
-//  ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, CONTROLLER_PIN_STROBE, CONTROLLER_PIN_BLANK);
 
   controller.vfd[0][0].layout  = vfdLayout;
 //  controller.vfd[0][0].display = bitMap->getDisplay(0);
@@ -74,9 +75,10 @@ void setup() {
   controller.muxSpi = muxSpi;
 
 //  controller.bitMap[0] = bitMap;
-//  controller.scan      = scan;
 
   controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, CONTROLLER_PIN_SELECT);
+
+  controller.scan = scan;
 
   controller.stdOutVfd = &controller.vfd[0][0];
   controller.stdOutRegionId = 0;

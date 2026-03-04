@@ -67,6 +67,8 @@ void setup() {
   controller.vfd[0][1].layout  = vfdLayout1;
   controller.vfd[0][1].display = bitMap->getDisplay(1);
 
+  controller.muxSpi = muxSpi;
+
   controller.buttons = new Buttons(BUTTON_PIN_NEXT, BUTTON_PIN_SELECT);
 
   controller.scan = scan;
