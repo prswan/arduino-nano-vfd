@@ -62,11 +62,12 @@ typedef struct _Controller
 
     MuxSpi *muxSpi;
 
-    // TODO: Move the system to use the system union.
-    ShiftRegisterBitMap* bitMap[8];
-    ShiftRegisterScan*   scan;
+    IScan*   scan;
 
     Buttons* buttons;
+
+    bool isShiftRegister;
+    bool isDriverIC;
 
     union {
 
@@ -74,16 +75,15 @@ typedef struct _Controller
         struct {
 
             ShiftRegisterBitMap* bitMap[8];
-            ShiftRegisterScan*   scan;
 
-        } un;
+        } sr;
 
         // Front Panel based integrated display system.
         struct {
 
             IDriverIC* idic[8];
 
-        } fp;
+        } dr;
     
     } sys;
 

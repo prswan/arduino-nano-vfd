@@ -22,27 +22,19 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef ShiftRegisterScan_h
-#define ShiftRegisterScan_h
+#ifndef Scan_h
+#define Scan_h
 
 #include "Arduino.h"
 #include "Types.h"
-#include "IScan.h"
 #include "MuxSpi.h"
-#include "ShiftRegisterBitMap.h"
 
 //
-// VFD serial driver scan.
+// Timer scan interface for display updates & foreground synchronization.
 //
-class ShiftRegisterScan : public IScan
+class IScan
 {
 public:
-    ShiftRegisterScan(
-        MuxSpi* muxSpi,
-        ShiftRegisterBitMap *bitMap);
-
-    ~ShiftRegisterScan();
-
     //
     // Update the display with the bitmap content.
     // scan should be spin-called and will return immediately if no update
@@ -53,17 +45,8 @@ public:
     // - false - No action.
     // - true  - Grid update was performed
     //
-    bool run();
+    virtual bool run() = 0;
 
-private:
-    MuxSpi* m_muxSpi;
-    
-    ShiftRegisterBitMap *m_bitMap;
-
-    UINT8 m_registerLenInBytes;
-    UINT8 *m_register;
-
-    UINT32 m_nextUpdateTimeInUS;
 };
 
 #endif

@@ -67,10 +67,6 @@ Step 1
    - Repeat to identify more pins.
 */
 
-// Button Digitial pin mappings
-
-#define BUTTON_PIN_NEXT   (3) // Increment
-#define BUTTON_PIN_SELECT (2) // App Select
 
 void Main(Controller *controller)
 {
@@ -136,19 +132,27 @@ void Main(Controller *controller)
                 {
                     if (newApp)
                     {
-                        if (uutDisplay != stdOutDisplay)
+                        // Only applicable to the Universal shift register version.
+                        if (controller->isShiftRegister)
                         {
-                            stdOut->printf("\f%s", "PIN ON");
+                            if (uutDisplay != stdOutDisplay)
+                            {
+                                stdOut->printf("\f%s", "PIN ON");
+                            }
+
+                            //
+                            // Only applicable to the ShiftRegister implementation.
+                            // The integrated bit map driver IC's don't have pin control.
+                            //
+                            ShiftRegisterDisplay *shiftRegisterDisplay = (ShiftRegisterDisplay *) uutDisplay;
+
+                            shiftRegisterDisplay->clear();
+                            shiftRegisterDisplay->setAllPins(true);
                         }
-
-                        //
-                        // Only applicable to the ShiftRegister implementation.
-                        // The integrated bit map driver IC's don't have pin control.
-                        //
-                        ShiftRegisterDisplay *shiftRegisterDisplay = (ShiftRegisterDisplay *) uutDisplay;
-
-                        shiftRegisterDisplay->clear();
-                        shiftRegisterDisplay->setAllPins(true);
+                        else
+                        {
+                            stdOut->printf("\f%s", "-");
+                        }
                     }
                     break;
                 }

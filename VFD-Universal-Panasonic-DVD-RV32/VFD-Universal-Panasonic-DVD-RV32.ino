@@ -51,8 +51,15 @@ void setup() {
   IVfdPinout *vfdPinout1 = new SonyDVPNS725PPinout();
   IVfdLayout *vfdLayout1 = new SonyDVPNS725PLayout();
 
+  MuxSpi *muxSpi = new MuxSpi(AN5818_STROBE,
+                              AN5818_BLANK,
+                              14, // Proto doesn't have the Mux, so just an unused pin
+                              14,
+                              14,
+                              MSBFIRST);
+
   ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout0, vfdPinout1);
-  ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, AN5818_STROBE, AN5818_BLANK);
+  ShiftRegisterScan   *scan   = new ShiftRegisterScan(muxSpi, bitMap);
 
   controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap->getDisplay(0);
@@ -60,10 +67,13 @@ void setup() {
   controller.vfd[0][1].layout  = vfdLayout1;
   controller.vfd[0][1].display = bitMap->getDisplay(1);
 
-  controller.bitMap[0] = bitMap;
-  controller.scan      = scan;
-
   controller.buttons = new Buttons(BUTTON_PIN_NEXT, BUTTON_PIN_SELECT);
+
+  controller.scan = scan;
+
+  controller.isShiftRegister = true;
+
+  controller.sys.sr.bitMap[0] = bitMap;
 
   controller.stdOutVfd = &controller.vfd[0][1]; // Sony for StdOut
   controller.stdOutRegionId = 0;

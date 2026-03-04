@@ -61,7 +61,9 @@ void setup() {
 
   idic->setDisplayMode(7, 19);
 
-  controller.sys.fp.idic[0] = idic;
+  controller.isDriverIC = true;
+
+  controller.sys.dr.idic[0] = idic;
 
 //  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
 //  ShiftRegisterScan   *scan   = new ShiftRegisterScan(bitMap, CONTROLLER_PIN_STROBE, CONTROLLER_PIN_BLANK);
@@ -90,7 +92,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 //  Main(&controller);
 
-  IDriverIC *idic = controller.sys.fp.idic[0];
+  IDriverIC *idic = controller.sys.dr.idic[0];
 
   UINT8 testdata[3] = {0x55,0xAA,0x55};
 

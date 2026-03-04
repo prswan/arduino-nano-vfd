@@ -29,44 +29,31 @@
 // 0.3mS per grid. Manuals suggest to use something not a multiple of mains 50Hz
 // to avoid alias flickering with the filament AC.
 //
-// SPI @ 1MHz versus pin drive efficiency (32-bit register)
-// --------------------------------------------------------
-// - SPI - 340uS -> 348uS total cycle time
-// - Pin - 620uS -> 624uS total cycle time
-// i.e. pin drive scan period is SW limied to ~624uS minimum versus 15uS for SPI.
-//
 static const UINT32 s_scanPeriodInUS = 333;
 
+
 ShiftRegisterScan::ShiftRegisterScan(
-    ShiftRegisterBitMap *bitMap,
-    int pinStrobe,
-    int pinBlank) : m_bitMap(bitMap),
-                    m_pinStrobe(pinStrobe),
-                    m_pinBlank(pinBlank)
+    MuxSpi* muxSpi,
+    ShiftRegisterBitMap *bitMap) : m_muxSpi(muxSpi),
+                                   m_bitMap(bitMap)
 {
     m_registerLenInBytes = bitMap->getRegisterLenInBytes();
 
     m_register = malloc(m_registerLenInBytes);
 
-    pinMode(pinStrobe, OUTPUT);
-    pinMode(pinBlank, OUTPUT);
-
-    pinMode(MOSI, OUTPUT);
-    pinMode(SCK, OUTPUT);
-    pinMode(SS, OUTPUT);
-
-    SPIClass::beginTransaction(m_spiSettings);
+    muxSpi->setBlank(true);
+    muxSpi->setStrobe(false);
 
     m_nextUpdateTimeInUS = micros() + s_scanPeriodInUS;
 };
+
 
 ShiftRegisterScan::~ShiftRegisterScan()
 {
     free(m_register);
     m_register = NULL;
-
-    SPIClass::endTransaction();
 };
+
 
 bool ShiftRegisterScan::run()
 {
@@ -81,39 +68,18 @@ bool ShiftRegisterScan::run()
 
     // Blank and strobe out the previous scan data
     {
-        digitalWrite(m_pinBlank, HIGH); // Blanked
+        m_muxSpi->setBlank(true);
 
         // Pulse strobe
-        digitalWrite(m_pinStrobe, HIGH);
-        digitalWrite(m_pinStrobe, LOW);
+        m_muxSpi->setStrobe(true);
+        m_muxSpi->setStrobe(false);
 
-        digitalWrite(m_pinBlank, LOW); // Display
+        m_muxSpi->setBlank(false);
     }
 
     m_bitMap->getCurrentRegisterData(m_register, m_registerLenInBytes);
 
-    //
-    // We don't use the SPI library implementation because it clobbers
-    // the input buffer by reading the input register.
-    // For the shift register pin driver we don't need the read back data.
-    //
-    {
-        void *buf = m_register;
-        size_t count = m_registerLenInBytes;
-
-        uint8_t *p = (uint8_t *)buf;
-        SPDR = *p++;
-
-        while (--count > 0)
-        {
-            uint8_t out = *p++;
-            while (!(SPSR & _BV(SPIF)));
-
-            SPDR = out;
-        }
-
-        while (!(SPSR & _BV(SPIF)));
-    }
+    m_muxSpi->writeData(m_register, m_registerLenInBytes);
 
     m_bitMap->incGrids();
 
