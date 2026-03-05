@@ -31,6 +31,7 @@
 #include "SamsungBDP1590Layout.h"
 #include "PT631xDriverIC.h"
 #include "TimerScan.h"
+#include "DriverICDisplay.h"
 
 // Controller Digital pin mappings
 #define CONTROLLER_PIN_STROBE (8)  // Rising edge clocked
@@ -59,7 +60,6 @@ void setup() {
                               LSBFIRST);
 
   IDriverIC *idic = new PT631xDriverIC(muxSpi);
-  idic->setDisplayMode(7, 19);
 
   TimerScan *scan = new TimerScan();
 
@@ -67,14 +67,10 @@ void setup() {
 
   controller.sys.dr.idic[0] = idic;
 
-//  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
-
   controller.vfd[0][0].layout  = vfdLayout;
-//  controller.vfd[0][0].display = bitMap->getDisplay(0);
+  controller.vfd[0][0].display = new DriverICDisplay(vfdPinout, idic);;
 
   controller.muxSpi = muxSpi;
-
-//  controller.bitMap[0] = bitMap;
 
   controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, CONTROLLER_PIN_SELECT);
 
@@ -92,16 +88,5 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-//  Main(&controller);
-
-  IDriverIC *idic = controller.sys.dr.idic[0];
-
-  UINT8 testdata[3] = {0x55,0xAA,0x55};
-
-  for (int x = 0 ; x < 7 ; x++)
-  {
-    idic->write(x, testdata, ARRAYSIZE(testdata));
-  }
-
-
+  Main(&controller);
 }
