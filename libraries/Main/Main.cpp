@@ -141,6 +141,8 @@ void Main(Controller *controller)
                 {
                     if (newApp)
                     {
+                        uutDisplay->clear();
+
                         // Only applicable to the Universal shift register version.
                         if (controller->isShiftRegister)
                         {
@@ -155,12 +157,11 @@ void Main(Controller *controller)
                             //
                             ShiftRegisterDisplay *shiftRegisterDisplay = (ShiftRegisterDisplay *) uutDisplay;
 
-                            shiftRegisterDisplay->clear();
                             shiftRegisterDisplay->setAllPins(true);
                         }
                         else
                         {
-                            stdOut->printf("\f%s", "-");
+                            stdOut->printf("\f%s", "0123456789");
                         }
                     }
                     break;

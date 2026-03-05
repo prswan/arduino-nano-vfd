@@ -126,8 +126,12 @@ bool DriverICDisplay::setSegments(
         {
             UINT8 bitS = pgm_read_byte_near(&p_pinMapSegment[pinS].bit);
 
-            // Set shift out first
-            UINT8 mapByte = reg + ((m_registerLenInBytes - 1) - (bitS / 8));
+            //
+            // PT631x Memory Layout from the manual is
+            // SG1..SG8 Address 0, SG9..SG16 Address 1, SG17..SG24 Address 2
+            //
+
+            UINT8 mapByte = reg + (bitS / 8);
             UINT8 mapBit = (bitS % 8);
 
             if (on)
