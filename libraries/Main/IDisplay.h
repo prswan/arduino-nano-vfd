@@ -46,6 +46,14 @@ typedef struct _Vfd
     IDisplay   *display;
 } Vfd;
 
+//
+// Intended for arrays, segment pin numbers and associated on/off state.
+//
+typedef struct _SegmentState
+{
+    UINT8 pinS;
+    bool  on;
+} SegmentState;
 
 //
 // Primary interface for elemental use of VFDs.
@@ -75,6 +83,19 @@ public:
         UINT8 pinG,
         UINT8 pinS,
         bool on
+    ) = 0;
+
+    //
+    // On grid pinG set the segment pin state "segState".
+    //
+    // This is an optimization to apply character updates in one call.
+    //
+    // returns true on success or false if failed, e.g. pinG or pinS out of bounds.
+    //
+    virtual bool setSegments(
+        UINT8 pinG,
+        SegmentState *segState,
+        UINT8 segStateLen
     ) = 0;
 };
 

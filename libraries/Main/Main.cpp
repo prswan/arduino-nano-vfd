@@ -30,6 +30,15 @@
 #include "LayoutFinder.h"
 #include "VfdStdOut.h"
 
+//
+// I don't remember needing to use an external library in the ICT project for this.
+// Source: https://github.com/mpflaga/Arduino-MemoryFree, Commit Hash: 0083982
+//
+// Unzip To: C:\Users\<user>>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6\libraries\MemoryFree
+//
+#include <MemoryFree.h>
+
+
 /* TODO
 
  Print (Character ?) class (similar concepts Bar and Circle).
@@ -242,13 +251,28 @@ void Main(Controller *controller)
                     break;
                 }
 
+                // Report free memory
+                case 6:
+                {
+                    if (newApp)
+                    {
+                        stdOut->printf("\f%s", "FREE");
+                    }
+
+                    if (buttons->isNextShortPressed())
+                    {
+                        stdOut->printf("\r%4.4d", freeMemory());
+                    }
+                    break;
+                }
+
                 default:
                 break;
             }
 
             if (buttons->isSelectShortPressed())
             {
-                if (++currentApp > 5)
+                if (++currentApp > 6)
                 {
                     currentApp = 0;
                 }

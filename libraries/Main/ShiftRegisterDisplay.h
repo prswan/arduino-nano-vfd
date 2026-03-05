@@ -60,6 +60,12 @@ public:
         bool on
     );
 
+    bool setSegments(
+        UINT8 pinG,
+        SegmentState *segState,
+        UINT8 segStateLen
+    );
+
     //
     // Set all the pins for display "d" on.
     // This is a test function to show full brightness with all girds and segments active.

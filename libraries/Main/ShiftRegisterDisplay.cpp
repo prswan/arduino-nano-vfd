@@ -136,25 +136,51 @@ bool ShiftRegisterDisplay::setSegment(
     UINT8 pinS,
     bool on)
 {
-    if ((pinG >= m_numEntriesPinMapGrid) || (pinS >= m_numEntriesPinMapSegment))
+    SegmentState segState = {pinS, on};
+
+    return setSegments(pinG, &segState, 1);
+};
+
+
+bool ShiftRegisterDisplay::setSegments(
+    UINT8 pinG,
+    SegmentState *segState,
+    UINT8 segStateLen)
+{
+    if (pinG >= m_numEntriesPinMapGrid)
     {
         return false;
     }
 
-    UINT8 bitS = pgm_read_byte_near(&p_pinMapSegment[pinS].bit);
-    UINT8 reg = (pinG - 1) * m_registerLenInBytes;
-
-    // Set shift out first
-    UINT8 mapByte = reg + ((m_registerLenInBytes - 1) - (bitS / 8));
-    UINT8 mapBit = (bitS % 8);
-
-    if (on)
+    for (int i = 0 ; i < segStateLen ; i++)
     {
-        m_bitMap[mapByte] |= (1 << mapBit);
-    }
-    else
-    {
-        m_bitMap[mapByte] &= ~(1 << mapBit);
+        UINT8 pinS = segState[i].pinS;
+        bool on = segState[i].on;
+
+        if (pinS >= m_numEntriesPinMapSegment)
+        {
+            return false;
+        }
+
+        // Legal to skip missing segments.
+        if (pinS != 0)
+        {
+            UINT8 bitS = pgm_read_byte_near(&p_pinMapSegment[pinS].bit);
+            UINT8 reg = (pinG - 1) * m_registerLenInBytes;
+
+            // Set shift out first
+            UINT8 mapByte = reg + ((m_registerLenInBytes - 1) - (bitS / 8));
+            UINT8 mapBit = (bitS % 8);
+
+            if (on)
+            {
+                m_bitMap[mapByte] |= (1 << mapBit);
+            }
+            else
+            {
+                m_bitMap[mapByte] &= ~(1 << mapBit);
+            }
+        }
     }
 
     return true;

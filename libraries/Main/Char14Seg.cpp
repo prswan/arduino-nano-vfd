@@ -24,6 +24,10 @@
 //
 #include "Char14Seg.h"
 
+
+// Correlated etting for number of segments in the segment map for this character to display.
+static const UINT8 s_numSegments = 15;
+
 //
 // Display group for 14 segment display characters.
 //
@@ -182,23 +186,21 @@ bool Char14Seg::print(
 
     SegmentMap *p_seg = (SegmentMap *)&p_segmentGroup14Seg[col];
 
-    for (int s = 0; s < 15; s++)
+    SegmentState segState[s_numSegments];
+
+    //
+    // TODO: WARNING: This implementation assumes that the segments for
+    // a character are all on the same grid. The layout map "segment groups"
+    // should really be refactored to reflect that. 
+    // The grid set by seg 1 is used.
+    //
+    UINT8 pinG = pgm_read_byte_near(&p_seg[0].pinG);
+
+    for (int s = 0; s < s_numSegments; s++)
     {
-        UINT8 pinG = pgm_read_byte_near(&p_seg[s].pinG);
-        UINT8 pinS = pgm_read_byte_near(&p_seg[s].pinS);
-        UINT8 on = pgm_read_byte_near(&p_on[s]);
-
-        // Check for a defined segment, this accounts for the optional "s" centre dot.
-        if (pinS != 0)
-        {
-            success = vfd->display->setSegment(pinG, pinS, on);
-
-            if (!success)
-            {
-                break;
-            }
-        }
+        segState[s].pinS = pgm_read_byte_near(&p_seg[s].pinS);
+        segState[s].on = pgm_read_byte_near(&p_on[s]);
     }
 
-    return true;
+    return vfd->display->setSegments(pinG, segState, ARRAYSIZE(segState));
 };
