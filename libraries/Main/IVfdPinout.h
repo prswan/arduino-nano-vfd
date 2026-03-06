@@ -28,6 +28,7 @@
 #include "Arduino.h"
 #include "Types.h"
 
+
 //
 // This maps the display pin to the driver IC register bit.
 //
@@ -37,7 +38,7 @@
 //       0..7, 0 - low, shift first, 7 - high, shift last.
 //
 // The prototype VFD driver Verboard is 1 driver IC of 32-bits (4 bytes).
-// The production VFD driver PCB is 3 chained driver IC's making 96-bits (12 bytes).
+// The production VFD driver PCB is up to 3 chained driver IC's making 96-bits (12 bytes).
 //
 // There are two pin maps for each display:
 //
@@ -57,6 +58,7 @@ typedef struct _PinMap
 class IVfdPinout
 {
 public:
+
     //
     // Returns the scan configuration information
     //

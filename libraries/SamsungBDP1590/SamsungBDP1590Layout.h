@@ -38,11 +38,14 @@ public:
 
     ~SamsungBDP1590Layout() {};
 
-    virtual void getRegionMap(
+    void getProperties(
+        const Properties **p_properties);
+
+    void getRegionMap(
         const Region **p_region,
         UINT8 *numEntries);
 
-    virtual bool getSegmentGroup14Seg(
+    bool getSegmentGroup14Seg(
         UINT8 regionId,
         const SegmentGroup14Seg **p_segGroup,
         UINT8 *numEntries);

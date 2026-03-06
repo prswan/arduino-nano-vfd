@@ -24,6 +24,17 @@
 //
 #include "SamsungBDP1590Layout.h"
 
+
+static const UINT8 s_manufacturer[] PROGMEM = "SAMSUNG";
+static const UINT8 s_model[]        PROGMEM = "BD-P1590";
+
+static const Properties s_properties PROGMEM =
+{
+    s_manufacturer,
+    s_model,
+    DriveTypePT6315,
+};
+
 //
 // 6x 14-segment display.
 //
@@ -55,7 +66,7 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_l,   0, 0, 2, 15},
         {S_14SEG_m,   0, 0, 2, 16},
         {S_14SEG_s,   0, 0, 2, 11},
-        {S_14SEG_dp,  0, 0, 2, 16},
+        {S_14SEG_dp,  0, 0, 0,  0}, // No decimal points
     },
     {
         {S_14SEG_a,   0, 1, 3,  4},
@@ -73,7 +84,6 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_l,   0, 1, 3, 15},
         {S_14SEG_m,   0, 1, 3, 16},
         {S_14SEG_s,   0, 1, 3, 11},
-        {S_14SEG_dp,  0, 1, 3, 16},
     },
     {
         {S_14SEG_a,   0, 2, 4,  4},
@@ -91,7 +101,6 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_l,   0, 2, 4, 15},
         {S_14SEG_m,   0, 2, 4, 16},
         {S_14SEG_s,   0, 2, 4, 11},
-        {S_14SEG_dp,  0, 2, 4, 16},
     },
     {
         {S_14SEG_a,   0, 3, 5,  4},
@@ -109,7 +118,6 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_l,   0, 3, 5, 15},
         {S_14SEG_m,   0, 3, 5, 16},
         {S_14SEG_s,   0, 3, 5, 11},
-        {S_14SEG_dp,  0, 3, 5, 16},
     },
     {
         {S_14SEG_a,   0, 4, 6,  4},
@@ -127,7 +135,6 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_l,   0, 4, 6, 15},
         {S_14SEG_m,   0, 4, 6, 16},
         {S_14SEG_s,   0, 4, 6, 11},
-        {S_14SEG_dp,  0, 4, 6, 16},
     },
     {
         {S_14SEG_a,   0, 5, 7,  4},
@@ -145,9 +152,14 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_l,   0, 5, 7, 15},
         {S_14SEG_m,   0, 5, 7, 16},
         {S_14SEG_s,   0, 5, 7, 11},
-        {S_14SEG_dp,  0, 5, 7, 16},
     },
 };
+
+void SamsungBDP1590Layout::getProperties(
+    const Properties **p_properties)
+{
+    *p_properties = &s_properties;
+}
 
 void SamsungBDP1590Layout::getRegionMap(
     const Region **p_region,
@@ -194,7 +206,14 @@ Symbols
 
 0203-0703 - top R & L dots
 0218-0718 - bottom R & L dots
+ - Manual examples of the extra corner dots
+   A - bottom
+   L - bottom
+   V - top
+   Y - top
+ - will have to somewhat guess the rest.
 
-
-The weird dot matrix area TBD.
+The weird dot matrix area TBD. The user manual doesn't document anything in this area.
+A walk through them has various dot groups. I *think* it's possible to make a stop square
+and play triangle?
 */

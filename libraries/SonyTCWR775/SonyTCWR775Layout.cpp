@@ -24,6 +24,17 @@
 //
 #include "SonyTCWR775Layout.h"
 
+
+static const UINT8 s_manufacturer[] PROGMEM = "SONY";
+static const UINT8 s_model[]        PROGMEM = "TC-WR775";
+
+static const Properties s_properties PROGMEM =
+{
+    s_manufacturer,
+    s_model,
+    DriveTypeSN75518,
+};
+
 /* TODO
 
   * Additon of the remaining single indicator elements
@@ -138,6 +149,12 @@ static const SegmentGroup7Seg s_segmentGroup7Seg1[] PROGMEM =
         {S_7SEG_g, 0, 7, 2, 15},
     },
 };
+
+void SonyTCWR775Layout::getProperties(
+    const Properties **p_properties)
+{
+    *p_properties = &s_properties;
+}
 
 void SonyTCWR775Layout::getRegionMap(
     const Region **p_region,

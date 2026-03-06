@@ -39,11 +39,14 @@ public:
 
     ~SonyTCWR775Layout() {};
 
-    virtual void getRegionMap(
+    void getProperties(
+        const Properties **p_properties);
+
+    void getRegionMap(
         const Region **p_region,
         UINT8 *numEntries);
 
-    virtual bool getSegmentGroup7Seg(
+    bool getSegmentGroup7Seg(
         UINT8 regionId,
         const SegmentGroup7Seg **p_segGroup,
         UINT8 *numEntries);

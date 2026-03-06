@@ -25,6 +25,16 @@
 #include "PanasonicDVDRV32Layout.h"
 
 
+static const UINT8 s_manufacturer[] PROGMEM = "PANASONIC";
+static const UINT8 s_model[]        PROGMEM = "DVD-RV32";
+
+static const Properties s_properties PROGMEM =
+{
+    s_manufacturer,
+    s_model,
+    DriveTypeSN75518,
+};
+
 /*
 //
 // 12x 14-segment standard display.
@@ -324,6 +334,12 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_m,   0, 11,  1, 13},
     },
 };
+
+void PanasonicDVDRV32Layout::getProperties(
+    const Properties **p_properties)
+{
+    *p_properties = &s_properties;
+}
 
 void PanasonicDVDRV32Layout::getRegionMap(
     const Region **p_region,

@@ -41,16 +41,6 @@
 // on Controller Ports 1 through 8.
 // Unused entries are NULL.
 //
-// We could pass a Vfd object to printf that can then use it to call Char14Seg?
-//
-// printf(Vfd *vfd, row, col, const UINT8 *format, ...)
-// -> Get the VfdLayoutMap for the supplied Vfd
-// -> Parse it to find where this print should be directed
-//    the row/col coordinates MUST map to the start of a layout region
-//     and MUST be a character region type,
-//     and the print will end at the end of the layout region.
-// -> call ICharacter->print(IVfdLayout *layout, IDisplay *display, row, col, ascii)
-//
 // Port 1: vfd[0][0], vfd[0][1]  => bitMap[0]
 // Port 2: vfd[1][0], vfd[1][1]  => bitMap[1]
 // ...

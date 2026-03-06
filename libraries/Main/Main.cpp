@@ -164,6 +164,48 @@ void Main(Controller *controller)
                             stdOut->printf("\f%s", "0123456789");
                         }
                     }
+
+                    if (buttons->isNextShortPressed())
+                    {
+                        static bool manu = true;
+                        const UINT8* p_string;
+
+                        uutDisplay->clear();
+
+                        Properties *p_properties;
+
+                        controller->uutVfd->layout->getProperties(&p_properties);
+
+                        if (manu)
+                        {
+                            if (uutDisplay != stdOutDisplay)
+                            {
+                                stdOut->printf("\f%s", "MANUF");
+                            }
+
+                            p_string = pgm_read_ptr(&p_properties->manufacturer);
+                            manu = false;
+                        }
+                        else
+                        {
+                            if (uutDisplay != stdOutDisplay)
+                            {
+                                stdOut->printf("\f%s", "MODEL");
+                            }
+
+                            p_string = pgm_read_ptr(&p_properties->model);
+                            manu = true;
+                        }
+
+                        stdOut->print(controller->uutVfd, 
+                                      controller->uutRegionId,
+                                      "\f");
+
+                        stdOut->print_P(controller->uutVfd, 
+                                        controller->uutRegionId,
+                                        p_string);
+                    }
+
                     break;
                 }
 

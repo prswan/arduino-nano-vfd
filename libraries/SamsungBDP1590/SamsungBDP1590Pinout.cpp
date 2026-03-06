@@ -24,6 +24,7 @@
 //
 #include "SamsungBDP1590Pinout.h"
 
+
 //
 // VFD pin number to controller function/line address pin number (GR1 to GR12).
 // Taken from the service manual, the grid pins are connected in order.

@@ -135,6 +135,19 @@ bool VfdStdOut::print(
 };
 
 
+bool VfdStdOut::print_P(
+        Vfd   *vfd,
+        UINT8  regionId,
+        const UINT8 *p_string)
+{
+    UINT8 buffer[s_bufferSize];
+
+    strcpy_P(buffer, p_string);
+ 
+    return print(vfd, regionId, buffer);
+};    
+
+
 bool VfdStdOut::printf(
         const UINT8 *format, 
         ...)

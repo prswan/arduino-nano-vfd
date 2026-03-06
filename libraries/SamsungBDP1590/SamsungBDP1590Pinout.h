@@ -39,16 +39,16 @@ public:
 
     ~SamsungBDP1590Pinout() {};
 
-    virtual void getScanConfig(
+    void getScanConfig(
         const UINT8 **registerMask,
         UINT8 *registerLenInBits,
         UINT8 *numGrids);
 
-    virtual void getPinMapGrid(
+    void getPinMapGrid(
         const PinMap **p_pinMap,
         UINT8 *numEntries);
 
-    virtual void getPinMapSegment(
+    void getPinMapSegment(
         const PinMap **p_pinMap,
         UINT8 *numEntries);
 };

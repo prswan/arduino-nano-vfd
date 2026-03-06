@@ -67,6 +67,15 @@ public:
     );
 
     //
+    // Print a simple unformatted NULL terminated string in PROGMEM to the Vfd region.
+    //
+    bool print_P(
+        Vfd   *vfd,
+        UINT8  regionId,
+        const UINT8 *p_string
+    );
+
+    //
     // Print a formatted string to the Vfd display region regionId.
     //
     bool printf(

@@ -29,6 +29,28 @@
 #include "Types.h"
 #include "Segments.h"
 
+
+//
+// Indication of the compatible drive type for this VFD.
+//
+typedef enum 
+{
+    DriveTypeSN75518,
+    DriveTypePT6315
+
+} DriveType;
+
+//
+// Basic properties for the VFD.
+//
+typedef struct _Properties
+{
+    const UINT8* manufacturer;
+    const UINT8* model;
+    DriveType    driveType;
+
+} Properties;
+
 //
 // Type identification for basic logical visual element regions.
 //
@@ -156,6 +178,14 @@ typedef struct _SegmentGroup14Seg
 class IVfdLayout
 {
 public:
+
+    //
+    // Returns the general properties of the VFD
+    // The returned properties are located in PROGMEM.
+    //
+    virtual void getProperties(
+        const Properties **p_properties) = 0;
+
 
     //
     // Returns the region map for all the group elements in the display.

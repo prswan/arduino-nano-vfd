@@ -24,6 +24,17 @@
 //
 #include "SonyDVPNS725PLayout.h"
 
+
+static const UINT8 s_manufacturer[] PROGMEM = "SONY";
+static const UINT8 s_model[]        PROGMEM = "DVP-NS725P";
+
+static const Properties s_properties PROGMEM =
+{
+    s_manufacturer,
+    s_model,
+    DriveTypeSN75518,
+};
+
 //
 // 7x 14-segment display with centre dot.
 //
@@ -167,6 +178,12 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
         {S_14SEG_dp,  0, 6, 1, 23},
     },
 };
+
+void SonyDVPNS725PLayout::getProperties(
+    const Properties **p_properties)
+{
+    *p_properties = &s_properties;
+}
 
 void SonyDVPNS725PLayout::getRegionMap(
     const Region **p_region,

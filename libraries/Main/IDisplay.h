@@ -37,7 +37,7 @@ class IDisplay;
 // 1) The layout map of the displays characters and symbols in terms of grid & segment coordinates.
 // 2) The display object used to update the visual state.
 //
-// IVfdPinout - Not needed because it's integrated into the BitMap display object.
+// IVfdPinout - Not needed because it's integrated into the BitMap or Display object.
 // ..BitMap   - Not needed because it's integrated into the Scan & Display objects.
 //
 typedef struct _Vfd 
