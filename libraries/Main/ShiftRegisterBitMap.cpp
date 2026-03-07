@@ -29,9 +29,14 @@ ShiftRegisterBitMap::ShiftRegisterBitMap(
     IVfdPinout *vfd1,
     IVfdPinout *vfd2)
 {
+    m_registerLenInBits = 0;
+    m_maxNumGrids = 0;
+
     for (int d = 0 ; d < ARRAYSIZE(m_display) ; d++)
     {
         IVfdPinout *vfd;
+
+        m_display[d] = NULL;
 
         if (d == 0)
         {
