@@ -26,6 +26,56 @@
 #define Segments_h
 
 //
+// Symbol identification
+//
+typedef enum {
+
+    // Sony TC-WR775
+    SymText_DOLBY_NR,
+    SymText_B,
+    SymText_C,
+    SymText_MEMORY,
+
+    Sym7SegMinus,
+    Sym7SegDecimalPoint,
+
+    SymText_A_plus_B,
+    SymText_HIGH,
+    SymText_NORM,
+
+    SymPlayReverse,
+    SymPlayForward,
+    SymText_PLAY,
+    SymPause,
+    SymText_REC,
+
+    SymTextBox_FADE,
+    SymArrowForward,
+    SymArrowReverse,
+    SymText_AUTO_PAUSE,
+    SymText_BLANK_SKIP,
+
+    SymDotBar123,
+    SymDotBar4,
+
+    // Sony DVP-NS725P Additions
+    SymText_DVD,
+    SymText_TRK,
+    SymText_V,
+    SymText_CD,
+    SymRepeat,
+    SymText_1,
+    SymMovieCamera,
+    Sym7SegColon,
+    SymDolbyDoubleD_D,
+    SymText_MP3,
+    SymText_dts,
+
+    //
+    SymEnd
+} Symbol;
+
+//
 // Segment identification
 //
 typedef enum {

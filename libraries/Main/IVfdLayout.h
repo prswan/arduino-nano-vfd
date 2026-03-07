@@ -118,6 +118,47 @@ typedef struct _Region
 } Region;
 
 //
+// Single standalone group of ad-hoc miscellaneous symbols not
+// part of any character or composite display element.
+//
+// Where there are multiple of the same symbol, the instance
+// count differentiates them. In general, the symbol group 
+// array & instance count runs left to right and top to bottom.
+//
+typedef struct _SegmentGroupSymbol
+{
+    Symbol sym;
+    UINT8 instance;
+    UINT8 pinG;
+    UINT8 pinS;
+
+} SegmentGroupSymbol;
+
+//
+// Proposed alternate more efficient SegmentGroup7Seg.
+// Yet to see any characters cross a grid.
+// use &seg->pinS to get the start of seg list.
+// or union it with an array?
+// {
+//  UINT8 pinG;
+//
+//  struct {
+//      UINT8 a;
+//      UINT8 b;
+//      ...
+//  } PinS
+//
+/*
+    // pinG, { a   b   c   d   e   f   g}
+    {
+        { 5, { 1,  2,  3,  4,  5,  6,  7},
+        { 5, { 9, 10, 11, 12, 13, 14, 15},
+        { 6, { 1,  2,  3,  4,  5,  6,  7},
+        { 6, { 9, 10, 11, 12, 13, 14, 15},
+    },
+*/
+
+//
 // Segment group for 7 segment display characters.
 // Character encoding is more efficient with direct index.
 // As an array, this can represent a group of characters.
@@ -139,6 +180,9 @@ typedef struct _SegmentGroup7Seg
 // including 15 segment versions with the centre dot.
 // Character encoding is more efficient with direct index.
 // As an array, this can represent a group of characters.
+//
+// TODO: Remove dp as it's rare and not easily usable.
+// TODO: Rename "s" to "gc" ready for ac & dc for Samsung corners
 //
 typedef struct _SegmentGroup14Seg
 {
@@ -165,15 +209,7 @@ typedef struct _SegmentGroup14Seg
 
 
 //
-// This should be part of IVfdLayout, and can also add programatic Manufacturer & Model strings.
-// Should we also git rid of the inheritance and just use a single API with false returns by default?
-//
-// Defines one layout map entry with logically approximate but contiguous, unique rows & columns.
-//
-// There is ALWAYS a IvfdLayoutSymbol on every display.
-//
-// Notes:
-// We can pass Vfd to Char14Seg in the API call and make it global to save RAM.
+// Defines one layout map entry with logically approximate but contiguous, unique regions & columns.
 //
 class IVfdLayout
 {
@@ -193,6 +229,18 @@ public:
     virtual void getRegionMap(
         const Region **p_region,
         UINT8 *numEntries) = 0;
+
+    //
+    // Returns the ad-hoc miscellaneous symbols group list.
+    //
+    // returns false if no symbols exist.
+    //
+    virtual bool getSegmentGroupSymbol(
+        const SegmentGroupSymbol **p_segGroup,
+        UINT8 *numEntries)
+    {
+        return false;
+    };
 
     //
     // Returns the SegmentMap groups of 7 segment digits for the Region::id.

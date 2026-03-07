@@ -46,6 +46,10 @@ public:
         const Region **p_region,
         UINT8 *numEntries);
 
+    bool getSegmentGroupSymbol(
+        const SegmentGroupSymbol **p_segGroup,
+        UINT8 *numEntries);
+
     bool getSegmentGroup7Seg(
         UINT8 regionId,
         const SegmentGroup7Seg **p_segGroup,

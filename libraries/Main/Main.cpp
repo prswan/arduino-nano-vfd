@@ -294,8 +294,61 @@ void Main(Controller *controller)
                     break;
                 }
 
-                // Report free memory
+                // Walk through the symbol group
                 case 6:
+                {
+                    static UINT8 symGroupIndex = 0;
+
+                    if (newApp)
+                    {
+                        symGroupIndex = 0;
+
+                        if (uutDisplay != stdOutDisplay)
+                        {
+                            uutDisplay->clear();
+                        }
+
+                        stdOutDisplay->clear();
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, 'S');
+                    }
+
+                    if (buttons->isNextShortPressed())
+                    {
+                        SegmentGroupSymbol *p_symGroup;
+                        UINT8 numSymEntries;
+
+                        if (controller->uutVfd->layout->getSegmentGroupSymbol(&p_symGroup, &numSymEntries))
+                        {
+                            UINT8 sym  = pgm_read_byte_near(&p_symGroup[symGroupIndex].sym);
+                            UINT8 instance = pgm_read_byte_near(&p_symGroup[symGroupIndex].instance);
+                            UINT8 pinG = pgm_read_byte_near(&p_symGroup[symGroupIndex].pinG);
+                            UINT8 pinS = pgm_read_byte_near(&p_symGroup[symGroupIndex].pinS);
+
+                            if (symGroupIndex == 0)
+                            {
+                                stdOutDisplay->clear();
+                            }
+
+                            uutDisplay->setSegment(pinG, pinS, true);
+
+                            character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, '0' + instance);
+
+                            UINT8 value = sym;
+                            character->print(controller->stdOutVfd, controller->stdOutRegionId, 2, '0' + (value / 10));
+                            value = (value % 10);
+                            character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (value / 1));
+
+                            if (++symGroupIndex >= numSymEntries)
+                            {
+                                symGroupIndex = 0;
+                            }
+                        }
+                    }
+                    break;
+                }
+
+                // Report free memory
+                case 7:
                 {
                     if (newApp)
                     {
@@ -315,7 +368,7 @@ void Main(Controller *controller)
 
             if (buttons->isSelectShortPressed())
             {
-                if (++currentApp > 6)
+                if (++currentApp > 7)
                 {
                     currentApp = 0;
                 }
