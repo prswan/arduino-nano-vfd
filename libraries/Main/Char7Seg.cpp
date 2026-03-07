@@ -145,21 +145,16 @@ bool Char7Seg::print(
         return false;
     }
 
-    SegmentMap *p_seg = (SegmentMap *)&p_segmentGroup7Seg[col];
-
     SegmentState segState[s_numSegments];
 
-    //
-    // TODO: WARNING: This implementation assumes that the segments for
-    // a character are all on the same grid. The layout map "segment groups"
-    // should really be refactored to reflect that. 
-    // The grid set by seg 1 is used.
-    //
-    UINT8 pinG = pgm_read_byte_near(&p_seg[0].pinG);
+    SegmentGroup7Seg *p_seg = (SegmentGroup7Seg *) &p_segmentGroup7Seg[col];
+
+    UINT8  pinG = pgm_read_byte_near(&p_seg->pinG);
+    UINT8* pinS = (UINT8 *) &p_seg->pinS;
 
     for (int s = 0; s < s_numSegments; s++)
     {
-        segState[s].pinS = pgm_read_byte_near(&p_seg[s].pinS);
+        segState[s].pinS = pgm_read_byte_near(&pinS[s]);
         segState[s].on = pgm_read_byte_near(&p_on[s]);
     }
 

@@ -135,43 +135,22 @@ typedef struct _SegmentGroupSymbol
 } SegmentGroupSymbol;
 
 //
-// Proposed alternate more efficient SegmentGroup7Seg.
-// Yet to see any characters cross a grid.
-// use &seg->pinS to get the start of seg list.
-// or union it with an array?
-// {
-//  UINT8 pinG;
-//
-//  struct {
-//      UINT8 a;
-//      UINT8 b;
-//      ...
-//  } PinS
-//
-/*
-    // pinG, { a   b   c   d   e   f   g}
-    {
-        { 5, { 1,  2,  3,  4,  5,  6,  7},
-        { 5, { 9, 10, 11, 12, 13, 14, 15},
-        { 6, { 1,  2,  3,  4,  5,  6,  7},
-        { 6, { 9, 10, 11, 12, 13, 14, 15},
-    },
-*/
-
-//
 // Segment group for 7 segment display characters.
-// Character encoding is more efficient with direct index.
 // As an array, this can represent a group of characters.
 //
 typedef struct _SegmentGroup7Seg
 {
-    SegmentMap a;
-    SegmentMap b;
-    SegmentMap c;
-    SegmentMap d;
-    SegmentMap e;
-    SegmentMap f;
-    SegmentMap g;
+    UINT8 pinG;
+
+    struct {
+        UINT8 a;
+        UINT8 b;
+        UINT8 c;
+        UINT8 d;
+        UINT8 e;
+        UINT8 f;
+        UINT8 g;
+    } pinS;
 
 } SegmentGroup7Seg;
 
