@@ -37,7 +37,7 @@ public:
 
     ~Char14Seg() {};
 
-    virtual bool print(
+    bool print(
         Vfd  *vfd,
         UINT8 regionId,
         UINT8 col,

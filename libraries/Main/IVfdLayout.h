@@ -186,6 +186,38 @@ typedef struct _SegmentGroup14Seg
 
 } SegmentGroup14Seg;
 
+//
+// Segment group for a bar. At the time of writing:
+// - None yet owned that use >1 grid for 1 bar.
+// - None yet owned with >16 segments 
+//   (seen photos of some that look longer, though)
+//
+// "vertical" 
+//  - true  -  the bar runs vertically.
+//  - false -  the bar runs horizontally.
+//
+// "reverse"
+//  - true  - a horizontal bar runs right to left.
+//          - a vertical bar runs top to bottom.
+//  - false - a horizontal bar runs left to right (e.g. Tape VU meter).
+//          - a vertical bar runs bottom to top (e.g. Graphic EQ).
+//
+// "seg1Symbol"
+//  - true  - Segment 1 also lights other symbols in addtition to bar 1.
+//  - false - Segment 1 is the same as Segment 2+
+//
+// As an array, this can represent a group of bars.
+//
+typedef struct _SegmentGroupBar
+{
+    bool vertical;
+    bool reverse;
+    bool seg1Symbol;
+
+    UINT8 pinG;
+    UINT8 pinS[16];
+
+} SegmentGroupBar;
 
 //
 // Defines one layout map entry with logically approximate but contiguous, unique regions & columns.
@@ -222,7 +254,7 @@ public:
     };
 
     //
-    // Returns the SegmentMap groups of 7 segment digits for the Region::id.
+    // Returns the groups of 7 segment digits for the Region::id.
     //
     // numEntries is also equivalent to the number of digits in the region, Region::len.
     //
@@ -237,7 +269,7 @@ public:
     };
 
     //
-    // Returns the SegmentMap groups of 14 or 15 segment digits for the Region::id.
+    // Returns the groups of 14 or 15 segment digits for the Region::id.
     //
     // numEntries is also equivalent to the number of digits in the region, Region::len.
     //
@@ -246,6 +278,21 @@ public:
     virtual bool getSegmentGroup14Seg(
         UINT8 regionId,
         const SegmentGroup14Seg **p_segGroup,
+        UINT8 *numEntries)
+    {
+        return false;
+    };
+
+    //
+    // Returns the groups of bars for the Region::id.
+    //
+    // numEntries is also equivalent to the number of bars in the region, Region::len.
+    //
+    // returns false if the region doesn't exist.
+    //
+    virtual bool getSegmentGroupBar(
+        UINT8 regionId,
+        const SegmentGroupBar **p_segGroup,
         UINT8 *numEntries)
     {
         return false;

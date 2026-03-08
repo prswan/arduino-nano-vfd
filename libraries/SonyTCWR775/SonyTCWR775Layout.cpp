@@ -35,20 +35,6 @@ static const Properties s_properties PROGMEM =
     DriveTypeSN75518,
 };
 
-/* TODO
-
-  * Definition & additon of the SegmentGroupBar
-    - Like 7Seg, and array of instance definitions for row/col.
-    - "Bar" class to activate them.
-    - Needs a way to be indepedent of number of segments in the bar.
-      - Ideas
-        - As a bar, percentage of max.
-        - Special effects
-          - Night Rider "Kit" scan?
-          - Single bar counter
-          - "scale" bar 0  on or off.
-*/
-
 //
 // 8x 7-segment displays in two groups of 4
 // 2x 16-segement horizontal bar graphs.
@@ -58,6 +44,7 @@ static const Region s_region[] PROGMEM =
     // type,          subType,               id, len
     {RegionTypeChar,  RegionSubTypeChar7Seg,  0,  4},
     {RegionTypeChar,  RegionSubTypeChar7Seg,  1,  4},
+    {RegionTypeBar,   0,                      0,  2},
 };
 
 static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
@@ -126,6 +113,16 @@ static const SegmentGroup7Seg s_segmentGroup7Seg1[] PROGMEM =
     { 2, { 9, 10, 11, 12, 13, 14, 15}},
 };
 
+//
+// 2x 16-segment bar with segment 1's also lighting the R/L top scale and bottom double D.
+//
+static const SegmentGroupBar s_segmentGroupBar[] PROGMEM =
+{
+// vertical, reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16}}
+    { false,   false,       true,    7, { 1,  2,  6,  7,  3,  5,  4,  8,  9, 10, 14, 15, 11, 13, 12, 16}},
+    { false,   false,       true,    8, { 1,  2,  6,  7,  3,  5,  4,  8,  9, 10, 14, 15, 11, 13, 12, 16}},
+};
+
 void SonyTCWR775Layout::getProperties(
     const Properties **p_properties)
 {
@@ -179,67 +176,19 @@ bool SonyTCWR775Layout::getSegmentGroup7Seg(
     return true;
 }
 
-/*
+bool SonyTCWR775Layout::getSegmentGroupBar(
+    UINT8 regionId,
+    const SegmentGroupBar **p_segGroup,
+    UINT8 *numEntries)
+{
+    if (regionId != 0)
+    {
+        return false;
+    }
 
-Layout Finder
-0308 - col 4 "-"
-0316 - col 5 DP
-0508 - col 0 "-"
-0516 - col 1 DP
+    *p_segGroup = s_segmentGroupBar;
+    *numEntries = ARRAYSIZE(s_segmentGroupBar);
 
-Right side symbols
-G1 S1 - "DOLBY NR" S_TEXT_DOLBY_NR
-G1 S2 - white square 'B' S_SYMBOL_WHITE_SQUARE_B
-G1 S3 - red left arrow S_SYMBOL_RED_LEFT_ARROW
-G1 S4 - "PLAY" S_TEXT_PLAY
-G1 S5 - red right arrow
-G1 S6 - white square 'C' S_SYMBOL_WHITE_SQUARE_C
-G1 S7 - "MEMORY"
-G1 S8 - red pause symbol S_SYMBOL_RED_PAUSE
-G1 S9 - red "REC"
-G1 S10+ - n/a
+    return true;
+}
 
-Left side symbols
-G6 S1 - "DOLBY NR"
-G6 S2 - white square 'B'
-G6 S3 - red left arrow
-G6 S4 - "PLAY"
-G6 S5 - red right arrow
-G6 S6 - white square 'C'
-G6 S7 - "MEMORY"
-G6 S8 - red pause symbol
-G6 S9 - red "REC"
-G6 S10 - FADE and box
-G6 S11 - red right arrow in fade box
-G6 S12 - "BLANK SKIP"
-G6 S13 - "AUTO PAUSE"
-G6 S14 - red left arrow in fade box
-G6 S15+ n/c
-
-Top:
-G7 S1 - Top bar L, bar 1 and top scale
-G7 S2 - 2
-G7 S3 - 5
-G7 S4 - 7
-G7 S5 - 6
-G7 S6 - 3
-G7 S7 - 4
-G7 S8 - 8
-G7 S9 - 9
-G7 S10 - 10
-G7 S11 - 13
-G7 S12 - 15
-G7 S13 - 14
-G7 S14 - 11
-G7 S15 - 12
-G7 S16 - 16
-G7 S17+
-
-Bottom G8
-G8 S1 - bottom bar R, bar 1, dolby double D symbol
-G8 S2 - S16 same as above
-G8 S17 - Red dot bar 4
-G8 S18 - Red dot bar 1 thru 3
-G8 S19+ n/c
-
-*/

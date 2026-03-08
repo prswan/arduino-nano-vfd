@@ -29,6 +29,7 @@
 #include "Char7Seg.h"
 #include "LayoutFinder.h"
 #include "VfdStdOut.h"
+#include "Bar.h"
 
 //
 // I don't remember needing to use an external library in the ICT project for this.
@@ -40,15 +41,6 @@
 
 
 /* TODO
-
- Print (Character ?) class (similar concepts Bar and Circle).
-  - print
-   - print7Seg::print
-   - print5x7Matrix::print
-   - print14Seg::print
-  - takes the segment group map for columns (and rows if >1 row)
-  There are other primatives that build on this - Numbers, Hex, Strings etc.
-  - Those all build on single character print => separate class for string ops?
 
 How to Find an Undocumented VFD Pinout
 --------------------------------------
@@ -229,7 +221,7 @@ void Main(Controller *controller)
                 {
                     if (newApp)
                     {
-                        stdOut->printf("\f%s", "TIME");
+                        stdOut->printf("\f%s", "PERF");
                     }
 
                     // This works because the run is only called when the display is scanned
@@ -267,7 +259,7 @@ void Main(Controller *controller)
                         }
 
                         stdOutDisplay->clear();
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, '*');
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, 'A');
                     }
 
                     if (buttons->isNextShortPressed())
@@ -294,8 +286,47 @@ void Main(Controller *controller)
                     break;
                 }
 
-                // Walk through the symbol group
+                // Walk through the Bar settings
                 case 6:
+                {
+                    static bool  scale = false;
+                    static UINT8 len = 0;
+
+                    if (newApp)
+                    {
+                        scale = false;
+                        len   = 0;
+
+                        if (uutDisplay != stdOutDisplay)
+                        {
+                            uutDisplay->clear();
+                        }
+
+                        stdOutDisplay->clear();
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, 'B');
+                    }
+
+                    if (buttons->isNextShortPressed())
+                    {
+                        UINT8 charValue = len;
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 2, '0' + (charValue / 10));
+                        charValue = (charValue % 10);
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (charValue / 1));
+
+                        Bar::set(controller->uutVfd, 0, 0, scale, len);
+                        Bar::set(controller->uutVfd, 0, 1, scale, len);
+
+                        if (++len >= (ARRAYSIZE(SegmentGroupBar::pinS) + 2))
+                        {
+                            len = 0;
+                            scale = !scale;
+                        }
+                    }
+                    break;
+                }
+
+                // Walk through the symbol group
+                case 7:
                 {
                     static UINT8 symGroupIndex = 0;
 
@@ -348,7 +379,7 @@ void Main(Controller *controller)
                 }
 
                 // Report free memory
-                case 7:
+                case 8:
                 {
                     if (newApp)
                     {
@@ -363,12 +394,12 @@ void Main(Controller *controller)
                 }
 
                 default:
-                break;
+                    break;
             }
 
             if (buttons->isSelectShortPressed())
             {
-                if (++currentApp > 7)
+                if (++currentApp > 8)
                 {
                     currentApp = 0;
                 }

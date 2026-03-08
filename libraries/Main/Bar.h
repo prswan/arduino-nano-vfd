@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025, Paul R. Swan
+// Copyright (c) 2026, Paul R. Swan
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -22,43 +22,44 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef SonyTCWR775Layout_h
-#define SonyTCWR775Layout_h
+#ifndef Bar_h
+#define Bar_h
 
-#include "Arduino.h"
-#include "IVfdLayout.h"
+#include "IDisplay.h"
+
 
 //
-// VFD implementation for the Sony TC-WR775 Twin Cassette Deck.
-// driven by a single A6518 32-bit serial driver IC.
+// Functions for managing bar elements.
 //
-class SonyTCWR775Layout : public IVfdLayout
+class Bar
 {
 public:
-    SonyTCWR775Layout() {};
+    Bar() {};
 
-    ~SonyTCWR775Layout() {};
+    ~Bar() {};
 
-    void getProperties(
-        const Properties **p_properties);
-
-    void getRegionMap(
-        const Region **p_region,
-        UINT8 *numEntries);
-
-    bool getSegmentGroupSymbol(
-        const SegmentGroupSymbol **p_segGroup,
-        UINT8 *numEntries);
-
-    bool getSegmentGroup7Seg(
+    //
+    // Set the length of a bar from it's origin.
+    //
+    // "scale" - control the display of an attached scale, if there is one.
+    // If there is no attached scale, it has no effect.
+    // - true  - the scale is displayed and the bar starts from segment 1.
+    // - false - segment bar 1 & associated scale are skipped to start at segment 2.
+    //
+    // "len" - the length of the bar to set in segments with 0 being all off.
+    // If len exceeds the number of segments in the bar, the remainder is ignored.
+    // The maximum known length is set by SegmentGroupBar.pinS[].
+    //
+    // returns false if the region or instance does not exist.
+    //  
+    static bool set(
+        Vfd  *vfd,
         UINT8 regionId,
-        const SegmentGroup7Seg **p_segGroup,
-        UINT8 *numEntries);
+        UINT8 instance,
+        bool  scale,
+        UINT8 len
+    );
 
-    bool getSegmentGroupBar(
-        UINT8 regionId,
-        const SegmentGroupBar **p_segGroup,
-        UINT8 *numEntries);
 };
 
 #endif

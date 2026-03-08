@@ -65,6 +65,7 @@ bool VfdStdOut::print(
         if ((RegionTypeChar == region.type) && (regionId == region.id))
         {
             success = true;
+            break;
         }
     }
 
