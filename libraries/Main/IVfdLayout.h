@@ -27,7 +27,7 @@
 
 #include "Arduino.h"
 #include "Types.h"
-#include "Segments.h"
+#include "Symbols.h"
 
 
 //
@@ -155,34 +155,38 @@ typedef struct _SegmentGroup7Seg
 } SegmentGroup7Seg;
 
 //
-// Segment group for 14 segment display characters,
-// including 15 segment versions with the centre dot.
+// Segment group for 14 segment display characters, including:
+// - 15 segment versions with the centre dot
+// - 17 segement versions with centre & corner dots.
 // Character encoding is more efficient with direct index.
 // As an array, this can represent a group of characters.
 //
-// TODO: Remove dp as it's rare and not easily usable.
-// TODO: Rename "s" to "gc" ready for ac & dc for Samsung corners
-//
 typedef struct _SegmentGroup14Seg
 {
-    SegmentMap a;
-    SegmentMap b;
-    SegmentMap c;
-    SegmentMap d;
-    SegmentMap e;
-    SegmentMap f;
-    SegmentMap g1;
-    SegmentMap g2;
-    SegmentMap h;
-    SegmentMap i;
-    SegmentMap j;
-    SegmentMap k;
-    SegmentMap l;
-    SegmentMap m;
-    // Optional centre dot for some displays
-    SegmentMap s;
-    // Optional Decimal Point on some characters
-    SegmentMap dp;
+    UINT8 pinG;
+
+    struct {
+        UINT8 a;
+        UINT8 b;
+        UINT8 c;
+        UINT8 d;
+        UINT8 e;
+        UINT8 f;
+        UINT8 g1;
+        UINT8 g2;
+        UINT8 h;
+        UINT8 i;
+        UINT8 j;
+        UINT8 k;
+        UINT8 l;
+        UINT8 m;
+        // Optional 'g' centre dot for some displays
+        UINT8 gc;
+        // Optional 'a' top corner dots for some displays
+        UINT8 ac;
+        // Optional 'd' bottom corner dots for some displays
+        UINT8 dc;
+    } pinS;
 
 } SegmentGroup14Seg;
 

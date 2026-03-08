@@ -264,7 +264,7 @@ void Main(Controller *controller)
 
                     if (buttons->isNextShortPressed())
                     {
-                        if (++currentChar >= 0x60)
+                        if (++currentChar >= 127)
                         {
                             currentChar = 0x20;
                         }

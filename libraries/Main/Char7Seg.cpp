@@ -25,7 +25,7 @@
 #include "Char7Seg.h"
 
 
-// Correlated etting for number of segments in the segment map for this character to display.
+// Correlated setting for number of segments in the segment group for this character to display.
 static const UINT8 s_numSegments = 7;
 
 //
