@@ -32,29 +32,24 @@ typedef enum {
 
     // Sony TC-WR775
     SymText_DOLBY_NR,
+    SymText_A_plus_B,
     SymText_B,
     SymText_C,
+    SymMinus,
     SymText_MEMORY,
-
-    Sym7SegMinus,
-    Sym7SegDecimalPoint,
-
-    SymText_A_plus_B,
+    SymDecimalPoint,
     SymText_HIGH,
     SymText_NORM,
-
     SymPlayReverse,
     SymPlayForward,
-    SymText_PLAY,
-    SymPause,
-    SymText_REC,
-
     SymTextBox_FADE,
     SymArrowForward,
     SymArrowReverse,
+    SymText_PLAY,
     SymText_AUTO_PAUSE,
+    SymPause,
+    SymText_REC,
     SymText_BLANK_SKIP,
-
     SymDotBar123,
     SymDotBar4,
 
@@ -66,10 +61,38 @@ typedef enum {
     SymRepeat,
     SymText_1,
     SymMovieCamera,
-    Sym7SegColon,
+    SymColon,
     SymDolbyDoubleD_D,
     SymText_MP3,
     SymText_dts,
+
+    // Panasonic DVD-RV32 Additions
+    SymText_PGM,    
+    SymText_A_minus,
+    SymText_GROUP,  
+    SymText_TITLE,  
+    SymText_TRACK,  
+    SymText_CHAP,   
+    SymText_D_N_R,  
+    SymText_PG,     
+    SymText_D_MIX,  
+    SymText_A_SRD,  
+    SymText_BASS,   
+    SymText_CINEMA, 
+    SymText_D_ENH,  
+    SymText_VIDEO,  
+    SymText_RND,    
+    SymText_AUDIO,  
+    SymText_WMA,    
+    SymText_VR,     
+
+    // Samsung BD-P1590 Additions
+    SymDiscIn,   
+    SymText_BD,  
+    SymText_USB, 
+    SymText_HDMI,
+    SymText_HD,  
+    SymText_24F, 
 
     //
     SymEnd

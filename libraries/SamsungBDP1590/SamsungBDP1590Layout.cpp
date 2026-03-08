@@ -44,6 +44,22 @@ static const Region s_region[] PROGMEM =
     {RegionTypeChar,  RegionSubTypeChar14Seg,   0,   6}
 };
 
+static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
+{
+    // sym,        instance, pinG, pinS
+    {SymDiscIn,           0,    1,    2}, // row 1
+    {SymText_BD,          0,    1,    1},
+    {SymText_DVD,         0,    2,    1},
+    {SymText_CD,          0,    3,    1},
+    {SymText_USB,         0,    4,    1},
+    {SymText_HDMI,        0,    5,    1},
+    {SymText_HD,          0,    6,    1},
+    {SymText_24F,         0,    7,    1},
+
+    {SymColon,            0,    3,    2}, // row 2
+    {SymColon,            1,    5,    2},
+};
+
 //
 // 6x 14-segment display with centre dot and four corner dots (to figure that out later).
 //
@@ -167,6 +183,15 @@ void SamsungBDP1590Layout::getRegionMap(
 {
     *p_region = s_region;
     *numEntries = ARRAYSIZE(s_region);
+};
+
+bool SamsungBDP1590Layout::getSegmentGroupSymbol(
+    const SegmentGroupSymbol **p_segGroup,
+    UINT8 *numEntries)
+{
+    *p_segGroup = s_segmentGroupSymbol;
+    *numEntries = ARRAYSIZE(s_segmentGroupSymbol);
+    return true;
 };
 
 bool SamsungBDP1590Layout::getSegmentGroup14Seg(

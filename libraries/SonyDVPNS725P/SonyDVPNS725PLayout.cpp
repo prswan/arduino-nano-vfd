@@ -44,6 +44,35 @@ static const Region s_region[] PROGMEM =
     {RegionTypeChar,  RegionSubTypeChar14Seg,   0,   7}
 };
 
+static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
+{
+    // sym,        instance, pinG, pinS
+    {SymText_DVD,         0,    2,    4}, // row 1
+    {SymPlayForward,      0,    1,   23},
+    {SymPause,            0,    1,    4},
+    {SymText_TRK,         0,    7,    4},
+
+    {SymText_V,           0,    2,   21}, // row 2
+    {SymText_CD,          0,    2,   22},
+    {SymRepeat,           0,    1,   21},
+    {SymText_1,           0,    1,   22},
+    {SymMovieCamera,      0,    7,   22},
+
+    {SymColon,            0,    5,    4},
+    {SymColon,            1,    3,    4},
+
+    {SymDolbyDoubleD_D,   0,    2,   20}, // row 3
+    {SymText_MP3,         0,    1,   20},
+    {SymText_dts,         0,    7,   20},
+
+    {SymDecimalPoint,     0,    7,   23},
+    {SymDecimalPoint,     1,    6,   23},
+    {SymDecimalPoint,     2,    5,   23},
+    {SymDecimalPoint,     3,    4,   23},
+    {SymDecimalPoint,     4,    3,   23},
+    {SymDecimalPoint,     5,    2,   23},
+};
+
 //
 // 7x 14-segment display with centre dot.
 // These were documented in the service manual.
@@ -193,6 +222,15 @@ void SonyDVPNS725PLayout::getRegionMap(
     *numEntries = ARRAYSIZE(s_region);
 };
 
+bool SonyDVPNS725PLayout::getSegmentGroupSymbol(
+    const SegmentGroupSymbol **p_segGroup,
+    UINT8 *numEntries)
+{
+    *p_segGroup = s_segmentGroupSymbol;
+    *numEntries = ARRAYSIZE(s_segmentGroupSymbol);
+    return true;
+};
+
 bool SonyDVPNS725PLayout::getSegmentGroup14Seg(
     UINT8 regionId,
     const SegmentGroup14Seg **p_segGroup,
@@ -208,28 +246,3 @@ bool SonyDVPNS725PLayout::getSegmentGroup14Seg(
 
     return true;
 };
-
-/*
-Symbols
-
-0104 - pause symbol
-0120 - "MP3"
-0121 - repeat symbol
-0122 - "1" next to repeat symbol
-0123 - play symbol
-0204 - "DVD"
-0220 - dolby double D symbol and "D"
-0221 - "V"
-0222 - "CD" after "V"
-0223 - col 5 dp
-0304 - col 4 colon
-0323 - col 4 dp
-0423 - col 3 dp
-0523 - col 2 dp
-0623 - col 1 dp
-0723 - col 0 dp
-0704 - "TRK"
-0720 - "Dts" symbol
-0722 - movie camera symbol
-
-*/

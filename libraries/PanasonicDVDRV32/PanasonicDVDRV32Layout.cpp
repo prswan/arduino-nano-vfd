@@ -132,6 +132,41 @@ static const Region s_region[] PROGMEM =
     {RegionTypeChar,  RegionSubTypeChar14Seg,  0,  12}
 };
 
+static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
+{
+    // sym,        instance, pinG, pinS
+    {SymText_DVD,         0,   13,    1}, // row 1
+    {SymText_PGM,         0,   13,    2},
+    {SymText_A_minus,     0,   13,    3},
+    {SymText_B,           0,   13,    4},
+    {SymText_GROUP,       0,   12,   15},
+    {SymText_TITLE,       0,   11,   15},
+    {SymText_TRACK,       0,   10,   15},
+    {SymText_CHAP,        0,    9,   15},
+    {SymText_D_N_R,       0,    8,   15},
+    {SymText_PG,          0,    7,   15},
+    {SymText_D_MIX,       0,    6,   15},
+    {SymText_A_SRD,       0,    5,   15},
+    {SymText_BASS,        0,    4,   15},
+    {SymText_CINEMA,      0,    3,   15},
+    {SymText_D_ENH,       0,    2,   15},
+
+    {SymText_VIDEO,       0,   13,    5}, // row 2
+    {SymText_RND,         0,   13,    6},
+    {SymRepeat,           0,   13,    7},
+
+    {SymText_AUDIO,       0,   13,    8}, // row 3
+    {SymText_WMA,         0,   13,    9},
+    {SymPlayForward,      0,   13,   10},
+    {SymColon,            0,    4,   16},
+    {SymColon,            1,    2,   16},
+
+    {SymText_CD,          0,   13,   11}, // row 4
+    {SymText_VR,          0,   13,   12},
+    {SymText_MP3,         0,   13,   13},
+    {SymPause,            0,   13,   14},
+};
+
 //
 // 12x 14-segment standard display.
 // The manual didn't document the layout, reverse engineered using the LayoutFinder.
@@ -347,6 +382,15 @@ void PanasonicDVDRV32Layout::getRegionMap(
 {
     *p_region = s_region;
     *numEntries = ARRAYSIZE(s_region);
+};
+
+bool PanasonicDVDRV32Layout::getSegmentGroupSymbol(
+    const SegmentGroupSymbol **p_segGroup,
+    UINT8 *numEntries)
+{
+    *p_segGroup = s_segmentGroupSymbol;
+    *numEntries = ARRAYSIZE(s_segmentGroupSymbol);
+    return true;
 };
 
 bool PanasonicDVDRV32Layout::getSegmentGroup14Seg(

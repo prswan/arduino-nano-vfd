@@ -357,7 +357,7 @@ void Main(Controller *controller)
 
                             if (symGroupIndex == 0)
                             {
-                                stdOutDisplay->clear();
+                                uutDisplay->clear();
                             }
 
                             uutDisplay->setSegment(pinG, pinS, true);
