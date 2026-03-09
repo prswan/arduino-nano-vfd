@@ -25,7 +25,7 @@
 #include "Char14Seg.h"
 
 
-// Correlated etting for number of segments in the segment group for this character to display.
+// Correlated setting for number of segments in the segment group for this character to display.
 static const UINT8 s_numSegments = 17;
 
 //
@@ -187,7 +187,6 @@ bool Char14Seg::print(
     {
         return false;
     }
-
 
     SegmentState segState[s_numSegments];
 

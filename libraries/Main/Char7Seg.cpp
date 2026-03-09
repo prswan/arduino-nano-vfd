@@ -54,9 +54,9 @@ typedef struct _SymbolDisplayGroup7Seg
     UINT8 value;
     DisplayGroup7Seg group;
 
-} SymbolDisplayGroup14Seg;
+} SymbolDisplayGroup7Seg;
 
-static const SymbolDisplayGroup14Seg s_symbolDisplayGroup7Seg[] PROGMEM =
+static const SymbolDisplayGroup7Seg s_symbolDisplayGroup7Seg[] PROGMEM =
 {
 //   val,  a  b  c  d  e  f  g 
     {' ',  0, 0, 0, 0, 0, 0, 0},

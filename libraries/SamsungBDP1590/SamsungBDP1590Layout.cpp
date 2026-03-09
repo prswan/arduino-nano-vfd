@@ -40,8 +40,9 @@ static const Properties s_properties PROGMEM =
 //
 static const Region s_region[] PROGMEM =
 {
-    // type,          subType,                 id, len
-    {RegionTypeChar,  RegionSubTypeChar14Seg,   0,   6}
+    // type,           subType,                 id, len
+    {RegionTypeCustom, 0,                        0,   2},
+    {RegionTypeChar,   RegionSubTypeChar14Seg,   0,   6}
 };
 
 static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
@@ -72,6 +73,40 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
     { 5, { 4,  9, 17, 19, 13,  5, 10, 12,  6,  7,  8, 14, 15, 16, 11,  3, 18}},
     { 6, { 4,  9, 17, 19, 13,  5, 10, 12,  6,  7,  8, 14, 15, 16, 11,  3, 18}},
     { 7, { 4,  9, 17, 19, 13,  5, 10, 12,  6,  7,  8, 14, 15, 16, 11,  3, 18}},
+};
+
+//
+// There is a wierd dot matrix region before the 14 segment characters.
+// The manual doesn't show it used and the dot groupings are very odd.
+// See: "Samsung BD-P1590 Dot Matrix Area Layout Map.pdf"
+//
+// Visually, it looks like it's two "characters" and it's possible to
+// construct something from them.
+//
+static const SegmentGroupGraphicSymbol s_segmentGroupGraphicSymbol[] PROGMEM =
+{
+// pinG, { pinS }}
+    { 1, { 3,  4,  5,  6,  7,  8,  9, 10}},
+    { 1, {11, 12, 13, 14, 15, 16, 17, 18}},
+};
+
+static const DisplayGroupGraphicSymbol s_displayGroupGraphicSymbol[] PROGMEM =
+{
+    // Segment Group 0
+    // sym,          instance, segGroupIndex, { 3,  4,  5,  6,  7,  8,  9, 10}
+    {SymPause,              0,             0, { 1,  0,  0,  0,  0,  1,  1,  1}},
+    {SymBarBottom,          0,             0, { 0,  0,  0,  0,  1,  1,  0,  0}},
+    {SymSquare,             0,             0, { 1,  1,  1,  0,  1,  1,  1,  1}},
+
+    // Segment Group 1
+    // sym,          instance, segGroupIndex, {11, 12, 13, 14, 15, 16, 17, 18}
+    {SymArrowForwardLight,  0,             1, { 0,  1,  0,  0,  1,  1,  0,  0}},
+    {SymArrowForward,       0,             1, { 0,  0,  0,  0,  0,  1,  1,  1}},
+    {SymArrowForwardBold,   0,             1, { 0,  0,  0,  0,  1,  1,  1,  1}},
+    {SymArrowForwardBold,   1,             1, { 1,  1,  1,  0,  1,  1,  0,  0}},
+    {SymChevron,            0,             1, { 1,  1,  1,  0,  1,  1,  1,  1}},
+    {SymText_8,             0,             1, { 0,  0,  1,  0,  0,  0,  0,  1}},
+    {SymText_B,             0,             1, { 0,  1,  1,  0,  0,  0,  0,  1}},
 };
 
 void SamsungBDP1590Layout::getProperties(
@@ -113,35 +148,18 @@ bool SamsungBDP1590Layout::getSegmentGroup14Seg(
     return true;
 };
 
-/*
-Symbols
+bool SamsungBDP1590Layout::getSegmentGroupGraphicSymbol(
+    const SegmentGroupGraphicSymbol **p_segmentGroup,
+    UINT8 *numSegmentGroupEntries,
+    const DisplayGroupGraphicSymbol **p_displayGroup,
+    UINT8 *numDisplayGroupEntries)
+{
 
-0101 - BD
-0201 - DVD
-0301 - CD
-0401 - USB
-0501 - HDMI
-0601 - HD
-0701 - 24F
+    *p_segmentGroup = s_segmentGroupGraphicSymbol;
+    *numSegmentGroupEntries = ARRAYSIZE(s_segmentGroupGraphicSymbol);
 
-0102 - spinning disc symbol
-0202
-0302 - colon between col 1 & 2
-0402
-0502 - colon between col 3 & 4
-0602
-0702
+    *p_displayGroup = s_displayGroupGraphicSymbol;
+    *numDisplayGroupEntries = ARRAYSIZE(s_displayGroupGraphicSymbol);
 
-0203-0703 - top R & L dots
-0218-0718 - bottom R & L dots
- - Manual examples of the extra corner dots
-   A - bottom
-   L - bottom
-   V - top
-   Y - top
- - will have to somewhat guess the rest.
-
-The weird dot matrix area TBD. The user manual doesn't document anything in this area.
-A walk through them has various dot groups. I *think* it's possible to make a stop square
-and play triangle?
-*/
+    return true;
+};

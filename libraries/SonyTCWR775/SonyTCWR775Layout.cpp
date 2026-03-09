@@ -71,8 +71,8 @@ static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
     {SymPlayReverse,      0,    6,    3}, // row 4
     {SymPlayForward,      0,    6,    5},
     {SymTextBox_FADE,     0,    6,   10},
-    {SymArrowForward,     0,    6,   14},
-    {SymArrowReverse,     0,    6,   11},
+    {SymFadeArrowForward, 0,    6,   14},
+    {SymFadeArrowReverse, 0,    6,   11},
     {SymPlayReverse,      1,    1,    3},
     {SymPlayForward,      1,    1,    5},
  

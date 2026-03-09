@@ -22,13 +22,15 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef Symbols_h
-#define Symbols_h
+#ifndef Sym_h
+#define Sym_h
 
 //
 // Symbol identification
 //
 typedef enum {
+
+    SymNone = 0,
 
     // Sony TC-WR775
     SymText_DOLBY_NR,
@@ -43,8 +45,8 @@ typedef enum {
     SymPlayReverse,
     SymPlayForward,
     SymTextBox_FADE,
-    SymArrowForward,
-    SymArrowReverse,
+    SymFadeArrowForward,
+    SymFadeArrowReverse,
     SymText_PLAY,
     SymText_AUTO_PAUSE,
     SymPause,
@@ -94,8 +96,19 @@ typedef enum {
     SymText_HD,  
     SymText_24F, 
 
+    // Samsung BD-P1590 Graphic Symbol Additions, Group 0
+    SymBarBottom,
+    SymSquare,
+
+    // Samsung BD-P1590 Graphic Symbol Additions, Group 1
+    SymArrowForwardLight,
+    SymArrowForward,
+    SymArrowForwardBold,
+    SymChevron,
+    SymText_8,
+
     //
     SymEnd
-} Symbol;
+} Sym;
 
 #endif

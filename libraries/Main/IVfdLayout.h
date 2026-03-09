@@ -27,7 +27,7 @@
 
 #include "Arduino.h"
 #include "Types.h"
-#include "Symbols.h"
+#include "Sym.h"
 
 
 //
@@ -59,7 +59,9 @@ typedef enum
     RegionTypeChar,
     RegionTypeBar,
     RegionTypeCircle,
-    RegionTypeNumberList
+    RegionTypeNumberList,
+
+    RegionTypeCustom
 
 } RegionType;
 
@@ -127,7 +129,7 @@ typedef struct _Region
 //
 typedef struct _SegmentGroupSymbol
 {
-    Symbol sym;
+    Sym   sym;
     UINT8 instance;
     UINT8 pinG;
     UINT8 pinS;
@@ -224,6 +226,35 @@ typedef struct _SegmentGroupBar
 } SegmentGroupBar;
 
 //
+// When it's just too oddball wierd to categorize, provide a means
+// to send back unstructured glyph layout information. It's intended
+// to pair with a matching symbol display implementation to use it,
+// unique to the VFD.
+//
+typedef struct _SegmentGroupGraphicSymbol
+{
+    UINT8 pinG;
+    UINT8 pinS[16];
+
+} SegmentGroupGraphicSymbol;
+
+//
+// Symbol display group paired with a unique graphic symbol.
+//
+// "sym" & "instance" are used to match the symbol.
+// "segGroupIndex" is the entry into the paired "SegmentGroupGraphicSymbol" table.
+// "on" defines whether the segment is on or off.
+//
+typedef struct _DisplayGroupGraphicSymbol
+{
+    Sym   sym;
+    UINT8 instance;
+    UINT8 segGroupIndex;
+    UINT8 on[16];
+
+} DisplayGroupGraphicSymbol;
+
+//
 // Defines one layout map entry with logically approximate but contiguous, unique regions & columns.
 //
 class IVfdLayout
@@ -302,6 +333,20 @@ public:
         return false;
     };
 
+    //
+    // Returns groups of custom unstructured glyph elements and the
+    // symbol display group mappings to use them.
+    //
+    // returns false if the region doesn't exist.
+    //
+    virtual bool getSegmentGroupGraphicSymbol(
+        const SegmentGroupGraphicSymbol **p_segmentGroup,
+        UINT8 *numSegmentGroupEntries,
+        const DisplayGroupGraphicSymbol **p_displayGroup,
+        UINT8 *numDisplayGroupEntries)
+    {
+        return false;
+    };
 };
 
 #endif

@@ -30,6 +30,7 @@
 #include "LayoutFinder.h"
 #include "VfdStdOut.h"
 #include "Bar.h"
+#include "Symbol.h"
 
 //
 // I don't remember needing to use an external library in the ICT project for this.
@@ -341,27 +342,28 @@ void Main(Controller *controller)
 
                         stdOutDisplay->clear();
                         character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, 'S');
+
+                        // Blind symbol set to test out this API, at least 1 activated for each supported display.
+                        Symbol::set(controller->uutVfd, 0, SymPlayForward, true);
+                        Symbol::set(controller->uutVfd, 0, SymPause, true);
+                        Symbol::set(controller->uutVfd, 1, SymPause, true);
+                        Symbol::set(controller->uutVfd, 0, SymText_CD, true);
                     }
 
                     if (buttons->isNextShortPressed())
                     {
-                        SegmentGroupSymbol *p_symGroup;
-                        UINT8 numSymEntries;
-
-                        if (controller->uutVfd->layout->getSegmentGroupSymbol(&p_symGroup, &numSymEntries))
+                        if (symGroupIndex == 0)
                         {
-                            UINT8 sym  = pgm_read_byte_near(&p_symGroup[symGroupIndex].sym);
-                            UINT8 instance = pgm_read_byte_near(&p_symGroup[symGroupIndex].instance);
-                            UINT8 pinG = pgm_read_byte_near(&p_symGroup[symGroupIndex].pinG);
-                            UINT8 pinS = pgm_read_byte_near(&p_symGroup[symGroupIndex].pinS);
+                            uutDisplay->clear();
+                        }
 
-                            if (symGroupIndex == 0)
-                            {
-                                uutDisplay->clear();
-                            }
+                        Sym sym = SymNone;
+                        UINT8 instance = 0;
 
-                            uutDisplay->setSegment(pinG, pinS, true);
+                        bool success = Symbol::set(controller->uutVfd, symGroupIndex, true, &sym, &instance);
 
+                        if (success)
+                        {
                             character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, '0' + instance);
 
                             UINT8 value = sym;
@@ -369,10 +371,11 @@ void Main(Controller *controller)
                             value = (value % 10);
                             character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (value / 1));
 
-                            if (++symGroupIndex >= numSymEntries)
-                            {
-                                symGroupIndex = 0;
-                            }
+                            symGroupIndex++;
+                        }
+                        else
+                        {
+                            symGroupIndex = 0;
                         }
                     }
                     break;

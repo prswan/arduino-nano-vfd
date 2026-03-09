@@ -53,6 +53,13 @@ public:
         UINT8 regionId,
         const SegmentGroup14Seg **p_segGroup,
         UINT8 *numEntries);
+
+    bool getSegmentGroupGraphicSymbol(
+        const SegmentGroupGraphicSymbol **p_segmentGroup,
+        UINT8 *numSegmentGroupEntries,
+        const DisplayGroupGraphicSymbol **p_displayGroup,
+        UINT8 *numDisplayGroupEntries);
+
 };
 
 #endif
