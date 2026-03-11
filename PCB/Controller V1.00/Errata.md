@@ -23,4 +23,5 @@
 9. If 1W glass BZV85 Zener diodes are used, the pads, holes and spacing are too small. They should be 0.4" pitch (standard resistor size).
 10. C332 \& C342 470uF/63V are larger than their outline, obscuring their reference designator and are touching component outlines of several nearby components including Q330, Q340 \& JP334.
 11. Adding two 1W low R resistors in line with FIL1 and FIL2 would allow the filament current draw to be measured, similar to R332 \& R342.
-12. It's not possibly to use both positive \& negative voltage driver boards at the same time so we could save redundant PCB real estate by using a single Vbb supply configurable for either Vbb+ or Vbb-.
+12. It's not possible to use both positive \& negative voltage driver boards at the same time so we could save redundant PCB real estate by using a single Vbb supply configurable for either Vbb+ or Vbb-.
+13. Without a display connected, the filament bias has no return path. A high value resistor (e.g. 100K) to the opposing rail (e.g. Vcc+ for negative voltage systems and Vbb+ for positive voltage systems) would allow the bias voltage to work. I think I've seen this in some service manuals.
