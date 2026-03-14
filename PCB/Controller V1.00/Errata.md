@@ -4,7 +4,8 @@
 
 1. Using a PT6315 based front panel, DOUT (SDOUT) is open drain and needs a pull-up adding to use it. To be added in the next version.
 2. The two buttons have incorrect pitch to properly flush mount a VSG1024 button. To be changed to the common 4-pin square button type used everywhere.
-3. Many standard negative voltage integrated controllers operate an anode range from Vbb- to Vcc+ are only rated to Vbb- = (Vcc+)-35 absolute max and (Vcc+)-30 nominal. A -36V Vbb- supply is therefore too high so a component update is needed to change ZD340 to 27V Zener (e.g. 1N5361) and possibly increase R342. Positive voltage shift register drivers operate an anode range from 0V to Vbb+ and typically rated Vbb+ to 60V.
+3. Many standard negative voltage integrated controllers operate an anode range from Vbb- to Vcc+ are only rated to Vbb- = (Vcc+)-35 absolute max and (Vcc+)-30 nominal. A -36V Vbb- supply is therefore too high so a component update is needed to change ZD340 to 24V Zener and possibly increase R342. Positive voltage shift register drivers operate an anode range from 0V to Vbb+ and typically rated Vbb+ to 60V.
+4. R828 \& R829 (390R) are too low and running hot. Calculated value indicates 820R is a better fit.
 
 
 

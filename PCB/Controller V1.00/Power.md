@@ -4,7 +4,7 @@
 
 ## Vbb
 
-* Universal VFD V1.00: Sony DVP-NS725P + Panasonic DVD-RV32, 2 x UCN5818AF, R1,R2,R3,R4 10R. 
+* Universal VFD V1.00: Sony DVP-NS725P + Panasonic DVD-RV32, 2 x UCN5818AF, R1,R2,R3,R4 10R.
 * Universal VFD Controller V1.00: Insignia NS-R2001 Transformer, Vbb+ @ 36.1VDC, R332 10R.
 
 
@@ -20,7 +20,7 @@
 
 
 
-### Theoretical Calculations
+### Theoretical Calculations @ 36V
 
 * 1 display @ 35mA max => 8 displays 0.28A max
 * Voltage drop over R332 (10R) => 2.8V
@@ -28,6 +28,17 @@
 * Calculated Power TIP41C: 4.08W
 * Calculated Power R332: 0.784W
 * Conclusion: TIP41C will need a 4W+ heatsink.
+
+
+
+### Theoretical Calculations @ 24V
+
+* 1 display @ 35mA max => 8 displays 0.28A max
+* Voltage drop over R332 (10R) => 2.8V
+* Voltage drop over TIP41C => (53.5 - 24.1 - 2.8) = 26.6V
+* Calculated Power TIP41C: 7.4W
+* Calculated Power R332: 0.784W
+* Conclusion: TIP41C will need a 7W+ heatsink.
 
 
 
@@ -53,6 +64,28 @@
 * 1 display pair @ 124mA max => 8 display pairs 0.99A max
 
 
+
+## XR-1091 +/- 5V
+
+* Universal VFD V1.00: Sony DVP-NS725P + Panasonic DVD-RV32, 2 x UCN5818AF, R1,R2,R3,R4 10R.
+* Universal VFD Controller V1.00: Insignia NS-R2001 Transformer, VccAC @ 16.6VAC, VccUNREG @ 22.0VDC
+
+
+
+### Measurements
+
+* Voltage drop over R829 (390R) => (22.0 - 5.0) => 17VDC
+* Current through R829: => 0.043A or 43mA
+* Power dissipation R829: => 0.731W (and its hot)
+
+
+
+### Theoretical Calculations
+
+* XR-1091 datasheet, typical supply current: 10mA, max supply current 18mA
+* For 17V of drop over R829 and 18mA minimum current: R829 = 944 Ohms \& power 0.306W
+* Selecting E12 R829 820R: 17V drop === 0.021A or 21mA and power 0.357W
+* Selecting E12 R829 680R: 17V drop === 0.025A or 25mA and power 0.425W
 
 
 
