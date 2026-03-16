@@ -79,7 +79,7 @@ bool ShiftRegisterScan::run()
 
     m_bitMap->getCurrentRegisterData(m_register, m_registerLenInBytes);
 
-    m_muxSpi->writeData(m_register, m_registerLenInBytes);
+    m_muxSpi->writeData(0, m_register, m_registerLenInBytes);
 
     m_bitMap->incGrids();
 

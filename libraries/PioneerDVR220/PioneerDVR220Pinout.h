@@ -22,44 +22,35 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef SamsungBDP1590Layout_h
-#define SamsungBDP1590Layout_h
+#ifndef PioneerDVR220Pinout_h
+#define PioneerDVR220Pinout_h
 
 #include "Arduino.h"
-#include "IVfdLayout.h"
+#include "IVfdPinout.h"
 
 //
-// VFD layout for the Samsung BD-P1590 DVD Player front panel.
+// VFD pinout for the Pioneer DVR-220 DVD Recorder front panel.
+// Uses Princeton PT6315 integrated bitmap display controller. 
 //
-class SamsungBDP1590Layout : public IVfdLayout
+class PioneerDVR220Pinout : public IVfdPinout
 {
 public:
-    SamsungBDP1590Layout() {};
+    PioneerDVR220Pinout() {};
 
-    ~SamsungBDP1590Layout() {};
+    ~PioneerDVR220Pinout() {};
 
-    void getProperties(
-        const Properties **p_properties);
+    void getScanConfig(
+        const UINT8 **registerMask,
+        UINT8 *registerLenInBits,
+        UINT8 *numGrids);
 
-    void getRegionMap(
-        const Region **p_region,
+    void getPinMapGrid(
+        const PinMap **p_pinMap,
         UINT8 *numEntries);
 
-    bool getSegmentGroupSymbol(
-        const SegmentGroupSymbol **p_segGroup,
+    void getPinMapSegment(
+        const PinMap **p_pinMap,
         UINT8 *numEntries);
-
-    bool getSegmentGroup14Seg(
-        UINT8 regionId,
-        const SegmentGroup14Seg **p_segGroup,
-        UINT8 *numEntries);
-
-    bool getSegmentGroupGraphicSymbol(
-        const SegmentGroupGraphicSymbol **p_segmentGroup,
-        UINT8 *numSegmentGroupEntries,
-        const DisplayGroupGraphicSymbol **p_displayGroup,
-        UINT8 *numDisplayGroupEntries);
-
 };
 
 #endif

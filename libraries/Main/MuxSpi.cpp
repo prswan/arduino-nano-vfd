@@ -75,9 +75,12 @@ void MuxSpi::setPort(UINT8 port)
 };
 
 void MuxSpi::writeData(
+        UINT8 port,
         const UINT8 *data,
         UINT8 dataLenInBytes)
 {
+    setPort(port);
+    
     //
     // We don't use the SPI library implementation because it clobbers
     // the input buffer by reading the input register.

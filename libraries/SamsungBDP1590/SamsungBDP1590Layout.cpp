@@ -100,13 +100,13 @@ static const DisplayGroupGraphicSymbol s_displayGroupGraphicSymbol[] PROGMEM =
 
     // Segment Group 1
     // sym,          instance, segGroupIndex, {11, 12, 13, 14, 15, 16, 17, 18}
-    {SymArrowForwardLight,  0,             1, { 0,  1,  0,  0,  1,  1,  0,  0}},
-    {SymArrowForward,       0,             1, { 0,  0,  0,  0,  0,  1,  1,  1}},
-    {SymArrowForwardBold,   0,             1, { 0,  0,  0,  0,  1,  1,  1,  1}},
-    {SymArrowForwardBold,   1,             1, { 1,  1,  1,  0,  1,  1,  0,  0}},
-    {SymChevron,            0,             1, { 1,  1,  1,  0,  1,  1,  1,  1}},
-    {SymText_8,             0,             1, { 0,  0,  1,  0,  0,  0,  0,  1}},
-    {SymText_B,             0,             1, { 0,  1,  1,  0,  0,  0,  0,  1}},
+    {SymArrowHeadForwardLight,  0,             1, { 0,  1,  0,  0,  1,  1,  0,  0}},
+    {SymArrowHeadForward,       0,             1, { 0,  0,  0,  0,  0,  1,  1,  1}},
+    {SymArrowHeadForwardBold,   0,             1, { 0,  0,  0,  0,  1,  1,  1,  1}},
+    {SymArrowHeadForwardBold,   1,             1, { 1,  1,  1,  0,  1,  1,  0,  0}},
+    {SymChevron,                0,             1, { 1,  1,  1,  0,  1,  1,  1,  1}},
+    {SymText_8,                 0,             1, { 0,  0,  1,  0,  0,  0,  0,  1}},
+    {SymText_B,                 0,             1, { 0,  1,  1,  0,  0,  0,  0,  1}},
 };
 
 void SamsungBDP1590Layout::getProperties(

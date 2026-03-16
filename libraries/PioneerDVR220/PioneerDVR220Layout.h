@@ -22,21 +22,21 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef SamsungBDP1590Layout_h
-#define SamsungBDP1590Layout_h
+#ifndef PioneerDVR220Layout_h
+#define PioneerDVR220Layout_h
 
 #include "Arduino.h"
 #include "IVfdLayout.h"
 
 //
-// VFD layout for the Samsung BD-P1590 DVD Player front panel.
+// VFD layout for the Pioneer DVR-220 DVD Recorder front panel.
 //
-class SamsungBDP1590Layout : public IVfdLayout
+class PioneerDVR220Layout : public IVfdLayout
 {
 public:
-    SamsungBDP1590Layout() {};
+    PioneerDVR220Layout() {};
 
-    ~SamsungBDP1590Layout() {};
+    ~PioneerDVR220Layout() {};
 
     void getProperties(
         const Properties **p_properties);
@@ -53,12 +53,6 @@ public:
         UINT8 regionId,
         const SegmentGroup14Seg **p_segGroup,
         UINT8 *numEntries);
-
-    bool getSegmentGroupGraphicSymbol(
-        const SegmentGroupGraphicSymbol **p_segmentGroup,
-        UINT8 *numSegmentGroupEntries,
-        const DisplayGroupGraphicSymbol **p_displayGroup,
-        UINT8 *numDisplayGroupEntries);
 
 };
 

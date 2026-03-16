@@ -51,14 +51,6 @@ public:
     ~MuxSpi();
 
     //
-    // Set the SPI multiplexor port to use via SEL0,1,2.
-    // "port" is 0 to 7 for physical ports 1 to 8.
-    //
-    void setPort(
-        UINT8 port
-    );
-
-    //
     // Set the strobe pin to the supplied value.
     //
     void setStrobe(
@@ -82,6 +74,7 @@ public:
     // Write "dataLenInBytes" amount of "data" out of the SPI port.
     //
     void writeData(
+        UINT8 port,
         const UINT8 *data,
         UINT8 dataLenInBytes
     );
@@ -90,10 +83,22 @@ public:
     // Read "dataLenInBytes" amount of "data" from the SPI port.
     //
     void readData(
+        UINT8  port,
         UINT8 *data,
-        UINT8 dataLenInBytes
+        UINT8  dataLenInBytes
     );
 */
+
+private:
+
+    //
+    // Set the SPI multiplexor port to use via SEL0,1,2.
+    // "port" is 0 to 7 for physical ports 1 to 8.
+    //
+    void setPort(
+        UINT8 port
+    );
+
 private:
 
     int m_pinStrobe;

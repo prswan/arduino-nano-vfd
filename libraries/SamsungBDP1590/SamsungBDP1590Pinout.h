@@ -29,7 +29,7 @@
 #include "IVfdPinout.h"
 
 //
-// VFD pinout for the Sony DVP-NS725P DVD Player front panel.
+// VFD pinout for the Samsung BD-P1590 DVD Player front panel.
 // Uses an MC3401 integrated bitmap display controller, equivalent to Princeton PT6315. 
 //
 class SamsungBDP1590Pinout : public IVfdPinout

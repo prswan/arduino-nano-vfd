@@ -34,6 +34,7 @@ PT631xDriverIC::PT631xDriverIC(
 
 
 bool PT631xDriverIC::setDisplayMode(
+    UINT8 port,
     UINT8 numGrids,
     UINT8 numSegments)
 {
@@ -47,34 +48,36 @@ bool PT631xDriverIC::setDisplayMode(
     UINT8 displayModeSetting = numGrids - 4;
 
     // Send display mode setting command
-    writeCommandData(displayModeSetting, NULL, 0);
+    writeCommandData(port, displayModeSetting, NULL, 0);
 
     // Send display control command, ON with full brightness
-    writeCommandData((0x80 | 0x0F), NULL, 0);
+    writeCommandData(port, (0x80 | 0x0F), NULL, 0);
 
     return true;
 };
 
 
 bool PT631xDriverIC::write(
+    UINT8 port,
     UINT8 gridAddress,
     const UINT8 *segData,
     UINT8 segDataLenInBytes)
 {
     // Send data setting command
-    writeCommandData(0x40, NULL, 0);
+    writeCommandData(port, 0x40, NULL, 0);
 
     // Up to 24-bits of segment, 8 bytes.
     UINT8 address = (gridAddress * 3) & 0x3F;
 
     // Send address & data command, auto increment.
-    writeCommandData((0xC0 | address), segData, segDataLenInBytes);
+    writeCommandData(port, (0xC0 | address), segData, segDataLenInBytes);
 
     return true;
 };
 
 
 void PT631xDriverIC::writeCommandData(
+    UINT8 port,
     UINT8 command,
     const UINT8 *data,
     UINT8 dataLenInBytes)
@@ -83,12 +86,12 @@ void PT631xDriverIC::writeCommandData(
     m_muxSpi->setStrobe(false);
 
     // Send command
-    m_muxSpi->writeData(&command, 1);
+    m_muxSpi->writeData(port, &command, 1);
 
     if ((data != NULL) && (dataLenInBytes != 0))
     {
         // Send data
-        m_muxSpi->writeData(data, dataLenInBytes);
+        m_muxSpi->writeData(port, data, dataLenInBytes);
     }
 
     // Clear chip select

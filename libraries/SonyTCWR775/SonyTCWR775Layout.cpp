@@ -49,44 +49,44 @@ static const Region s_region[] PROGMEM =
 
 static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
 {
-    // sym,        instance, pinG, pinS
-    {SymText_DOLBY_NR,    0,    6,    1}, // row 1
-    {SymText_A_plus_B,    0,    4,   16},
-    {SymText_DOLBY_NR,    1,    1,    1},
+    // sym,            instance, pinG, pinS
+    {SymText_DOLBY_NR,        0,    6,    1}, // row 1
+    {SymText_A_plus_B,        0,    4,   16},
+    {SymText_DOLBY_NR,        1,    1,    1},
 
-    {SymText_B,           0,    6,    2}, // row 2
-    {SymText_C,           0,    6,    6},
-    {SymMinus,            0,    5,    8},
-    {SymMinus,            1,    3,    8},
-    {SymText_B,           1,    1,    2},
-    {SymText_C,           1,    1,    6},
+    {SymText_B,               0,    6,    2}, // row 2
+    {SymText_C,               0,    6,    6},
+    {SymMinus,                0,    5,    8},
+    {SymMinus,                1,    3,    8},
+    {SymText_B,               1,    1,    2},
+    {SymText_C,               1,    1,    6},
 
-    {SymText_MEMORY,      0,    6,    7}, // row 3
-    {SymDecimalPoint,     0,    5,   16},
-    {SymText_HIGH,        0,    4,   17},
-    {SymText_NORM,        0,    4,   18},
-    {SymDecimalPoint,     1,    3,   16},
-    {SymText_MEMORY,      1,    1,    7},
+    {SymText_MEMORY,          0,    6,    7}, // row 3
+    {SymDecimalPoint,         0,    5,   16},
+    {SymText_HIGH,            0,    4,   17},
+    {SymText_NORM,            0,    4,   18},
+    {SymDecimalPoint,         1,    3,   16},
+    {SymText_MEMORY,          1,    1,    7},
 
-    {SymPlayReverse,      0,    6,    3}, // row 4
-    {SymPlayForward,      0,    6,    5},
-    {SymTextBox_FADE,     0,    6,   10},
-    {SymFadeArrowForward, 0,    6,   14},
-    {SymFadeArrowReverse, 0,    6,   11},
-    {SymPlayReverse,      1,    1,    3},
-    {SymPlayForward,      1,    1,    5},
+    {SymPlayReverse,          0,    6,    3}, // row 4
+    {SymPlayForward,          0,    6,    5},
+    {SymTextBox_FADE,         0,    6,   10},
+    {SymFadeArrowHeadForward, 0,    6,   14},
+    {SymFadeArrowHeadReverse, 0,    6,   11},
+    {SymPlayReverse,          1,    1,    3},
+    {SymPlayForward,          1,    1,    5},
  
-    {SymText_PLAY,        0,    6,    4}, // row 5
-    {SymText_AUTO_PAUSE,  0,    6,   13},
-    {SymText_PLAY,        1,    1,    4},
+    {SymText_PLAY,            0,    6,    4}, // row 5
+    {SymText_AUTO_PAUSE,      0,    6,   13},
+    {SymText_PLAY,            1,    1,    4},
 
-    {SymPause,            0,    6,    8}, // row 6
-    {SymText_REC,         0,    6,    9},
-    {SymText_BLANK_SKIP,  0,    6,   12},
-    {SymDotBar123,        0,    8,   18},
-    {SymDotBar4,          0,    8,   17},
-    {SymPause,            1,    1,    8},
-    {SymText_REC,         1,    1,    9},
+    {SymPause,                0,    6,    8}, // row 6
+    {SymText_REC,             0,    6,    9},
+    {SymText_BLANK_SKIP,      0,    6,   12},
+    {SymDotBar123,            0,    8,   18},
+    {SymDotBar4,              0,    8,   17},
+    {SymPause,                1,    1,    8},
+    {SymText_REC,             1,    1,    9},
 };
 
 //

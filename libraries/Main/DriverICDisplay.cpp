@@ -27,10 +27,14 @@
 
 DriverICDisplay::DriverICDisplay(
     IVfdPinout *vfd,
-    IDriverIC *idic)
+    IDriverIC *idic,
+    MuxSpi *muxSpi,
+    UINT8 port)
 {
     m_vfd = vfd;
     m_idic = idic;
+    m_muxSpi = muxSpi;
+    m_port = port;
 
     // Cache the display information we need to manage it.
     vfd->getScanConfig(
@@ -46,7 +50,7 @@ DriverICDisplay::DriverICDisplay(
         &p_pinMapSegment,
         &m_numEntriesPinMapSegment);
 
-    m_idic->setDisplayMode(m_numGrids, (m_numEntriesPinMapSegment - 1));
+    m_idic->setDisplayMode(m_port, m_numGrids, (m_numEntriesPinMapSegment - 1));
 
     // TODO is to handle any display driver that is not 8-bit aligned.
     m_registerLenInBytes = m_registerLenInBits / 8;
@@ -71,7 +75,7 @@ void DriverICDisplay::clear()
 
     for (UINT8 gridAddress = 0; gridAddress < (m_numEntriesPinMapGrid - 1); gridAddress++)
     {
-        m_idic->write(gridAddress, &m_bitMap[gridAddress * m_registerLenInBytes], m_registerLenInBytes);
+        m_idic->write(m_port, gridAddress, &m_bitMap[gridAddress * m_registerLenInBytes], m_registerLenInBytes);
     }
 };
 
@@ -82,7 +86,7 @@ void DriverICDisplay::setAllSegmentsOn()
 
     for (UINT8 gridAddress = 0; gridAddress < (m_numEntriesPinMapGrid - 1); gridAddress++)
     {
-        m_idic->write(gridAddress, &m_bitMap[gridAddress * m_registerLenInBytes], m_registerLenInBytes);
+        m_idic->write(m_port, gridAddress, &m_bitMap[gridAddress * m_registerLenInBytes], m_registerLenInBytes);
     }
 };
 
@@ -145,7 +149,7 @@ bool DriverICDisplay::setSegments(
         }
     }
 
-    m_idic->write(gridAddress, &m_bitMap[reg], m_registerLenInBytes);
+    m_idic->write(m_port, gridAddress, &m_bitMap[reg], m_registerLenInBytes);
 
     return true;
 };

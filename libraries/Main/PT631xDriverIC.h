@@ -43,11 +43,13 @@ public:
     ~PT631xDriverIC() {};
 
     bool setDisplayMode(
+        UINT8 port,
         UINT8 numGrids,
         UINT8 numSegments
     );
 
     bool write(
+        UINT8 port,
         UINT8 gridAddress,
         const UINT8 *segData,
         UINT8 segDataLenInBytes
@@ -56,6 +58,7 @@ public:
 private:
 
     void writeCommandData(
+        UINT8 port,
         UINT8 command,
         const UINT8 *data,
         UINT8 dataLenInBytes

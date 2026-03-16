@@ -30,6 +30,7 @@
 #include "IVfdPinout.h"
 #include "IDisplay.h"
 #include "IDriverIC.h"
+#include "MuxSpi.h"
 
 //
 // VFD shift register display class.
@@ -43,7 +44,9 @@ public:
     //
     DriverICDisplay(
         IVfdPinout *vfd,
-        IDriverIC *idic
+        IDriverIC *idic,
+        MuxSpi *muxSpi,
+        UINT8 port
     );
 
     ~DriverICDisplay();
@@ -69,7 +72,9 @@ public:
 private:
 
     IVfdPinout *m_vfd;
-    IDriverIC *m_idic;
+    IDriverIC  *m_idic;
+    MuxSpi     *m_muxSpi;
+    UINT8       m_port;
 
     UINT8 m_numGrids;
 

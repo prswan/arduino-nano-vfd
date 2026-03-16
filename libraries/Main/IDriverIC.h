@@ -43,6 +43,7 @@ class IDriverIC
         // This is used to determine the memory layout & addressing.
         //
         virtual bool setDisplayMode(
+            UINT8 port,
             UINT8 numGrids,
             UINT8 numSegments
         ) = 0;
@@ -54,6 +55,7 @@ class IDriverIC
         // returns false on failure, e.g. the address was out of range.
         //
         virtual bool write(
+            UINT8 port,
             UINT8 gridAddress,
             const UINT8 *segData,
             UINT8 segDataLenInBytes

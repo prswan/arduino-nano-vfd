@@ -22,7 +22,7 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#include "SamsungBDP1590Pinout.h"
+#include "PioneerDVR220Pinout.h"
 
 
 //
@@ -33,42 +33,44 @@ static const PinMap s_pinMapGrid[] PROGMEM =
 {
     {0, 0},
     // pin, bit (GR-1)
-    { 5, ( 1-1)}, // G1
-    { 6, ( 2-1)}, // G2
-    { 7, ( 3-1)}, // G3
-    { 8, ( 4-1)}, // G4
-    { 9, ( 5-1)}, // G5
-    {10, ( 6-1)}, // G6
-    {11, ( 7-1)}  // G7
+    { 9, ( 1-1)}, // G1
+    {10, ( 2-1)}, // G2
+    {11, ( 3-1)}, // G3
+    {12, ( 4-1)}, // G4
+    {13, ( 5-1)}, // G5
+    {14, ( 6-1)}, // G6
+    {15, ( 7-1)}, // G7
+    {16, ( 8-1)}, // G8
+    {17, ( 9-1)}, // G9
+    {18, (10-1)}, // G10
+    {19, (11-1)}, // G11
+    {20, (12-1)}, // G12
 };
 
 //
 // VFD pin number to controller function/line address pin number (SG1 to SG19).
-// Taken from the service manual, the segment pins are NOT connected in order.
+// Taken from the service manual, the segment pins are connected in order.
 //
 static const PinMap s_pinMapSegment[] PROGMEM =
 {
     {0, 0},
     // pin, bit (OUT-1)
-    {16, (19-1)}, // S1
-    {17, (18-1)}, // S2
-    {18, (17-1)}, // S3
-    {19, (16-1)}, // S4
-    {20, (15-1)}, // S5
-    {21, (14-1)}, // S6
-    {22, (13-1)}, // S7
-    {23, (12-1)}, // S8
-    {24, (11-1)}, // S9
-    {25, (10-1)}, // S10
-    {26, ( 9-1)}, // S11
-    {27, ( 8-1)}, // S12
-    {28, ( 7-1)}, // S13
-    {29, ( 6-1)}, // S14
-    {30, ( 5-1)}, // S15
-    {31, ( 4-1)}, // S16
-    {32, ( 3-1)}, // S17
-    {33, ( 2-1)}, // S18
-    {34, ( 1-1)}  // S19
+    {41, ( 1-1)}, // S1
+    {40, ( 2-1)}, // S2
+    {39, ( 3-1)}, // S3
+    {38, ( 4-1)}, // S4
+    {37, ( 5-1)}, // S5
+    {36, ( 6-1)}, // S6
+    {35, ( 7-1)}, // S7
+    {34, ( 8-1)}, // S8
+    {33, ( 9-1)}, // S9
+    {27, (10-1)}, // S10
+    {26, (11-1)}, // S11
+    {25, (12-1)}, // S12
+    {24, (13-1)}, // S13
+    {23, (14-1)}, // S14
+    {22, (15-1)}, // S15
+    {21, (16-1)}  // S16
 };
 
 //
@@ -82,7 +84,7 @@ static const UINT8 s_registerMask[] PROGMEM =
     0xFF,0xFF,0xFF
 };
 
-void SamsungBDP1590Pinout::getScanConfig(
+void PioneerDVR220Pinout::getScanConfig(
     const UINT8 **registerMask,
     UINT8 *registerLenInBits,
     UINT8 *numGrids)
@@ -96,7 +98,7 @@ void SamsungBDP1590Pinout::getScanConfig(
     *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
 };
 
-void SamsungBDP1590Pinout::getPinMapGrid(
+void PioneerDVR220Pinout::getPinMapGrid(
     const PinMap **p_pinMap,
     UINT8 *numEntries)
 {
@@ -104,7 +106,7 @@ void SamsungBDP1590Pinout::getPinMapGrid(
     *numEntries = ARRAYSIZE(s_pinMapGrid);
 };
 
-void SamsungBDP1590Pinout::getPinMapSegment(
+void PioneerDVR220Pinout::getPinMapSegment(
     const PinMap **p_pinMap,
     UINT8 *numEntries)
 {

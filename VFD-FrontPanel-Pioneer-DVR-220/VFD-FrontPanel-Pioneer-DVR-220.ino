@@ -29,6 +29,10 @@
 
 #include "SamsungBDP1590Pinout.h"
 #include "SamsungBDP1590Layout.h"
+
+#include "PioneerDVR220Pinout.h"
+#include "PioneerDVR220Layout.h"
+
 #include "PT631xDriverIC.h"
 #include "TimerScan.h"
 #include "DriverICDisplay.h"
@@ -49,8 +53,11 @@ static Controller controller;
 void setup() {
   // put your setup code here, to run once:
 
-  IVfdPinout *vfdPinout = new SamsungBDP1590Pinout();
-  IVfdLayout *vfdLayout = new SamsungBDP1590Layout();
+  IVfdPinout *vfdPinout0 = new SamsungBDP1590Pinout();
+  IVfdLayout *vfdLayout0 = new SamsungBDP1590Layout();
+
+  IVfdPinout *vfdPinout1 = new PioneerDVR220Pinout();
+  IVfdLayout *vfdLayout1 = new PioneerDVR220Layout();
 
   MuxSpi *muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
                               CONTROLLER_PIN_BLANK,
@@ -67,8 +74,11 @@ void setup() {
 
   controller.sys.dr.idic[0] = idic;
 
-  controller.vfd[0][0].layout  = vfdLayout;
-  controller.vfd[0][0].display = new DriverICDisplay(vfdPinout, idic, muxSpi, 0);
+  controller.vfd[0][0].layout  = vfdLayout0;
+  controller.vfd[0][0].display = new DriverICDisplay(vfdPinout0, idic, muxSpi, 0);
+
+  controller.vfd[1][0].layout  = vfdLayout1;
+  controller.vfd[1][0].display = new DriverICDisplay(vfdPinout1, idic, muxSpi, 1);
 
   controller.muxSpi = muxSpi;
 
@@ -76,14 +86,14 @@ void setup() {
 
   controller.scan = scan;
 
-  controller.stdOutVfd = &controller.vfd[0][0];
-  controller.stdOutRegionId = 0;
+ controller.stdOutVfd = &controller.vfd[0][0];
+ controller.stdOutRegionId = 0;
 
   controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
   controller.regionSubTypeMap[0].ichar = new Char14Seg();
 
-  controller.uutVfd = controller.stdOutVfd;
-  controller.uutRegionId = controller.stdOutRegionId;
+  controller.uutVfd = &controller.vfd[1][0];
+  controller.uutRegionId = 0;
 }
 
 void loop() {
