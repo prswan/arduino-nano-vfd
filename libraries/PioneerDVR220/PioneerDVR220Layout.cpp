@@ -24,6 +24,19 @@
 //
 #include "PioneerDVR220Layout.h"
 
+/*
+Data
+----
+The original player powered on once and ran for a short while before it died.
+Whilst it ran, the display was dim. No voltage readings could be obtained.
+When scrapped, the power supply had several swollen capacitors.
+
+Attached to the Controller PCB the display is dim and uneven with:
+ - FIL: 4.15 VAC
+ - Vbb: -24.1 VDC
+ 2 x 2.2R Fil resistors yield FIL 3.80 VAC. Physically, it's almost identically to the
+ Panasonic DVD-RV32 measured in the player as FIL 3.86 VDC & Vbb -30.8 VDC.
+*/
 
 static const UINT8 s_manufacturer[] PROGMEM = "PIONEER";
 static const UINT8 s_model[]        PROGMEM = "DVR-220";
