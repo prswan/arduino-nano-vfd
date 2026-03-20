@@ -52,7 +52,12 @@ MuxSpi::MuxSpi(
     m_currentPort = 0xFF;
     setPort(0);
 
-    SPIClass::beginTransaction(SPISettings(1000000, bitOrder, SPI_MODE0));
+    //
+    // Mode 3: CLK Rising Edge data latch, CLK idle state high.
+    // This is need to esnure that there is no spurious CLK when the
+    // port mux is changed because the port mux is idle high.
+    //
+    SPIClass::beginTransaction(SPISettings(1000000, bitOrder, SPI_MODE3));
 };
 
 MuxSpi::~MuxSpi()
@@ -80,7 +85,7 @@ void MuxSpi::writeData(
         UINT8 dataLenInBytes)
 {
     setPort(port);
-    
+
     //
     // We don't use the SPI library implementation because it clobbers
     // the input buffer by reading the input register.
