@@ -28,3 +28,7 @@
 13. Without a display connected, the filament bias has no return path. A high value resistor to the opposing rail (e.g. Vcc+ or GND for negative voltage systems and Vbb+ for positive voltage systems) would allow the bias voltage to work with no display connected. e.g. Kenwood VR-615 has a R820 10K from fil bias to GND.
 14. Adding two 10R 1W resistors inline with unregulated DC similar to R332 \& R342 would allow the Vcc+/Vcc- current draw to be measured.
 15. The Arduino Nano USB cable fouls VR310 \& VR320.
+16. The inductor pitch and holes are slightly too small for AL0410. They still fit, just.
+17. For negative voltage front panels, the fil resistors are on the Controller PCB. This makes each port somewhat specific to a particular front panel.
+18. To get from ~50V unregulated DC to -24V results in high power dissipation on the TIP transistor, from 4W for 36V to 7W for 24V. One idea is to use two stages for the regulation ~50V to 36V and then 36V to 24V using two TIP transistor stages in series. How a reference is set could have a useful side effect - if a positive regulation stage is used and the resulting +24V set as reference, then the intermediate "36V" stage becomes a regulated +12V.
+19. Futaba datasheets for a few displays and several service manuals show -28V as typical rather than -24V for Vbb-.
