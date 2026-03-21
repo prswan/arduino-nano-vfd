@@ -73,6 +73,12 @@ Step 1
 void Main(Controller *controller)
 {
     Buttons *buttons = controller->buttons;
+
+    //
+    // TODO: This doesn't work if stdOutVfd and uutVfd use different character encodings
+    // e.g. using the Pana-Sony as stdOut and TEAC as uut means uut character prints don't work.
+    // printf works OK.
+    // 
     ICharacter *character = controller->regionSubTypeMap[0].ichar; 
 
     // in case we crash

@@ -22,59 +22,38 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef ShiftRegisterScan_h
-#define ShiftRegisterScan_h
+#ifndef TeacPDD1200Layout_h
+#define TeacPDD1200Layout_h
 
 #include "Arduino.h"
-#include "Types.h"
-#include "IScan.h"
-#include "MuxSpi.h"
-#include "ShiftRegisterBitMap.h"
+#include "IVfdLayout.h"
 
 //
-// VFD serial driver scan.
+// VFD layout for the TEAC PD-D1200 CD Player.
+// driven by a single A6518 32-bit serial driver IC.
 //
-class ShiftRegisterScan : public IScan
+class TeacPDD1200Layout : public IVfdLayout
 {
 public:
+    TeacPDD1200Layout() {};
 
-    //
-    // bitMap     - Pointer to an array of bitMaps.
-    // numBitMaps - Number of entries in the bitmap array.
-    //
-    // There is a 1-1 mapping between enrties in the bitMap
-    // array and the associated port ([0] == PL1, [1] == PL2 ...)
-    // Unusued ports have a NULL bitMap entry.
-    //
-    ShiftRegisterScan(
-        MuxSpi* muxSpi,
-        ShiftRegisterBitMap** bitMap,
-        UINT8 numBitMaps);
+    ~TeacPDD1200Layout() {};
 
-    ~ShiftRegisterScan();
+    void getProperties(
+        const Properties **p_properties);
 
-    //
-    // Update the display with the bitmap content.
-    // scan should be spin-called and will return immediately if no update
-    // is needed.
-    //
-    // The return value can be used to synchronize other operations to the start of
-    // a new grid.
-    // - false - No action.
-    // - true  - Grid update was performed
-    //
-    bool run();
+    void getRegionMap(
+        const Region **p_region,
+        UINT8 *numEntries);
 
-private:
-    MuxSpi* m_muxSpi;
-    
-    ShiftRegisterBitMap** m_bitMap;
-    UINT8 m_numBitMaps;
+    bool getSegmentGroupSymbol(
+        const SegmentGroupSymbol **p_segGroup,
+        UINT8 *numEntries);
 
-    UINT8 m_maxRegisterLenInBytes;
-    UINT8 *m_register;
-
-    UINT32 m_nextUpdateTimeInUS;
+    bool getSegmentGroup7Seg(
+        UINT8 regionId,
+        const SegmentGroup7Seg **p_segGroup,
+        UINT8 *numEntries);
 };
 
 #endif

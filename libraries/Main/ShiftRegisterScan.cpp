@@ -34,12 +34,32 @@ static const UINT32 s_scanPeriodInUS = 333;
 
 ShiftRegisterScan::ShiftRegisterScan(
     MuxSpi* muxSpi,
-    ShiftRegisterBitMap *bitMap) : m_muxSpi(muxSpi),
-                                   m_bitMap(bitMap)
+    ShiftRegisterBitMap** bitMap,
+    UINT8 numBitMaps) : m_muxSpi(muxSpi),
+                        m_bitMap(bitMap),
+                        m_numBitMaps(numBitMaps)
 {
-    m_registerLenInBytes = bitMap->getRegisterLenInBytes();
+    m_maxRegisterLenInBytes = 0;
 
-    m_register = malloc(m_registerLenInBytes);
+    // Find the largest register
+    for (UINT8 i = 0 ; i < numBitMaps ; i++)
+    {
+        ShiftRegisterBitMap *thisBitMap = bitMap[i];
+
+        if (thisBitMap == NULL)
+        {
+            continue;
+        }
+
+        UINT8 curRegLen = thisBitMap->getRegisterLenInBytes();
+
+        if (curRegLen > m_maxRegisterLenInBytes)
+        {
+            m_maxRegisterLenInBytes = curRegLen;
+        }
+    }
+
+    m_register = malloc(m_maxRegisterLenInBytes);
 
     muxSpi->setBlank(true);
     muxSpi->setStrobe(false);
@@ -77,11 +97,23 @@ bool ShiftRegisterScan::run()
         m_muxSpi->setBlank(false);
     }
 
-    m_bitMap->getCurrentRegisterData(m_register, m_registerLenInBytes);
+    for (UINT8 i = 0 ; i < m_numBitMaps ; i++)
+    {
+        ShiftRegisterBitMap *thisBitMap = m_bitMap[i];
 
-    m_muxSpi->writeData(0, m_register, m_registerLenInBytes);
+        if (thisBitMap == NULL)
+        {
+            continue;
+        }
 
-    m_bitMap->incGrids();
+        UINT8 curRegLen = thisBitMap->getRegisterLenInBytes();
+
+        thisBitMap->getCurrentRegisterData(m_register, curRegLen);
+
+        m_muxSpi->writeData(i, m_register, curRegLen);
+
+        thisBitMap->incGrids();
+    }
 
     return true;
 };

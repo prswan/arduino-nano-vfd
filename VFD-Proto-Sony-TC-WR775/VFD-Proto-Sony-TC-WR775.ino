@@ -53,7 +53,14 @@ void setup() {
                               MSBFIRST);
 
   ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
-  ShiftRegisterScan   *scan   = new ShiftRegisterScan(muxSpi, bitMap);
+
+  controller.isShiftRegister = true;
+
+  controller.sys.sr.bitMap[0] = bitMap; // Port Address 0, PL1
+
+  ShiftRegisterScan   *scan   = new ShiftRegisterScan(muxSpi, 
+                                                      &(controller.sys.sr.bitMap[0]), 
+                                                      ARRAYSIZE(controller.sys.sr.bitMap));
 
   controller.vfd[0][0].layout  = vfdLayout;
   controller.vfd[0][0].display = bitMap->getDisplay(0);
@@ -63,10 +70,6 @@ void setup() {
   controller.buttons = new Buttons(BUTTON_PIN_NEXT, BUTTON_PIN_SELECT);
 
   controller.scan = scan;
-
-  controller.isShiftRegister = true;
-
-  controller.sys.sr.bitMap[0] = bitMap;
 
   controller.stdOutVfd = &controller.vfd[0][0];
   controller.stdOutRegionId = 0;

@@ -26,59 +26,87 @@
 
 #include "Controller.h"
 #include "Char14Seg.h"
+#include "Char7Seg.h"
+
+#include "PanasonicDVDRV32Pinout.h"
+#include "PanasonicDVDRV32Layout.h"
 
 #include "SonyDVPNS725PPinout.h"
 #include "SonyDVPNS725PLayout.h"
 
-// AN5818 Digital pin mappings
-#define AN5818_STROBE (1)  // Rising edge clocked
-#define AN5818_BLANK  (9)  // Hi == All outputs disabled
+#include "TeacPDD1200Pinout.h"
+#include "TeacPDD1200Layout.h"
 
-#define BUTTON_PIN_NEXT   (3)
-#define BUTTON_PIN_SELECT (2)
+// Controller Digital pin mappings
+#define CONTROLLER_PIN_STROBE (8)  // Rising edge clocked
+#define CONTROLLER_PIN_BLANK  (9)  // Hi == All outputs disabled
+
+#define CONTROLLER_PIN_NEXT   (2)
+#define CONTROLLER_PIN_SELECT (3)
+
+#define CONTROLLER_PIN_SEL0   (5)
+#define CONTROLLER_PIN_SEL1   (6)
+#define CONTROLLER_PIN_SEL2   (7)
 
 static Controller controller;
 
 void setup() {
   // put your setup code here, to run once:
 
-  IVfdPinout *vfdPinout = new SonyDVPNS725PPinout();
-  IVfdLayout *vfdLayout = new SonyDVPNS725PLayout();
+  IVfdPinout *vfdPinout0 = new PanasonicDVDRV32Pinout();
+  IVfdLayout *vfdLayout0 = new PanasonicDVDRV32Layout();
 
-  MuxSpi *muxSpi = new MuxSpi(AN5818_STROBE,
-                              AN5818_BLANK,
-                              14, // Proto doesn't have the Mux, so just an unused pin
-                              14,
-                              14,
+  IVfdPinout *vfdPinout1 = new SonyDVPNS725PPinout();
+  IVfdLayout *vfdLayout1 = new SonyDVPNS725PLayout();
+
+  IVfdPinout *vfdPinout2 = new TeacPDD1200Pinout();
+  IVfdLayout *vfdLayout2 = new TeacPDD1200Layout();
+
+  MuxSpi *muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
+                              CONTROLLER_PIN_BLANK,
+                              CONTROLLER_PIN_SEL0,
+                              CONTROLLER_PIN_SEL1,
+                              CONTROLLER_PIN_SEL2,
                               MSBFIRST);
 
-  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
-
+  ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, vfdPinout1);
+  ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout2, NULL);
+  
   controller.isShiftRegister = true;
 
-  controller.sys.sr.bitMap[0] = bitMap; // Port Address 0, PL1
+  controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
+  controller.sys.sr.bitMap[1] = bitMap1; // Port Address 1, PL2
 
   ShiftRegisterScan   *scan   = new ShiftRegisterScan(muxSpi, 
                                                       &(controller.sys.sr.bitMap[0]), 
                                                       ARRAYSIZE(controller.sys.sr.bitMap));
 
-  controller.vfd[0][0].layout  = vfdLayout;
-  controller.vfd[0][0].display = bitMap->getDisplay(0);
+  controller.vfd[0][0].layout  = vfdLayout0;
+  controller.vfd[0][0].display = bitMap0->getDisplay(0);
+
+  controller.vfd[0][1].layout  = vfdLayout1;
+  controller.vfd[0][1].display = bitMap0->getDisplay(1);
+
+  controller.vfd[1][0].layout  = vfdLayout2;
+  controller.vfd[1][0].display = bitMap1->getDisplay(0);
 
   controller.muxSpi = muxSpi;
 
-  controller.buttons = new Buttons(BUTTON_PIN_NEXT, BUTTON_PIN_SELECT);
+  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, CONTROLLER_PIN_SELECT);
 
   controller.scan = scan;
-
-  controller.stdOutVfd = &controller.vfd[0][0];
-  controller.stdOutRegionId = 0;
 
   controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
   controller.regionSubTypeMap[0].ichar = new Char14Seg();
 
-  controller.uutVfd = controller.stdOutVfd;
-  controller.uutRegionId = controller.stdOutRegionId;
+  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
+  controller.regionSubTypeMap[1].ichar = new Char7Seg();
+
+  controller.stdOutVfd = &controller.vfd[0][1]; // Sony for StdOut
+  controller.stdOutRegionId = 0;
+
+  controller.uutVfd = &controller.vfd[1][0]; // TEAC as the UUT 
+  controller.uutRegionId = 1;
 }
 
 void loop() {
