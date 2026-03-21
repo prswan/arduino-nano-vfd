@@ -121,8 +121,7 @@ static const PinMap s\_pinMapSegment\[] PROGMEM =
 
 };
 
-
-
+```
 
 
 ## 1st Pass Layout Finder Results
@@ -285,6 +284,8 @@ What we know:
 
 &nbsp;=> Seg pin 02 is likely a grid pin, but we need to check the pin translation on why it appears unconnected
 
+```
+
 
 
 ## 2nd Pass Configuration
@@ -393,6 +394,8 @@ static const PinMap s\_pinMapSegment\[] PROGMEM =
 
 };
 
+```
+
 
 
 ## 2nd Pass Layout Finder Results
@@ -478,7 +481,7 @@ Remaining Digits
 
 &nbsp;=> All segments \& digits accounted for
 
-
+```
 
 
 
