@@ -36,8 +36,14 @@ Fitted to a Universal V1.10 PCB with 2 x 2.2R Fil resistors:
  - IFIL: 179mA
  - Vbb: -36.1 VDC, display is good & bright
  
-There is about 82mm of pin width and 10 drive pins remaining on U1 plus 32 if U3 is fitted for
+There is about 82mm of pin width and 12 drive pins remaining on U1 plus 32 if U3 is fitted for
 a second display on this PCB.
+
+NOTE
+ * The Sony CDP-C305 VFD is 68mm x 29mm, bottom pinned, with 6 grids and 12 segments.
+ * In theory if the 6 Sony grids are commoned with 6 from the TEAC then the additional
+   12 segment pins would fit from U1, at the expense of 30% brightness on the Sony from
+   the extra 3 TEAC grid scans.
 */
 
 static const UINT8 s_manufacturer[] PROGMEM = "TEAC";
