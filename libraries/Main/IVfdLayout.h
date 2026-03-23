@@ -36,7 +36,8 @@
 typedef enum 
 {
     DriveTypeSN75518,
-    DriveTypePT6315
+    DriveTypePT6315,
+    DriveTypePT6311
 
 } DriveType;
 
