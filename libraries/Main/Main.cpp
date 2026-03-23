@@ -161,6 +161,13 @@ void Main(Controller *controller)
                         else
                         {
                             stdOut->printf("\f%s", "0123456789");
+
+                            if (uutDisplay != stdOutDisplay)
+                            {
+                                stdOut->printf(controller->uutVfd,
+                                               controller->uutRegionId,
+                                               "\f%s", "0123456789");
+                            }
                         }
                     }
 
