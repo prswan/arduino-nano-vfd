@@ -36,8 +36,10 @@ DriverICDisplay::DriverICDisplay(
     m_muxSpi = muxSpi;
     m_port = port;
 
+
     // Cache the display information we need to manage it.
     vfd->getScanConfig(
+        &m_driverType,
         &p_registerMask,
         &m_registerLenInBits,
         &m_numGrids);
@@ -50,7 +52,10 @@ DriverICDisplay::DriverICDisplay(
         &p_pinMapSegment,
         &m_numEntriesPinMapSegment);
 
-    m_idic->setDisplayMode(m_port, m_numGrids, (m_numEntriesPinMapSegment - 1));
+    m_idic->setDisplayMode(m_driverType,
+                           m_port,
+                           m_numGrids,
+                           (m_numEntriesPinMapSegment - 1));
 
     // TODO is to handle any display driver that is not 8-bit aligned.
     m_registerLenInBytes = m_registerLenInBits / 8;

@@ -34,19 +34,40 @@ PT631xDriverIC::PT631xDriverIC(
 
 
 bool PT631xDriverIC::setDisplayMode(
+    DriverType driverType,
     UINT8 port,
     UINT8 numGrids,
     UINT8 numSegments)
 {
-    // TODO: The encoding is diffrerent for PT6311.
+    UINT8 displayModeSetting;
 
-    if ((numGrids < 4) || (numGrids > 12))
+    switch (driverType)
     {
-        return false;
-    }
+        case DriverTypePT6315:
+        {
+            if ((numGrids < 4) || (numGrids > 12))
+            {
+                return false;
+            }
 
-    UINT8 displayModeSetting = numGrids - 4;
+            displayModeSetting = numGrids - 4;
+            break;
+        }
 
+        case DriverTypePT6311:
+        {
+            if ((numGrids < 8) || (numGrids > 16))
+            {
+                return false;
+            }
+
+            displayModeSetting = 0x7 + (numGrids - 8);
+            break;
+        }
+
+        default: return false;
+    };
+ 
     // Send display mode setting command
     writeCommandData(port, displayModeSetting, NULL, 0);
 

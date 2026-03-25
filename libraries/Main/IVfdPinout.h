@@ -30,6 +30,17 @@
 
 
 //
+// Indication of the compatible drive type for this VFD pinout connection.
+//
+typedef enum 
+{
+    DriverTypeSN75518,
+    DriverTypePT6315,
+    DriverTypePT6311
+
+} DriverType;
+
+//
 // This maps the display pin to the driver IC register bit.
 //
 // There are two translations encompassed:
@@ -62,12 +73,15 @@ public:
     //
     // Returns the scan configuration information
     //
+    // driverType - The type of driver circuit that this VFD pinout is driven by.
+    //
     // registerMask - Pointer to the driver IC register mask for this display
     //                in PROGMEN bytes rounded up from registerLenInBits.
     // registerLenInBits - The number of bits in the driver IC shift register.
     // numGrids - The number of grids for the bitmap scan, usually the same as the grid pin count.
     //
     virtual void getScanConfig(
+        DriverType *driverType,
         const UINT8 **registerMask,
         UINT8 *registerLenInBits,
         UINT8 *numGrids) = 0;

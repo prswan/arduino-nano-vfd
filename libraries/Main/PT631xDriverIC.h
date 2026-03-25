@@ -43,6 +43,7 @@ public:
     ~PT631xDriverIC() {};
 
     bool setDisplayMode(
+        DriverType driverType,
         UINT8 port,
         UINT8 numGrids,
         UINT8 numSegments

@@ -35,6 +35,7 @@ ShiftRegisterDisplay::ShiftRegisterDisplay(
 
     // Cache the display information we need to manage it.
     vfd->getScanConfig(
+        &m_driverType,
         &p_registerMask,
         &m_registerLenInBits,
         &m_numGrids);

@@ -76,6 +76,8 @@ private:
     MuxSpi     *m_muxSpi;
     UINT8       m_port;
 
+    DriverType  m_driverType;
+
     UINT8 m_numGrids;
 
     UINT8 m_registerLenInBits;

@@ -52,12 +52,14 @@ ShiftRegisterBitMap::ShiftRegisterBitMap(
             continue;
         }
 
+        DriverType driverType;
         UINT8 *p_registerMask;
         UINT8  registerLenInBits;
         UINT8  numGrids;
 
         // Check dimensions parameters
         vfd->getScanConfig(
+            &driverType,
             &p_registerMask,
             &registerLenInBits,
             &numGrids);

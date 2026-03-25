@@ -27,6 +27,7 @@
 
 #include "Arduino.h"
 #include "Types.h"
+#include "IVfdPinout.h"
 
 //
 // Interface to VFD Integrated Driver/Controller IC's based on simple integrated bit maps.
@@ -39,10 +40,11 @@ class IDriverIC
     public:
 
         //
-        // Must be called ONCE before any data is written, set the display characteristics.
-        // This is used to determine the memory layout & addressing.
+        // Must be called ONCE before any data is written, set the display characteristics,
+        // memory layout & addressing for the specific IC.
         //
         virtual bool setDisplayMode(
+            DriverType driverType,
             UINT8 port,
             UINT8 numGrids,
             UINT8 numSegments
