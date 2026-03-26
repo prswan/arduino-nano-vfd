@@ -31,24 +31,12 @@
 
 
 //
-// Indication of the compatible drive type for this VFD.
-//
-typedef enum 
-{
-    DriveTypeSN75518,
-    DriveTypePT6315,
-    DriveTypePT6311
-
-} DriveType;
-
-//
 // Basic properties for the VFD.
 //
 typedef struct _Properties
 {
     const UINT8* manufacturer;
     const UINT8* model;
-    DriveType    driveType;
 
 } Properties;
 
