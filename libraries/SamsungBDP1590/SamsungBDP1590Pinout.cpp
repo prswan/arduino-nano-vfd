@@ -83,10 +83,14 @@ static const UINT8 s_registerMask[] PROGMEM =
 };
 
 void SamsungBDP1590Pinout::getScanConfig(
+    DriverType *driverType,
     const UINT8 **registerMask,
     UINT8 *registerLenInBits,
     UINT8 *numGrids)
 {
+    // Used to select the flavour in the PT631xDriverIC implementation.
+    *driverType = DriverTypePT6315;
+
     *registerMask = s_registerMask;
 
     // Used to calculate the driver IC memory address layout.

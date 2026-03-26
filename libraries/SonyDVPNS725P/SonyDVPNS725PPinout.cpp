@@ -109,10 +109,12 @@ static const UINT8 s_registerMask[] PROGMEM =
 };
 
 void SonyDVPNS725PPinout::getScanConfig(
+    DriverType *driverType,
     const UINT8 **registerMask,
     UINT8 *registerLenInBits,
     UINT8 *numGrids)
 {
+    *driverType = DriverTypeSN75518;
     *registerMask = s_registerMask;
     *registerLenInBits = 64;
     *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;

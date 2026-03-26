@@ -91,7 +91,7 @@ void PioneerDVR220Pinout::getScanConfig(
     UINT8 *numGrids)
 {
     // Used to select the flavour in the PT631xDriverIC implementation.
-    *driverType = DriverTypePT6311;
+    *driverType = DriverTypePT6315;
 
     *registerMask = s_registerMask;
 

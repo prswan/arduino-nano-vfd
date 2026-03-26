@@ -53,7 +53,6 @@ static const Properties s_properties PROGMEM =
 {
     s_manufacturer,
     s_model,
-    DriveTypeSN75518,
 };
 
 //
