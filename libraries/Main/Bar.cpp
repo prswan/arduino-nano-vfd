@@ -59,17 +59,22 @@ bool Bar::set(
 
     UINT8  pinG = pgm_read_byte_near(&p_seg->pinG);
     UINT8* pinS = (UINT8 *) &p_seg->pinS;
+    UINT8  numSegs = s_numSegments;
 
-    for (UINT8 s = 0 ; s < s_numSegments ; s++)
+    for (UINT8 s = 0 ; s < numSegs ; s++)
     {
         segState[s].pinS = pgm_read_byte_near(&pinS[s]);
-        bool on = false;
+        segState[s].on = false;
+
+        if (segState[s].pinS == 0)
+        {
+            numSegs = s;
+            break;
+        }
 
         // There is a seg 1 symbol/scale but don't display it
         if ((s == 0) && seg1Symbol && !scale)
         {
-            on = false;
-
             // Add 1 to the length as we're skipping the first segment.
             if (len != 0)
             {
@@ -78,15 +83,9 @@ bool Bar::set(
         }
         else if (s < len)
         {
-            on = true;
+            segState[s].on = true;
         }
-        else
-        {
-            on = false;
-        }
-
-        segState[s].on = on;
     }
 
-    return vfd->display->setSegments(pinG, segState, ARRAYSIZE(segState));
+    return vfd->display->setSegments(pinG, segState, numSegs);
 };

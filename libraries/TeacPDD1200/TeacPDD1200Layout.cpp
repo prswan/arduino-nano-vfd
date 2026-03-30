@@ -111,6 +111,19 @@ static const SegmentGroup7Seg s_segmentGroup7Seg1[] PROGMEM =
     { 7, { 5,  7, 10, 11,  9,  6,  8}},
 };
 
+static const SegmentGroupNumberList s_segmentGroupNumberList[] PROGMEM =
+{
+    { // numListLen, numCols, numRows, topToBottom
+                 20,       5,       4,       false,
+        {
+            // [] {pinG,{value,pinS},{value,pinS},...}
+            { 2, {{20, 1},{15, 2},{10, 3},{ 5, 4}}},                                 // grid[0]
+            { 8, {{17, 1},{12, 2},{ 7, 3},{ 2, 4},{16, 5},{11, 6},{ 6, 7},{ 1, 8}}}, // grid[1]
+            { 9, {{19, 1},{14, 2},{ 9, 3},{ 4, 4},{18, 5},{13, 6},{ 8, 7},{ 3, 8}}}  // grid[2]
+        }
+    }
+};
+
 void TeacPDD1200Layout::getProperties(
     const Properties **p_properties)
 {
@@ -160,6 +173,22 @@ bool TeacPDD1200Layout::getSegmentGroup7Seg(
             return false;
         }
     }
+
+    return true;
+};
+
+bool TeacPDD1200Layout::getSegmentGroupNumberList(
+    UINT8 regionId,
+    const SegmentGroupNumberList **p_segGroup,
+    UINT8 *numEntries)
+{
+    if (regionId != 0)
+    {
+        return false;
+    }
+
+    *p_segGroup = s_segmentGroupNumberList;
+    *numEntries = ARRAYSIZE(s_segmentGroupNumberList);
 
     return true;
 };
