@@ -72,6 +72,23 @@ static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
     // sym,        instance, pinG, pinS
     {SymText_DISC,        0,    1,    1}, // row 1
     {SymText_TRACK,       0,    3,    1},
+    {SymText_EDIT,        0,    4,    4},
+    {SymText_INTRO,       0,    5,    1},
+    {SymText_SHUFFLE,     0,    6,    1},
+    {SymText_MEMORY,      0,    7,    1},
+
+    {SymText_MIN,         0,    5,    2}, // row 2
+    {SymText_SEC,         0,    6,    2},
+
+    {SymText_PLAY,        0,    1,    2}, // row 3
+    {SymText_TOTAL,       0,    4,    1},
+
+    {SymText_PAUSE,       0,    1,    3}, // row 4
+    {SymText_EACH,        0,    4,    2},
+    {SymText_REMAIN,      0,    4,    3},
+    {SymText_REPEAT,      0,    7,    2},
+    {SymText_ONE,         0,    7,    4},
+    {SymText_ALL,         0,    7,    3},
 };
 
 //

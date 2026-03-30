@@ -139,6 +139,20 @@ typedef enum {
     SymText_NTSC,
     SymText_MN,
 
+    // TEAC PD-D1200 Additions
+    SymText_EDIT,
+    SymText_INTRO,
+    SymText_SHUFFLE,
+    SymText_MIN,
+    SymText_SEC,
+    SymText_TOTAL,
+    SymText_PAUSE,
+    SymText_EACH,
+    SymText_REMAIN,
+    SymText_REPEAT,
+    SymText_ONE,
+    SymText_ALL,
+
     //
     SymEnd
 } Sym;
