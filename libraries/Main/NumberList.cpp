@@ -54,8 +54,6 @@ bool NumberList::set(
 
     SegmentGroupNumberList *p_seg = (SegmentGroupNumberList *) &p_segmentGroupNumberList[instance];
 
-//    UINT8 numListLen = pgm_read_byte_near(&p_seg->numListLen);
-
     for (UINT8 g = 0 ; g < s_numGrids ; g++)
     {
         UINT8 pinG = pgm_read_byte_near(&p_seg->grid[g].pinG);
@@ -83,13 +81,11 @@ bool NumberList::set(
 
             if (number > 0)
             {
-                UINT8 index = number - 1;
-
-                if (value == index)
+                if (value == number)
                 {
                     segState[s].on = true;
                 }
-                else if (displayTo && (value < index))
+                else if (displayTo && (value < number))
                 {
                     segState[s].on = true;
                 }
