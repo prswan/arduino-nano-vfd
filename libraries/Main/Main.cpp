@@ -30,6 +30,7 @@
 #include "LayoutFinder.h"
 #include "VfdStdOut.h"
 #include "Bar.h"
+#include "NumberList.h"
 #include "Symbol.h"
 
 //
@@ -394,8 +395,46 @@ void Main(Controller *controller)
                     break;
                 }
 
-                // Report free memory
+                // Walk through the number list
                 case 8:
+                {
+                    static bool  displayTo = false;
+                    static UINT8 number = 0;
+
+                    if (newApp)
+                    {
+                        displayTo = false;
+                        number    = 0;
+
+                        if (uutDisplay != stdOutDisplay)
+                        {
+                            uutDisplay->clear();
+                        }
+
+                        stdOutDisplay->clear();
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, 'L');
+                    }
+
+                    if (buttons->isNextShortPressed())
+                    {
+                        UINT8 charValue = number;
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 2, '0' + (charValue / 10));
+                        charValue = (charValue % 10);
+                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (charValue / 1));
+
+                        NumberList::set(controller->uutVfd, 0, 0, displayTo, number);
+
+                        if (++number >= (ARRAYSIZE(SegmentGroupNumberList::grid[0].list) + 2))
+                        {
+                            number = 0;
+                            displayTo = !displayTo;
+                        }
+                    }
+                    break;
+                }
+
+                // Report free memory
+                case 9:
                 {
                     if (newApp)
                     {
@@ -415,7 +454,7 @@ void Main(Controller *controller)
 
             if (buttons->isSelectShortPressed())
             {
-                if (++currentApp > 8)
+                if (++currentApp > 9)
                 {
                     currentApp = 0;
                 }

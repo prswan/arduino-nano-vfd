@@ -22,43 +22,43 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef TeacPDD1200Layout_h
-#define TeacPDD1200Layout_h
+#ifndef NumberList_h
+#define NumberList_h
 
-#include "Arduino.h"
-#include "IVfdLayout.h"
+#include "IDisplay.h"
+
 
 //
-// VFD layout for the TEAC PD-D1200 CD Player.
-// driven by a single A6518 32-bit serial driver IC.
+// Functions for managing NumberList elements.
 //
-class TeacPDD1200Layout : public IVfdLayout
+class NumberList
 {
 public:
-    TeacPDD1200Layout() {};
+    NumberList() {};
 
-    ~TeacPDD1200Layout() {};
+    ~NumberList() {};
 
-    void getProperties(
-        const Properties **p_properties);
-
-    void getRegionMap(
-        const Region **p_region,
-        UINT8 *numEntries);
-
-    bool getSegmentGroupSymbol(
-        const SegmentGroupSymbol **p_segGroup,
-        UINT8 *numEntries);
-
-    bool getSegmentGroup7Seg(
+    //
+    // Set the number from the origin
+    //
+    // "displayTo"
+    // - true  - Display all numbers up to and including the specified number.
+    // - false - Display only the number specified. 
+    //
+    // "number" - the number to display with 0 being all off.
+    // If len exceeds the number list, the remainder is ignored.
+    // The maximum known length is set by SegmentGroupNumberList.num[].
+    //
+    // returns false if the region or instance does not exist.
+    //  
+    static bool set(
+        Vfd  *vfd,
         UINT8 regionId,
-        const SegmentGroup7Seg **p_segGroup,
-        UINT8 *numEntries);
+        UINT8 instance,
+        bool  displayTo,
+        UINT8 number
+    );
 
-    bool getSegmentGroupNumberList(
-        UINT8 regionId,
-        const SegmentGroupNumberList **p_segGroup,
-        UINT8 *numEntries);
-    };
+};
 
 #endif

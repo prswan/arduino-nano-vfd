@@ -227,6 +227,52 @@ typedef struct _SegmentGroupBar
 } SegmentGroupBar;
 
 //
+// Segment group for a number list, e.g. the track numbers on CD players. 
+// e.g. TEAC PD-D1200:
+//
+//  1  2  3  4  5
+//  6  7  8  9 10
+// 11 12 13 14 15
+// 16 17 18 19 20
+//
+// "numListLen" 
+//  - The number of numbers in the list e.g. for 1 to 20 this is 20.
+//
+// "numCols"
+//  - The number of columns in the number list grid, e.g. 5
+//
+// "numRows"
+//  - The number of rows in the number list grid, e.g. 4
+//
+// "topToBottom"
+//  - true  - The numbers increment row first.
+//  - false - The numbers increment col first, left-to-right.
+// false in the example above.
+//
+// "grid"
+//  - Array of grids containing an array "list" of number value
+//    and segement pin pairs for the number list.
+//
+typedef struct _SegmentGroupNumberList
+{
+    UINT8 numListLen;
+    UINT8 numCols;
+    UINT8 numRows;
+    bool  topToBottom;
+
+    struct {
+        UINT8 pinG;
+
+        struct {
+            UINT8 value;
+            UINT8 pinS;
+        } list[20];
+
+    } grid[3];
+
+} SegmentGroupNumberList;
+
+//
 // When it's just too oddball wierd to categorize, provide a means
 // to send back unstructured glyph layout information. It's intended
 // to pair with a matching symbol display implementation to use it,
@@ -345,6 +391,21 @@ public:
         UINT8 *numSegmentGroupEntries,
         const DisplayGroupGraphicSymbol **p_displayGroup,
         UINT8 *numDisplayGroupEntries)
+    {
+        return false;
+    };
+
+    //
+    // Returns the groups of number lists for the Region::id.
+    //
+    // numEntries is also equivalent to the number of lists in the region, Region::len.
+    //
+    // returns false if the region doesn't exist.
+    //
+    virtual bool getSegmentGroupNumberList(
+        UINT8 regionId,
+        const SegmentGroupNumberList **p_segGroup,
+        UINT8 *numEntries)
     {
         return false;
     };
