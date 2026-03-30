@@ -75,7 +75,7 @@ void setup() {
   controller.isShiftRegister = true;
 
   controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
-  controller.sys.sr.bitMap[1] = bitMap1; // Port Address 1, PL2
+  controller.sys.sr.bitMap[7] = bitMap1; // Port Address 7, PL8
 
   ShiftRegisterScan   *scan   = new ShiftRegisterScan(muxSpi, 
                                                       &(controller.sys.sr.bitMap[0]), 
