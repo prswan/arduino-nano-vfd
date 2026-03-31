@@ -24,6 +24,20 @@
 //
 #include "PanasonicDVDRV32Layout.h"
 
+/*
+Data
+----
+Original player measurements:
+ - VFIL: 3.86 VDC
+ - Vbb: -30.8 VDC
+
+Attached to the Controller PCB the display is a little dim and uneven:
+ - VFIL: 4.25 VAC
+ - Vbb: +36.1 VDC
+ 2 x 10R Fil resistors yield VFIL at VFD of 2.57 VAC. 
+
+ TODO: VFIL at VFD too low, to replace RFIL with 2 x 2.2R for improved display.
+*/
 
 static const UINT8 s_manufacturer[] PROGMEM = "PANASONIC";
 static const UINT8 s_model[]        PROGMEM = "DVD-RV32";

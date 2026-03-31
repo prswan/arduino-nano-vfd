@@ -24,6 +24,22 @@
 //
 #include "SamsungBDP1590Layout.h"
 
+/*
+Data
+----
+Original player measurements:
+ - VFIL: 2.30 VDC
+ - Vbb: -22.7 VDC
+
+Estimate:
+ - VFIL: 4.25 VAC
+ - Vbb: -24.1 VDC
+ 2 x 7.5R Fil resistors estimated to yield VFIL at VFD of 2.4 VAC. 
+
+ TODO: Confirm the Fil tuning on the Controller PCB.
+
+*/
+
 
 static const UINT8 s_manufacturer[] PROGMEM = "SAMSUNG";
 static const UINT8 s_model[]        PROGMEM = "BD-P1590";

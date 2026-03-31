@@ -32,10 +32,12 @@ Whilst it ran the display was dim. No voltage readings could be obtained.
 When scrapped the power supply had several swollen capacitors.
 
 Attached to the Controller PCB the display is dim and uneven with:
- - FIL: 4.15 VAC
+ - VFIL: 4.15 VAC
  - Vbb: -24.1 VDC
- 2 x 2.2R Fil resistors yield FIL 3.80 VAC. Physically, it's almost identical to the
- Panasonic DVD-RV32 measured in the player as FIL 3.86 VDC & Vbb -30.8 VDC.
+ 2 x 2.2R Fil resistors yield VFIL at VFD of 3.80 VAC. 
+ 
+ Physically, it's almost identical to the Panasonic DVD-RV32 
+ measured in the player as FIL 3.86 VDC & Vbb -30.8 VDC.
 */
 
 static const UINT8 s_manufacturer[] PROGMEM = "PIONEER";

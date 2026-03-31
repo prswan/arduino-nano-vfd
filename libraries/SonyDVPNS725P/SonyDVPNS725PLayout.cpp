@@ -24,6 +24,20 @@
 //
 #include "SonyDVPNS725PLayout.h"
 
+/*
+Data
+----
+Original player measurements:
+ - VFIL: 2.89 VDC
+ - Vbb: -15.0 VDC
+
+Attached to the Controller PCB the display is OK:
+ - VFIL: 4.25 VAC
+ - Vbb: +36.1 VDC
+ 2 x 10R Fil resistors yield VFIL at VFD of 1.79 VAC. 
+
+ TODO: VFIL at VFD slightly too low, to replace RFIL with 2 x 6.8R.
+*/
 
 static const UINT8 s_manufacturer[] PROGMEM = "SONY";
 static const UINT8 s_model[]        PROGMEM = "DVP-NS725P";
