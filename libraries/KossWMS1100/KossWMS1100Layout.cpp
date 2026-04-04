@@ -96,7 +96,29 @@ static const SegmentGroup7Seg s_segmentGroup7Seg2[] PROGMEM =
     { 2, { 1,  2,  5,  7,  6,  3,  4}},
 };
 
-// TODO: Add the bar layout
+//
+// 3x 9-segment bar with col 0 segment 1 also lighting the T/B side scales
+//  - The two side curved bar regions, far left and far right, coupled
+//  - To properly align col 2+, seg1Symbol is set to true for all.
+//
+static const SegmentGroupBar s_segmentGroupBar0[] PROGMEM =
+{
+// vertical, reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9}}
+    { true,    false,       true,   12, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+    { true,    false,       true,   16, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+    { true,    false,       true,   13, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+};
+
+//
+// 2x 9-segment bar
+//  - The middle bar region
+//
+static const SegmentGroupBar s_segmentGroupBar1[] PROGMEM =
+{
+// vertical, reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9}}
+    { true,    false,      false,   15, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+    { true,    false,      false,   14, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+};
 
 void KossWMS1100Layout::getProperties(
     const Properties **p_properties)
@@ -157,6 +179,36 @@ bool KossWMS1100Layout::getSegmentGroup7Seg(
 
     return true;
 };
+
+bool KossWMS1100Layout::getSegmentGroupBar(
+    UINT8 regionId,
+    const SegmentGroupBar **p_segGroup,
+    UINT8 *numEntries)
+{
+    switch (regionId)
+    {
+        case 0:
+        {
+            *p_segGroup = s_segmentGroupBar0;
+            *numEntries = ARRAYSIZE(s_segmentGroupBar0);
+            break;
+        }
+
+        case 1:
+        {
+            *p_segGroup = s_segmentGroupBar1;
+            *numEntries = ARRAYSIZE(s_segmentGroupBar1);
+            break;
+        }
+
+        default:
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 /*
 LayoutFinder
@@ -331,15 +383,15 @@ LayoutFinder
 1509 - r 1 col 0,1,2,3,4,5 bar 8
 1510-1512 - nothing
 
-1601 - r 1 col 2,3,4 bar 0
-1602 - r 1 col 2,3,4 bar 1
-1603 - r 1 col 2,3,4 bar 2
-1604 - r 1 col 2,3,4 bar 3
-1605 - r 1 col 2,3,4 bar 4
-1606 - r 1 col 2,3,4 bar 5
-1607 - r 1 col 2,3,4 bar 6
-1608 - r 1 col 2,3,4 bar 7
-1609 - r 1 col 2,3,4 bar 8
+1601 - r 0 col 2,3,4 bar 0
+1602 - r 0 col 2,3,4 bar 1
+1603 - r 0 col 2,3,4 bar 2
+1604 - r 0 col 2,3,4 bar 3
+1605 - r 0 col 2,3,4 bar 4
+1606 - r 0 col 2,3,4 bar 5
+1607 - r 0 col 2,3,4 bar 6
+1608 - r 0 col 2,3,4 bar 7
+1609 - r 0 col 2,3,4 bar 8
 1610-1612 - nothing
 
 */

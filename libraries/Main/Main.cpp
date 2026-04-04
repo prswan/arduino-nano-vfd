@@ -328,9 +328,15 @@ void Main(Controller *controller)
                         charValue = (charValue % 10);
                         character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (charValue / 1));
 
-                        Bar::set(controller->uutVfd, 0, 0, scale, len);
-                        Bar::set(controller->uutVfd, 0, 1, scale, len);
-
+                        // The Koss WMS1100 has 2 regions and up to 3 bars per region.
+                        for (UINT8 r = 0 ; r < 2 ; r++)
+                        {
+                            for (UINT8 i = 0 ; i < 3 ; i++)
+                            {
+                                Bar::set(controller->uutVfd, r, i, scale, (len + r + i));
+                            }
+                        }
+                        
                         if (++len >= (ARRAYSIZE(SegmentGroupBar::pinS) + 2))
                         {
                             len = 0;
