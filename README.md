@@ -6,7 +6,7 @@ This is a hardware \& software project to utilize various Vacuum Fluorescent Dis
 
 ## Hardware
 
-VFD are somewhat awkward to use. They need a low voltage high current biased filament supply (a few volts and a few hundred milliamps) and a high voltage drive supply for the digit elements (around 40 volts). Thankfully they were so prevalent several driver ICs were manufactured that included basic serial shift registers, bit map integrated stand alone driver ICs, alphanumeric controllers and microcontrollers with integrated VFD support. In almost all cases, the communications with these driver ICs is by 2-wire serial that the Arduino SPI port can drive efficiently.
+VFD are somewhat awkward to use. They need a low voltage high current biased filament supply (a few volts and a few hundred milliamps) and a high voltage drive supply for the digit elements (around 20 to 40 volts). Thankfully they were so prevalent several driver ICs were manufactured that included basic serial shift registers, bit map integrated stand alone driver ICs, alphanumeric controllers and microcontrollers with integrated VFD support. In almost all cases, the communications with these driver ICs is by 2-wire serial that the Arduino SPI port can drive efficiently.
 
 ### Universal VFD PCB
 
@@ -15,33 +15,44 @@ This PCB is designed for raw serial shift register drive using up to three SN755
 Features:
 
 * 210mm maximum display width
-* 96-pin 2mm pitch VFD connector
-* 80-pin 0.1" pitch VFD connector
-* 3-row patch area to facilitate rewiring.
-* Filament voltage tuning resistors.
+* 96-anode 2mm pitch VFD connector
+* 80-anode 0.1" pitch VFD connector
+* 3-row patch area to facilitate rewiring
+* Filament voltage tuning resistors
 
-### Controller PCB (in progress)
+### Controller PCB
 
 Arduino Nano microcontroller based main controller board.
 
 Features:
 
-* 8 multiplexed "Universal VFD" display ports
+* 8 multiplexed SPI master ports
+
+  * Supports either shift registers or integrated display drivers
 * 1 dedicated bidirectional (master or slave) SPI port
-* 1 I2C port
-* Up, Down \& Select buttons
-* 40V anode linear power supply, selectable + or - configuration
-* +5V/-5V linear regulated power supplies
-* Filament bias circuit
-* Battery backed real time clock module
-* 6-Band Graphic Equalizer Display stereo audio input
+* I2C sensor ports
+* Next \& Select buttons
+* +36V \& -28V anode linear voltage regulators
+* +5V \& -5V linear voltage regulators
+* Configurable filament \& bias circuit
+* 6-Band audio spectrum analyzer, stereo audio input
+* 10-pin low voltage AC transformer power input
+
+  * Many 1990 to 2010 receivers contain a suitable transformer 
 
 # Software
 
 The software design aims to minimize the effort needed to use the diverse range of VFDs.
+
+Features:
+
+* Supports up to 16 shift register or 8 integrated driver displays
+* LayoutFinder application for reverse engineering each unique display
+* Various other development utilities
 
 ## Further Reading
 
 * [**Wikipedia Vacuum Fluorescent Display**](https://en.wikipedia.org/wiki/Vacuum_fluorescent_display)
 * [**Wikipedia 7-Segment Display**](https://en.wikipedia.org/wiki/Seven-segment_display)
 * [**Wikipedia 14-Segment Display**](https://en.wikipedia.org/wiki/Fourteen-segment_display)
+
