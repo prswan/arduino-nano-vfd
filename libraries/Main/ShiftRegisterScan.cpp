@@ -61,7 +61,7 @@ ShiftRegisterScan::ShiftRegisterScan(
 
     m_register = malloc(m_maxRegisterLenInBytes);
 
-    muxSpi->setBlank(false); // Not used
+    muxSpi->setBlank(true);
     muxSpi->setStrobe(false);
 
     m_nextUpdateTimeInUS = micros() + s_scanPeriodInUS;
@@ -86,11 +86,15 @@ bool ShiftRegisterScan::run()
 
     m_nextUpdateTimeInUS = currentTimeInUS + s_scanPeriodInUS;
 
-    // Strobe out the previous scan data
+    // Blank and strobe out the previous scan data
     {
+        m_muxSpi->setBlank(true);
+
         // Pulse strobe
         m_muxSpi->setStrobe(true);
         m_muxSpi->setStrobe(false);
+
+        m_muxSpi->setBlank(false);
     }
 
     for (UINT8 i = 0 ; i < m_numBitMaps ; i++)
