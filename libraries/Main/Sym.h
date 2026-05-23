@@ -153,6 +153,23 @@ typedef enum {
     SymText_ONE,
     SymText_ALL,
 
+    // Koss WMS1100 Additions
+    SymHeart,
+    SymVerticalLine,
+    SymArrowHeadDown,
+    SymText_EQ,
+    SymText_ROCK,
+    SymArrowHeadUp,
+    SymText_LOC,
+    SymText_ST,
+    SymText_CLAS,
+    SymDoubleCircle,
+    SymText_POP,
+    SymText_LOUD,
+    SymText_RPT,
+    SymText_SCAN,
+    SymText_Sub_dot_W,
+
     //
     SymEnd
 } Sym;

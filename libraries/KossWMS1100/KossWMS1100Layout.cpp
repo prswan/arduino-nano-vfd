@@ -67,7 +67,29 @@ static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
 {
     // sym,        instance, pinG, pinS
     {SymDiscIn,           0,   11,    5}, // row 1
+    {SymHeart,            0,   10,   12},
+    {SymVerticalLine,     0,   10,   10},
+    {SymVerticalLine,     1,   10,    9},
+    {SymArrowHeadDown,    0,   10,    8},
     {SymText_TRACK,       0,    1,    8},
+    {SymText_EQ,          0,    1,    2},
+    {SymText_ROCK,        0,    1,    3},
+
+    {SymArrowHeadUp,      0,   10,   11}, // row 2
+    {SymText_CH,          0,    1,   11},
+    {SymText_LOC,         0,    1,   10},
+    {SymText_ST,          0,    1,    6},
+    {SymText_CLAS,        0,    1,    4},
+    {SymDoubleCircle,     0,    1,    9},
+    {SymText_POP,         0,    1,    5},
+
+    {SymText_DISC,        0,   11,    3}, // row 3
+    {SymText_RND,         0,   11,    4},
+    {SymText_LOUD,        0,    1,    7},
+
+    {SymText_RPT,         0,   11,    2}, // row 4
+    {SymText_SCAN,        0,   11,    1},
+    {SymText_Sub_dot_W,   0,    1,    1},
 };
 
 // 1x full 7-segment display
@@ -222,7 +244,7 @@ LayoutFinder
 0106 - ST
 0107 - LOUD
 0108 - TRACK
-0109 - tape head symbol?
+0109 - double circle
 0110 - LOC
 0111 - CH
 0112 - nothing
