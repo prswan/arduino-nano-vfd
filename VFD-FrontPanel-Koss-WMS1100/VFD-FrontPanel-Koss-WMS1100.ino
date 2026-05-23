@@ -35,7 +35,6 @@
 #include "KossWMS1100Layout.h"
 
 #include "PT631xDriverIC.h"
-#include "TimerScan.h"
 #include "DriverICDisplay.h"
 
 // Controller Digital pin mappings
@@ -54,47 +53,50 @@ static Controller controller;
 void setup() {
   // put your setup code here, to run once:
 
-  IVfdPinout *vfdPinout0 = new PioneerDVR220Pinout();
-  IVfdLayout *vfdLayout0 = new PioneerDVR220Layout();
+  controller.muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
+                                 CONTROLLER_PIN_BLANK,
+                                 CONTROLLER_PIN_SEL0,
+                                 CONTROLLER_PIN_SEL1,
+                                 CONTROLLER_PIN_SEL2,
+                                 LSBFIRST);
 
-  IVfdPinout *vfdPinout1 = new KossWMS1100Pinout();
-  IVfdLayout *vfdLayout1 = new KossWMS1100Layout();
+  controller.timer = new Timer();
 
-  MuxSpi *muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
-                              CONTROLLER_PIN_BLANK,
-                              CONTROLLER_PIN_SEL0,
-                              CONTROLLER_PIN_SEL1,
-                              CONTROLLER_PIN_SEL2,
-                              LSBFIRST);
-
-  IDriverIC *idic = new PT631xDriverIC(muxSpi);
-
-  TimerScan *scan = new TimerScan();
-
-  controller.isDriverIC = true;
-
-  controller.sys.dr.idic[0] = idic;
-
-  controller.vfd[0][0].layout  = vfdLayout0;
-  controller.vfd[0][0].display = new DriverICDisplay(vfdPinout0, idic, muxSpi, 0);
-
-  controller.vfd[1][0].layout  = vfdLayout1;
-  controller.vfd[1][0].display = new DriverICDisplay(vfdPinout1, idic, muxSpi, 7);
-
-  controller.muxSpi = muxSpi;
-
-  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, CONTROLLER_PIN_SELECT);
-
-  controller.scan = scan;
-
- controller.stdOutVfd = &controller.vfd[0][0];
- controller.stdOutRegionId = 0;
+  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, 
+                                   CONTROLLER_PIN_SELECT);
 
   controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
   controller.regionSubTypeMap[0].ichar = new Char14Seg();
 
   controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
   controller.regionSubTypeMap[1].ichar = new Char7Seg();
+
+  IVfdPinout *vfdPinout0 = new PioneerDVR220Pinout();
+  IVfdLayout *vfdLayout0 = new PioneerDVR220Layout();
+
+  IVfdPinout *vfdPinout1 = new KossWMS1100Pinout();
+  IVfdLayout *vfdLayout1 = new KossWMS1100Layout();
+
+  IDriverIC *idic = new PT631xDriverIC(controller.muxSpi);
+
+  controller.isDriverIC = true;
+
+  controller.sys.dr.idic[0] = idic;
+
+  controller.vfd[0][0].layout  = vfdLayout0;
+  controller.vfd[0][0].display = new DriverICDisplay(vfdPinout0, 
+                                                     idic, 
+                                                     controller.muxSpi, 
+                                                     0);
+
+  controller.vfd[1][0].layout  = vfdLayout1;
+  controller.vfd[1][0].display = new DriverICDisplay(vfdPinout1, 
+                                                     idic, 
+                                                     controller.muxSpi, 
+                                                     7);
+
+  controller.stdOutVfd = &controller.vfd[0][0];
+  controller.stdOutRegionId = 0;
 
   controller.uutVfd = &controller.vfd[1][0];
   controller.uutRegionId = 1;

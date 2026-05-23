@@ -110,7 +110,7 @@ void Main(Controller *controller)
     // Main loop
     while (1)
     {  
-        if (controller->scan->run())
+        if (controller->timer->run())
         {
             switch (currentApp)
             {

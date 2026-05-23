@@ -27,14 +27,13 @@
 
 #include "Arduino.h"
 #include "Types.h"
-#include "IScan.h"
 #include "MuxSpi.h"
 #include "ShiftRegisterBitMap.h"
 
 //
 // VFD serial driver scan.
 //
-class ShiftRegisterScan : public IScan
+class ShiftRegisterScan
 {
 public:
 
@@ -58,12 +57,9 @@ public:
     // scan should be spin-called and will return immediately if no update
     // is needed.
     //
-    // The return value can be used to synchronize other operations to the start of
-    // a new grid.
-    // - false - No action.
-    // - true  - Grid update was performed
+    // This is called by the timer ISR.
     //
-    bool run();
+    void scan();
 
 private:
     MuxSpi* m_muxSpi;
@@ -73,8 +69,6 @@ private:
 
     UINT8 m_maxRegisterLenInBytes;
     UINT8 *m_register;
-
-    UINT32 m_nextUpdateTimeInUS;
 };
 
 #endif

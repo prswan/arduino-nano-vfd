@@ -34,7 +34,6 @@
 #include "PioneerDVR220Layout.h"
 
 #include "PT631xDriverIC.h"
-#include "TimerScan.h"
 #include "DriverICDisplay.h"
 
 // Controller Digital pin mappings
@@ -53,44 +52,47 @@ static Controller controller;
 void setup() {
   // put your setup code here, to run once:
 
+  controller.muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
+                                 CONTROLLER_PIN_BLANK,
+                                 CONTROLLER_PIN_SEL0,
+                                 CONTROLLER_PIN_SEL1,
+                                 CONTROLLER_PIN_SEL2,
+                                 LSBFIRST);
+
+  controller.timer = new Timer();
+
+  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, 
+                                   CONTROLLER_PIN_SELECT);
+
+  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
+  controller.regionSubTypeMap[0].ichar = new Char14Seg();
+
   IVfdPinout *vfdPinout0 = new SamsungBDP1590Pinout();
   IVfdLayout *vfdLayout0 = new SamsungBDP1590Layout();
 
   IVfdPinout *vfdPinout1 = new PioneerDVR220Pinout();
   IVfdLayout *vfdLayout1 = new PioneerDVR220Layout();
 
-  MuxSpi *muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
-                              CONTROLLER_PIN_BLANK,
-                              CONTROLLER_PIN_SEL0,
-                              CONTROLLER_PIN_SEL1,
-                              CONTROLLER_PIN_SEL2,
-                              LSBFIRST);
-
-  IDriverIC *idic = new PT631xDriverIC(muxSpi);
-
-  TimerScan *scan = new TimerScan();
+  IDriverIC *idic = new PT631xDriverIC(controller.muxSpi);
 
   controller.isDriverIC = true;
 
   controller.sys.dr.idic[0] = idic;
 
   controller.vfd[0][0].layout  = vfdLayout0;
-  controller.vfd[0][0].display = new DriverICDisplay(vfdPinout0, idic, muxSpi, 0);
+  controller.vfd[0][0].display = new DriverICDisplay(vfdPinout0, 
+                                                     idic, 
+                                                     controller.muxSpi, 
+                                                     0);
 
   controller.vfd[1][0].layout  = vfdLayout1;
-  controller.vfd[1][0].display = new DriverICDisplay(vfdPinout1, idic, muxSpi, 1);
+  controller.vfd[1][0].display = new DriverICDisplay(vfdPinout1, 
+                                                     idic, 
+                                                     controller.muxSpi, 
+                                                     1);
 
-  controller.muxSpi = muxSpi;
-
-  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, CONTROLLER_PIN_SELECT);
-
-  controller.scan = scan;
-
- controller.stdOutVfd = &controller.vfd[0][0];
- controller.stdOutRegionId = 0;
-
-  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
-  controller.regionSubTypeMap[0].ichar = new Char14Seg();
+  controller.stdOutVfd = &controller.vfd[0][0];
+  controller.stdOutRegionId = 0;
 
   controller.uutVfd = &controller.vfd[1][0];
   controller.uutRegionId = 0;

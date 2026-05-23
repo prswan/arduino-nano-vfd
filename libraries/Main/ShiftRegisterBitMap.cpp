@@ -135,10 +135,10 @@ bool ShiftRegisterBitMap::getCurrentRegisterData(
         }
 
         UINT8 reg = m_display[d]->getScanCurrentGrid() * m_registerLenInBytes;
+        UINT8 *mask = m_display[d]->getScanRegisterMask();
 
         for (UINT8 byte = 0 ; byte < m_registerLenInBytes ; byte++)
         {
-            UINT8 *mask = m_display[d]->getScanRegisterMask();
             UINT8 maskByte = pgm_read_byte_near(&mask[byte]);
 
             UINT8 mapByte = reg + byte;

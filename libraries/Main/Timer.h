@@ -22,23 +22,27 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef TimerScan_h
-#define TimerScan_h
+#ifndef Timer_h
+#define Timer_h
 
 #include "Arduino.h"
 #include "Types.h"
-#include "IScan.h"
 
 //
-// Dummy implementation that just provides a regular 1mS tick indication.
+// Implementation that just provides a regular 1mS tick indication.
 //
-class TimerScan : public IScan
+class Timer
 {
 public:
-    TimerScan();
+    Timer();
 
-    ~TimerScan() {};
+    ~Timer() {};
 
+    //
+    // The return value can be used to synchronize cooperative tasks
+    // - false - No action.
+    // - true  - Timer expired
+    //
     bool run();
 
 private:

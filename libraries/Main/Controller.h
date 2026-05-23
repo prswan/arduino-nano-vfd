@@ -33,6 +33,7 @@
 #include "IDisplay.h"
 #include "ShiftRegisterBitMap.h"
 #include "ShiftRegisterScan.h"
+#include "Timer.h"
 #include "Buttons.h"
 #include "VfdStdOut.h"
 
@@ -48,13 +49,11 @@
 //
 typedef struct _Controller
 {
-    Vfd vfd[8][2];
-
-    MuxSpi *muxSpi;
-
-    IScan*   scan;
-
+    MuxSpi*  muxSpi;
+    Timer*   timer;
     Buttons* buttons;
+
+    Vfd vfd[8][2];
 
     bool isShiftRegister;
     bool isDriverIC;
@@ -65,6 +64,7 @@ typedef struct _Controller
         struct {
 
             ShiftRegisterBitMap* bitMap[8];
+            ShiftRegisterScan*   scan;
 
         } sr;
 

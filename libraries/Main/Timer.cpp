@@ -22,31 +22,31 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef Scan_h
-#define Scan_h
+#include "Timer.h"
 
-#include "Arduino.h"
-#include "Types.h"
-#include "MuxSpi.h"
 
 //
-// Timer scan interface for display updates & foreground synchronization.
+// Arbitrary value
 //
-class IScan
+static const UINT32 s_scanPeriodInUS = 1000;
+
+
+Timer::Timer()
 {
-public:
-    //
-    // Update the display with the bitmap content.
-    // scan should be spin-called and will return immediately if no update
-    // is needed.
-    //
-    // The return value can be used to synchronize other operations to the start of
-    // a new grid.
-    // - false - No action.
-    // - true  - Grid update was performed
-    //
-    virtual bool run() = 0;
-
+    m_nextUpdateTimeInUS = micros() + s_scanPeriodInUS;
 };
 
-#endif
+
+bool Timer::run()
+{
+    UINT32 currentTimeInUS = micros();
+
+    if (currentTimeInUS < m_nextUpdateTimeInUS)
+    {
+        return false;
+    }
+
+    m_nextUpdateTimeInUS = currentTimeInUS + s_scanPeriodInUS;
+
+    return true;
+};

@@ -49,28 +49,29 @@ static Controller controller;
 void setup() {
   // put your setup code here, to run once:
 
-  IVfdPinout *vfdPinout0 = new PanasonicDVDRV32Pinout();
-  IVfdLayout *vfdLayout0 = new PanasonicDVDRV32Layout();
-
-  IVfdPinout *vfdPinout1 = new SonyDVPNS725PPinout();
-  IVfdLayout *vfdLayout1 = new SonyDVPNS725PLayout();
-
-  MuxSpi *muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
+  controller.muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
                               CONTROLLER_PIN_BLANK,
                               CONTROLLER_PIN_SEL0,
                               CONTROLLER_PIN_SEL1,
                               CONTROLLER_PIN_SEL2,
                               MSBFIRST);
 
-  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout0, vfdPinout1);
+  controller.timer = new Timer();
 
-  controller.isShiftRegister = true;
+  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, 
+                                   CONTROLLER_PIN_SELECT);
 
-  controller.sys.sr.bitMap[0] = bitMap; // Port Address 0, PL1
+  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
+  controller.regionSubTypeMap[0].ichar = new Char14Seg();
 
-  ShiftRegisterScan   *scan   = new ShiftRegisterScan(muxSpi, 
-                                                      &(controller.sys.sr.bitMap[0]), 
-                                                      ARRAYSIZE(controller.sys.sr.bitMap));
+  IVfdPinout *vfdPinout0 = new PanasonicDVDRV32Pinout();
+  IVfdLayout *vfdLayout0 = new PanasonicDVDRV32Layout();
+
+  IVfdPinout *vfdPinout1 = new SonyDVPNS725PPinout();
+  IVfdLayout *vfdLayout1 = new SonyDVPNS725PLayout();
+
+  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout0, 
+                                                        vfdPinout1);
 
   controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap->getDisplay(0);
@@ -78,17 +79,16 @@ void setup() {
   controller.vfd[0][1].layout  = vfdLayout1;
   controller.vfd[0][1].display = bitMap->getDisplay(1);
 
-  controller.muxSpi = muxSpi;
+  controller.isShiftRegister = true;
 
-  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, CONTROLLER_PIN_SELECT);
+  controller.sys.sr.bitMap[7] = bitMap; // Port Address 7, PL8
 
-  controller.scan = scan;
+  controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
+                                                 &(controller.sys.sr.bitMap[0]), 
+                                                 ARRAYSIZE(controller.sys.sr.bitMap));
 
   controller.stdOutVfd = &controller.vfd[0][1]; // Sony for StdOut
   controller.stdOutRegionId = 0;
-
-  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
-  controller.regionSubTypeMap[0].ichar = new Char14Seg();
 
   controller.uutVfd = &controller.vfd[0][0]; // Panasonic as the UUT 
   controller.uutRegionId = 0;

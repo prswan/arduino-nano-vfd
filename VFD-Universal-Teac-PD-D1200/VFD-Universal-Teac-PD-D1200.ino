@@ -53,6 +53,24 @@ static Controller controller;
 void setup() {
   // put your setup code here, to run once:
 
+  controller.muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
+                              CONTROLLER_PIN_BLANK,
+                              CONTROLLER_PIN_SEL0,
+                              CONTROLLER_PIN_SEL1,
+                              CONTROLLER_PIN_SEL2,
+                              MSBFIRST);
+
+  controller.timer = new Timer();
+
+  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, 
+                                   CONTROLLER_PIN_SELECT);
+
+  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
+  controller.regionSubTypeMap[0].ichar = new Char14Seg();
+
+  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
+  controller.regionSubTypeMap[1].ichar = new Char7Seg();
+
   IVfdPinout *vfdPinout0 = new PanasonicDVDRV32Pinout();
   IVfdLayout *vfdLayout0 = new PanasonicDVDRV32Layout();
 
@@ -62,24 +80,11 @@ void setup() {
   IVfdPinout *vfdPinout2 = new TeacPDD1200Pinout();
   IVfdLayout *vfdLayout2 = new TeacPDD1200Layout();
 
-  MuxSpi *muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
-                              CONTROLLER_PIN_BLANK,
-                              CONTROLLER_PIN_SEL0,
-                              CONTROLLER_PIN_SEL1,
-                              CONTROLLER_PIN_SEL2,
-                              MSBFIRST);
-
-  ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, vfdPinout1);
-  ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout2, NULL);
+  ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, 
+                                                         vfdPinout1);
   
-  controller.isShiftRegister = true;
-
-  controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
-  controller.sys.sr.bitMap[7] = bitMap1; // Port Address 7, PL8
-
-  ShiftRegisterScan   *scan   = new ShiftRegisterScan(muxSpi, 
-                                                      &(controller.sys.sr.bitMap[0]), 
-                                                      ARRAYSIZE(controller.sys.sr.bitMap));
+  ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout2, 
+                                                         NULL);
 
   controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
@@ -90,17 +95,14 @@ void setup() {
   controller.vfd[1][0].layout  = vfdLayout2;
   controller.vfd[1][0].display = bitMap1->getDisplay(0);
 
-  controller.muxSpi = muxSpi;
+  controller.isShiftRegister = true;
 
-  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, CONTROLLER_PIN_SELECT);
+  controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
+  controller.sys.sr.bitMap[7] = bitMap1; // Port Address 7, PL8
 
-  controller.scan = scan;
-
-  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
-  controller.regionSubTypeMap[0].ichar = new Char14Seg();
-
-  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
-  controller.regionSubTypeMap[1].ichar = new Char7Seg();
+  controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
+                                                 &(controller.sys.sr.bitMap[0]), 
+                                                 ARRAYSIZE(controller.sys.sr.bitMap));
 
   controller.stdOutVfd = &controller.vfd[0][1]; // Sony for StdOut
   controller.stdOutRegionId = 0;

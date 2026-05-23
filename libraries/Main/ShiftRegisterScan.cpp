@@ -29,8 +29,23 @@
 // 0.3mS per grid. Manuals suggest to use something not a multiple of mains 50Hz
 // to avoid alias flickering with the filament AC.
 //
-static const UINT32 s_scanPeriodInUS = 333;
+static const UINT32 s_scanPeriodInHz = 3333;
 
+// Keep a global copy for the ISR
+static ShiftRegisterScan *s_thisScan = NULL;
+
+/* TODO
+* ShiftRegisterScan
+  * Remove polling support
+* ShiftRegisterBitMap
+  * DONE: Remove this from the loop: UINT8 *mask = m_display[d]->getScanRegisterMask();
+* TimerScan
+  * Rename to Timer
+  * Remove inheritance from IScan
+  * Update IDIC & Shift Register recipes to both use Timer
+  * Add single global Timer to Controller.h
+  * Update Main.cpp to use Timer for polling
+*/
 
 ShiftRegisterScan::ShiftRegisterScan(
     MuxSpi* muxSpi,
@@ -64,7 +79,35 @@ ShiftRegisterScan::ShiftRegisterScan(
     muxSpi->setBlank(true);
     muxSpi->setStrobe(false);
 
-    m_nextUpdateTimeInUS = micros() + s_scanPeriodInUS;
+    // Setup a timer ISR for the scan
+    {
+        s_thisScan = this;
+
+        // Stop interrupts while configuring
+        cli(); 
+
+        // Reset Timer 1 Control Registers
+        TCCR1A = 0;
+        TCCR1B = 0;
+        TCNT1  = 0; // Initialize counter to 0
+
+        // Set compare match register frequency based on 16MHz clock
+        // Formula: (16,000,000 / (prescaler * frequency)) - 1
+        // Using 256 prescaler for 1Hz: (16,000,000 / (256 * 1)) - 1 = 62499
+        OCR1A = (16000000 / (256 * s_scanPeriodInHz)) - 1;
+
+        // Set CTC (Clear Timer on Compare Match) mode
+        TCCR1B |= (1 << WGM12);
+
+        // Set prescaler to 256
+        TCCR1B |= (1 << CS12);
+
+        // Enable timer compare interrupt
+        TIMSK1 |= (1 << OCIE1A);
+
+        // Enable interrupts
+        sei();
+    }
 };
 
 
@@ -75,18 +118,9 @@ ShiftRegisterScan::~ShiftRegisterScan()
 };
 
 
-bool ShiftRegisterScan::run()
+void ShiftRegisterScan::scan()
 {
-    UINT32 currentTimeInUS = micros();
-
-    if (currentTimeInUS < m_nextUpdateTimeInUS)
-    {
-        return false;
-    }
-
-    m_nextUpdateTimeInUS = currentTimeInUS + s_scanPeriodInUS;
-
-    // Blank and strobe out the previous scan data
+    // Blank & strobe out the previous scan data
     {
         m_muxSpi->setBlank(true);
 
@@ -114,6 +148,10 @@ bool ShiftRegisterScan::run()
 
         thisBitMap->incGrids();
     }
-
-    return true;
 };
+
+
+ISR(TIMER1_COMPA_vect)
+{
+    s_thisScan->scan();
+}

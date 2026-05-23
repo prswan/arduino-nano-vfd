@@ -49,7 +49,7 @@
 
 // Integrated Driver IC Front Panel system
 #include "PT631xDriverIC.h"
-#include "TimerScan.h"
+#include "Timer.h"
 #include "DriverICDisplay.h"
 
 #include "SamsungBDP1590Pinout.h"
@@ -77,6 +77,24 @@ static Controller controller;
 void setup() {
   // put your setup code here, to run once:
 
+  controller.muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
+                              CONTROLLER_PIN_BLANK,
+                              CONTROLLER_PIN_SEL0,
+                              CONTROLLER_PIN_SEL1,
+                              CONTROLLER_PIN_SEL2,
+                              MSBFIRST);
+
+  controller.timer = new Timer();
+
+  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, 
+                                   CONTROLLER_PIN_SELECT);
+
+  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
+  controller.regionSubTypeMap[0].ichar = new Char14Seg();
+
+  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
+  controller.regionSubTypeMap[1].ichar = new Char7Seg();
+
   IVfdPinout *vfdPinoutU0 = new SonyTCWR775Pinout();
   IVfdLayout *vfdLayoutU0 = new SonyTCWR775Layout();
 
@@ -98,25 +116,9 @@ void setup() {
   IVfdPinout *vfdPinoutF2 = new KossWMS1100Pinout();
   IVfdLayout *vfdLayoutF2 = new KossWMS1100Layout();
 
-  MuxSpi *muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
-                              CONTROLLER_PIN_BLANK,
-                              CONTROLLER_PIN_SEL0,
-                              CONTROLLER_PIN_SEL1,
-                              CONTROLLER_PIN_SEL2,
-                              MSBFIRST);
-
   ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinoutU0, vfdPinoutU1);
   ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinoutU2, NULL);
   
-  controller.isShiftRegister = true;
-
-  controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
-  controller.sys.sr.bitMap[1] = bitMap1; // Port Address 1, PL2
-
-  ShiftRegisterScan   *scan   = new ShiftRegisterScan(muxSpi, 
-                                                      &(controller.sys.sr.bitMap[0]), 
-                                                      ARRAYSIZE(controller.sys.sr.bitMap));
-
   controller.vfd[0][0].layout  = vfdLayoutU0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
 
@@ -126,21 +128,16 @@ void setup() {
   controller.vfd[1][0].layout  = vfdLayoutU2;
   controller.vfd[1][0].display = bitMap1->getDisplay(0);
 
-  controller.muxSpi = muxSpi;
+  controller.isShiftRegister = true;
 
-  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, CONTROLLER_PIN_SELECT);
+  controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
+  controller.sys.sr.bitMap[1] = bitMap1; // Port Address 1, PL2
 
-  controller.scan = scan;
+  controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
+                                                 &(controller.sys.sr.bitMap[0]), 
+                                                 ARRAYSIZE(controller.sys.sr.bitMap));
 
-  IDriverIC *idic = new PT631xDriverIC(muxSpi);
-
-  TimerScan *timerScan = new TimerScan();
-
-  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
-  controller.regionSubTypeMap[0].ichar = new Char14Seg();
-
-  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
-  controller.regionSubTypeMap[1].ichar = new Char7Seg();
+  IDriverIC *idic = new PT631xDriverIC(controller.muxSpi);
 
   controller.stdOutVfd = &controller.vfd[0][1]; // Sony for StdOut
   controller.stdOutRegionId = 0;

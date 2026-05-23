@@ -30,54 +30,58 @@
 #include "SonyDVPNS725PPinout.h"
 #include "SonyDVPNS725PLayout.h"
 
-// AN5818 Digital pin mappings
-#define AN5818_STROBE (1)  // Rising edge clocked
-#define AN5818_BLANK  (9)  // Hi == All outputs disabled
+// Controller Digital pin mappings
+#define CONTROLLER_PIN_STROBE (8)  // Rising edge clocked
+#define CONTROLLER_PIN_BLANK  (9)  // Hi == All outputs disabled
 
-#define BUTTON_PIN_NEXT   (3)
-#define BUTTON_PIN_SELECT (2)
+#define CONTROLLER_PIN_NEXT   (2)
+#define CONTROLLER_PIN_SELECT (3)
+
+#define CONTROLLER_PIN_SEL0   (5)
+#define CONTROLLER_PIN_SEL1   (6)
+#define CONTROLLER_PIN_SEL2   (7)
 
 static Controller controller;
 
 void setup() {
   // put your setup code here, to run once:
 
-  IVfdPinout *vfdPinout = new SonyDVPNS725PPinout();
-  IVfdLayout *vfdLayout = new SonyDVPNS725PLayout();
-
-  MuxSpi *muxSpi = new MuxSpi(AN5818_STROBE,
-                              AN5818_BLANK,
-                              14, // Proto doesn't have the Mux, so just an unused pin
-                              14,
-                              14,
+  controller.muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
+                              CONTROLLER_PIN_BLANK,
+                              CONTROLLER_PIN_SEL0,
+                              CONTROLLER_PIN_SEL1,
+                              CONTROLLER_PIN_SEL2,
                               MSBFIRST);
 
-  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout, NULL);
+  controller.timer = new Timer();
 
-  controller.isShiftRegister = true;
-
-  controller.sys.sr.bitMap[0] = bitMap; // Port Address 0, PL1
-
-  ShiftRegisterScan   *scan   = new ShiftRegisterScan(muxSpi, 
-                                                      &(controller.sys.sr.bitMap[0]), 
-                                                      ARRAYSIZE(controller.sys.sr.bitMap));
-
-  controller.vfd[0][0].layout  = vfdLayout;
-  controller.vfd[0][0].display = bitMap->getDisplay(0);
-
-  controller.muxSpi = muxSpi;
-
-  controller.buttons = new Buttons(BUTTON_PIN_NEXT, BUTTON_PIN_SELECT);
-
-  controller.scan = scan;
-
-  controller.stdOutVfd = &controller.vfd[0][0];
-  controller.stdOutRegionId = 0;
+  controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, 
+                                   CONTROLLER_PIN_SELECT);
 
   controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
   controller.regionSubTypeMap[0].ichar = new Char14Seg();
 
-  controller.uutVfd = controller.stdOutVfd;
+  IVfdPinout *vfdPinout0 = new SonyDVPNS725PPinout();
+  IVfdLayout *vfdLayout0 = new SonyDVPNS725PLayout();
+
+  ShiftRegisterBitMap *bitMap = new ShiftRegisterBitMap(vfdPinout0, 
+                                                        NULL);
+
+  controller.vfd[0][0].layout  = vfdLayout0;
+  controller.vfd[0][0].display = bitMap->getDisplay(0);
+
+  controller.isShiftRegister = true;
+
+  controller.sys.sr.bitMap[7] = bitMap; // Port Address 7, PL8
+
+  controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
+                                                 &(controller.sys.sr.bitMap[0]), 
+                                                 ARRAYSIZE(controller.sys.sr.bitMap));
+
+  controller.stdOutVfd = &controller.vfd[0][0]; // Sony for StdOut
+  controller.stdOutRegionId = 0;
+
+  controller.uutVfd = controller.stdOutVfd; // UUT == stdOut
   controller.uutRegionId = controller.stdOutRegionId;
 }
 
