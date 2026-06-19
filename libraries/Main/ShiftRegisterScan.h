@@ -61,6 +61,16 @@ public:
     //
     void scan();
 
+    //
+    // Return the time taken for 1 grid scan in microseconds.
+    //
+    UINT32 getScanTimeInUs()
+    {
+        UINT32 x = m_scanTimeInUs;
+        m_scanTimeInUs = 0;
+        return x;
+    };
+
 private:
     MuxSpi* m_muxSpi;
     
@@ -69,6 +79,8 @@ private:
 
     UINT8 m_maxRegisterLenInBytes;
     UINT8 *m_register;
+
+    UINT32 m_scanTimeInUs;
 };
 
 #endif

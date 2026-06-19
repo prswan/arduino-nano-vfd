@@ -40,13 +40,7 @@
 class MuxSpi
 {
 public:
-    MuxSpi(
-        int pinStrobe,
-        int pinBlank,
-        int pinSel0,
-        int pinSel1,
-        int pinSel2,
-        UINT8 bitOrder);
+    MuxSpi(UINT8 bitOrder);
 
     ~MuxSpi();
 
@@ -57,7 +51,7 @@ public:
         bool hi
     )
     {
-        digitalWrite(m_pinStrobe, (hi ? HIGH : LOW));
+        PORTB = (PORTB & ~0x01) | (hi ? 0x01 : 0x00);
     };
 
     //
@@ -67,7 +61,7 @@ public:
         bool hi
     )
     {
-        digitalWrite(m_pinBlank, (hi ? HIGH : LOW));
+        PORTB = (PORTB & ~0x02) | (hi ? 0x02 : 0x00);
     };
 
     //
@@ -100,12 +94,6 @@ private:
     );
 
 private:
-
-    int m_pinStrobe;
-    int m_pinBlank;
-    int m_pinSel0;
-    int m_pinSel1;
-    int m_pinSel2;
 
     UINT8 m_currentPort;
 };

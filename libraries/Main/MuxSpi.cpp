@@ -24,25 +24,32 @@
 //
 #include "MuxSpi.h"
 
+//
+// This is used in the critical performance path & ISR and
+// the built-in Arduino pin functions are very slow.
+// The implementation is hard coded for the Ardino Nano
+// and Controller V1.00 PCB pinout.
+//
+// When the digitalWrites for Strobe & Blank were removed, scan time
+// was reduced from 280uS to 260us, a saving of 20uS.
+//
+#define CONTROLLER_PIN_SEL0   (5)  // PD5
+#define CONTROLLER_PIN_SEL1   (6)  // PD6
+#define CONTROLLER_PIN_SEL2   (7)  // PD7
 
-MuxSpi::MuxSpi(
-    int pinStrobe,
-    int pinBlank,
-    int pinSel0,
-    int pinSel1,
-    int pinSel2,
-    UINT8 bitOrder) : m_pinStrobe(pinStrobe),
-                      m_pinBlank(pinBlank),
-                      m_pinSel0(pinSel0),
-                      m_pinSel1(pinSel1),
-                      m_pinSel2(pinSel2)
+#define CONTROLLER_PIN_STROBE (8)  // PB0 - Rising edge clocked
+#define CONTROLLER_PIN_BLANK  (9)  // PB1 - Hi == All outputs disabled
+//
+
+
+MuxSpi::MuxSpi(UINT8 bitOrder)
 {
-    pinMode(pinStrobe, OUTPUT);
-    pinMode(pinBlank, OUTPUT);
+    pinMode(CONTROLLER_PIN_STROBE, OUTPUT);
+    pinMode(CONTROLLER_PIN_BLANK, OUTPUT);
 
-    pinMode(pinSel0, OUTPUT);
-    pinMode(pinSel1, OUTPUT);
-    pinMode(pinSel2, OUTPUT);
+    pinMode(CONTROLLER_PIN_SEL0, OUTPUT);
+    pinMode(CONTROLLER_PIN_SEL1, OUTPUT);
+    pinMode(CONTROLLER_PIN_SEL2, OUTPUT);
 
     pinMode(MOSI, OUTPUT);
     pinMode(SCK, OUTPUT);
@@ -74,9 +81,8 @@ void MuxSpi::setPort(UINT8 port)
 
     m_currentPort = port & 0x7;
 
-    digitalWrite(m_pinSel0, ((m_currentPort & 0x1) ? HIGH : LOW));
-    digitalWrite(m_pinSel1, ((m_currentPort & 0x2) ? HIGH : LOW));
-    digitalWrite(m_pinSel2, ((m_currentPort & 0x4) ? HIGH : LOW));
+    // SEL[0..2] === [PD5..PD7]
+    PORTD = (PORTD & ~(0x07 << 5)) | (m_currentPort << 5);
 };
 
 void MuxSpi::writeData(

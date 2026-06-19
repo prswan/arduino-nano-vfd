@@ -38,27 +38,15 @@
 #include "TeacPDD1200Layout.h"
 
 // Controller Digital pin mappings
-#define CONTROLLER_PIN_STROBE (8)  // Rising edge clocked
-#define CONTROLLER_PIN_BLANK  (9)  // Hi == All outputs disabled
-
 #define CONTROLLER_PIN_NEXT   (2)
 #define CONTROLLER_PIN_SELECT (3)
-
-#define CONTROLLER_PIN_SEL0   (5)
-#define CONTROLLER_PIN_SEL1   (6)
-#define CONTROLLER_PIN_SEL2   (7)
 
 static Controller controller;
 
 void setup() {
   // put your setup code here, to run once:
 
-  controller.muxSpi = new MuxSpi(CONTROLLER_PIN_STROBE,
-                              CONTROLLER_PIN_BLANK,
-                              CONTROLLER_PIN_SEL0,
-                              CONTROLLER_PIN_SEL1,
-                              CONTROLLER_PIN_SEL2,
-                              MSBFIRST);
+  controller.muxSpi = new MuxSpi(MSBFIRST);
 
   controller.timer = new Timer();
 

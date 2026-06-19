@@ -34,17 +34,11 @@ static const UINT32 s_scanPeriodInHz = 3333;
 // Keep a global copy for the ISR
 static ShiftRegisterScan *s_thisScan = NULL;
 
-/* TODO
-* ShiftRegisterScan
-  * Remove polling support
-* ShiftRegisterBitMap
-  * DONE: Remove this from the loop: UINT8 *mask = m_display[d]->getScanRegisterMask();
-* TimerScan
-  * Rename to Timer
-  * Remove inheritance from IScan
-  * Update IDIC & Shift Register recipes to both use Timer
-  * Add single global Timer to Controller.h
-  * Update Main.cpp to use Timer for polling
+/*
+ Scan Times Per Grid
+ -------------------
+ 1 Shift Register , 2 Displays : DVP-NS725 + DVD-RV32 (64-bit)          : 156uS
+ 2 Shift Registers, 2 Displays : DVP-NS725 (64-bit) + KR-V77R (96-bit)  : 276uS
 */
 
 ShiftRegisterScan::ShiftRegisterScan(
@@ -55,6 +49,7 @@ ShiftRegisterScan::ShiftRegisterScan(
                         m_numBitMaps(numBitMaps)
 {
     m_maxRegisterLenInBytes = 0;
+    m_scanTimeInUs = 0;
 
     // Find the largest register
     for (UINT8 i = 0 ; i < numBitMaps ; i++)
@@ -120,6 +115,13 @@ ShiftRegisterScan::~ShiftRegisterScan()
 
 void ShiftRegisterScan::scan()
 {
+    static UINT32 s_entryScanTimeStampInUs;
+
+    if (m_scanTimeInUs == 0)
+    {
+        s_entryScanTimeStampInUs = micros();
+    }
+
     // Blank & strobe out the previous scan data
     {
         m_muxSpi->setBlank(true);
@@ -147,6 +149,11 @@ void ShiftRegisterScan::scan()
         m_muxSpi->writeData(i, m_register, curRegLen);
 
         thisBitMap->incGrids();
+    }
+
+    if (m_scanTimeInUs == 0)
+    {
+        m_scanTimeInUs = micros() - s_entryScanTimeStampInUs;
     }
 };
 

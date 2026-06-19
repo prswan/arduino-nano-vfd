@@ -239,22 +239,21 @@ void Main(Controller *controller)
                         stdOut->printf("\f%s", "PERF");
                     }
 
-                    // This works because the run is only called when the display is scanned
-                    static UINT32 previousTimeInUs = 0;
-
-                    UINT32 currentTimeInUs = micros();
-                    UINT16 elapsedTimeInUs = (UINT16)(currentTimeInUs - previousTimeInUs);
-
-                    previousTimeInUs = currentTimeInUs;
-
                     if (buttons->isNextShortPressed())
                     {
-                        //
-                        // This print appears to be so slow that it glitches the display.
-                        // The \f clear is really expensive. Still slight glitch though.
-                        // The math parsing must be terrible.
-                        //
-                        stdOut->printf("\r%4.4d", elapsedTimeInUs);
+                        if (controller->isShiftRegister)
+                        {
+                            //
+                            // This print appears to be so slow that it glitches the display.
+                            // The \f clear is really expensive. Still slight glitch though.
+                            // The math parsing must be terrible.
+                            //
+                            stdOut->printf("\r%4.4d", controller->sys.sr.scan->getScanTimeInUs());
+                        }
+                        else
+                        {
+                            stdOut->printf("\r----");
+                        }
                     }
                     break;
                 }
