@@ -282,14 +282,18 @@ void Main(Controller *controller)
                         {
                             currentChar = 0x20;
                         }
-
+                        
                         character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, ' ');
                         character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, currentChar);
 
                         if (uutDisplay != stdOutDisplay)
                         {
-                            character->print(controller->uutVfd, controller->uutRegionId, 0, ' ');
-                            character->print(controller->uutVfd, controller->uutRegionId, 0, currentChar);
+                            // Print a whole row to help debug differing digit encodings
+                            for (UINT8 x = 0 ; x < 16 ; x++)
+                            {
+                                character->print(controller->uutVfd, controller->uutRegionId, x, ' ');
+                                character->print(controller->uutVfd, controller->uutRegionId, x, currentChar);
+                            }
                         }
 
                         UINT8 charValue = currentChar;
