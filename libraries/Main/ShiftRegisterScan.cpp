@@ -26,19 +26,47 @@
 
 
 //
-// 0.3mS per grid. Manuals suggest to use something not a multiple of mains 50Hz
+// 450uS per grid.
+// Manuals suggest to use something not a multiple of mains 50Hz
 // to avoid alias flickering with the filament AC.
 //
-static const UINT32 s_scanPeriodInHz = 3333;
+static const UINT32 s_scanPeriodInHz = 2222;
 
 // Keep a global copy for the ISR
 static ShiftRegisterScan *s_thisScan = NULL;
 
 /*
- Scan Times Per Grid
- -------------------
- 1 Shift Register , 2 Displays : DVP-NS725 + DVD-RV32 (64-bit)          : 156uS
- 2 Shift Registers, 2 Displays : DVP-NS725 (64-bit) + KR-V77R (96-bit)  : 276uS
+ Performance Considerations
+ --------------------------
+ 1 Shift Register , 2 Displays : DVP-NS725 + DVD-RV32 (64-bit)                     : 156uS
+ 2 Shift Registers, 2 Displays : DVP-NS725 (64-bit) + KR-V77R (96-bit)             : 276uS
+ 2 Shift Registers, 3 Displays : DVD-RV32 + DVP-NS725 (64-bit) + KR-V77R (96-bit)  : 280uS
+  - now seeing significant visible foreground slowdown.
+  - 3333 Hz === 300uS per grid so we've reached a limit
+  - 2222 Hz === 450uS per grid and the foreground slowdown is gone.
+  - 1111 Hz === 900uS per grid but the 13 grid DVD-RV32 has visible flicker
+
+  Moving to 450uS for now, but further performance analsyis needed.
+
+  Given the limited impact of adding a display versus a shift register, the main bottleneck
+  is the shift register.
+
+  - At 1MHz SPI clock, 96-bits would take 1uS x 96 == 96uS, consistent with the measurements above.
+  - The lack of DMA for more than a byte at a time is a problem.
+  - According to the SN75518 datasheet, CLK is 1MHz at 4.5V Vcc2 or 5MHz at 10V-15V Vcc2.
+    - but Vih at 12V is ~9.5V. Vil is still 0.8V.
+  - A quick test using 2MHz SPI clock with 2 shift registers and 3 displays : 200uS
+    - and there were no visible artifacts indicating an issue at 2MHz.
+    - 4MHz SPI clock : Artifacts on KR-V77R, perf 160uS, UCN5818 seems OK (datasheet Fclk max is 3.3 MHz)
+
+  Ideas
+  -----
+   1) 2MHz SPI clock would give a maximum total SPI cost of 96 x 8 x 500ns == 384uS.
+   2) Set the grid scan time between 450uS and perceptable flicker (900uS)
+   3) Interleave the SPI transfers with bitmap composition, maybe up to 28uS per display to save.
+      - Send a byte, calculate the next byte, wait for transfer, send the next byte.
+      ** OR **
+      - Batch per display, calculate register d+1 interleaved with the transfer of register d.
 */
 
 ShiftRegisterScan::ShiftRegisterScan(

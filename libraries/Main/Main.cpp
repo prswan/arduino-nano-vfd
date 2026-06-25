@@ -288,11 +288,23 @@ void Main(Controller *controller)
 
                         if (uutDisplay != stdOutDisplay)
                         {
-                            // Print a whole row to help debug differing digit encodings
-                            for (UINT8 x = 0 ; x < 16 ; x++)
+                            // Print to all the available displays, up to 16 (8 ports and 2 per port max)
+                            for (UINT8 disp = 0 ; disp < 16 ; disp++)
                             {
-                                character->print(controller->uutVfd, controller->uutRegionId, x, ' ');
-                                character->print(controller->uutVfd, controller->uutRegionId, x, currentChar);
+                                Vfd *iVfd = &controller->vfd[disp / 2][disp % 2];
+
+                                // If there is nothing in this slot or it's the primary StdOut, skip it
+                                if ((iVfd->display == NULL) || (iVfd == controller->stdOutVfd))
+                                {
+                                    continue;
+                                }
+
+                                // Print a whole row to help debug differing digit encodings
+                                for (UINT8 row = 0 ; row < 16 ; row++)
+                                {
+                                    character->print(iVfd, controller->uutRegionId, row, ' ');
+                                    character->print(iVfd, controller->uutRegionId, row, currentChar);
+                                }
                             }
                         }
 

@@ -30,6 +30,9 @@
 #include "KenwoodKRV77RPinout.h"
 #include "KenwoodKRV77RLayout.h"
 
+#include "PanasonicDVDRV32Pinout.h"
+#include "PanasonicDVDRV32Layout.h"
+
 #include "SonyDVPNS725PPinout.h"
 #include "SonyDVPNS725PLayout.h"
 
@@ -55,20 +58,26 @@ void setup() {
   IVfdPinout *vfdPinout0 = new KenwoodKRV77RPinout();
   IVfdLayout *vfdLayout0 = new KenwoodKRV77RLayout();
 
-  IVfdPinout *vfdPinout1 = new SonyDVPNS725PPinout();
-  IVfdLayout *vfdLayout1 = new SonyDVPNS725PLayout();
+  IVfdPinout *vfdPinout1 = new PanasonicDVDRV32Pinout();
+  IVfdLayout *vfdLayout1 = new PanasonicDVDRV32Layout();
+
+  IVfdPinout *vfdPinout2 = new SonyDVPNS725PPinout();
+  IVfdLayout *vfdLayout2 = new SonyDVPNS725PLayout();
 
   ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, 
                                                          NULL);
 
   ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout1, 
-                                                         NULL);
+                                                         vfdPinout2);
 
   controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
 
-  controller.vfd[0][1].layout  = vfdLayout1;
-  controller.vfd[0][1].display = bitMap1->getDisplay(0);
+  controller.vfd[1][0].layout  = vfdLayout1;
+  controller.vfd[1][0].display = bitMap1->getDisplay(0);
+
+  controller.vfd[1][1].layout  = vfdLayout2;
+  controller.vfd[1][1].display = bitMap1->getDisplay(1);
 
   controller.isShiftRegister = true;
 
@@ -79,7 +88,7 @@ void setup() {
                                                  &(controller.sys.sr.bitMap[0]), 
                                                  ARRAYSIZE(controller.sys.sr.bitMap));
 
-  controller.stdOutVfd = &controller.vfd[0][1]; // Sony for StdOut
+  controller.stdOutVfd = &controller.vfd[1][1]; // Sony for StdOut
   controller.stdOutRegionId = 0;
 
   controller.uutVfd = &controller.vfd[0][0]; // Kenwood as the UUT 

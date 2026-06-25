@@ -64,7 +64,7 @@ MuxSpi::MuxSpi(UINT8 bitOrder)
     // This is need to esnure that there is no spurious CLK when the
     // port mux is changed because the port mux is idle high.
     //
-    SPIClass::beginTransaction(SPISettings(1000000, bitOrder, SPI_MODE3));
+    SPIClass::beginTransaction(SPISettings(2000000, bitOrder, SPI_MODE3));
 };
 
 MuxSpi::~MuxSpi()
