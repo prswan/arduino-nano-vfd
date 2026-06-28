@@ -48,13 +48,15 @@ static const Properties s_properties PROGMEM =
 };
 
 //
-// 1 x 5-digit 14-seg
-// TODO: Add the other 7-seg display groups
+// - Leading "1" digit ignored
+// - Trailing small partial digit ignored
 //
 static const Region s_region[] PROGMEM =
 {
     // type,          subType,                id, len
-    {RegionTypeChar,  RegionSubTypeChar14Seg,  0,   5}
+    {RegionTypeChar,  RegionSubTypeChar7Seg,   0,   3},
+    {RegionTypeChar,  RegionSubTypeChar14Seg,  1,   5},
+    {RegionTypeChar,  RegionSubTypeChar7Seg,   2,   2},
 };
 
 // TODO: Add the symbols for this display
@@ -65,6 +67,20 @@ static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
 };
 
 //
+// Region 0
+// 3 x 7-seg standard display
+// - leading "1" and trailing small partial digit ignored
+//
+static const SegmentGroup7Seg s_segmentGroup7Seg0[] PROGMEM =
+{
+// pinG, { a   b   c   d   e   f  g }}
+    { 5, {29, 30, 31, 32, 33, 34, 35}},
+    { 4, {29, 30, 31, 32, 33, 34, 35}},
+    { 3, {29, 30, 31, 32, 33, 34, 35}},
+};
+
+//
+// Region 1
 // 5x 14-segment standard display.
 // Digit 5:
 // - Is missing segment "k", impacts: V,W,X,Z
@@ -77,7 +93,7 @@ static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
 //   Digit 5 included here as an incomplete 14-seg for now.
 // Digits 6 & 7 in the same row are pure 7-seg. 
 //
-static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
+static const SegmentGroup14Seg s_segmentGroup14Seg1[] PROGMEM =
 {
 // pinG, { a   b   c   d   e   f  g1  g2   h   i   j   k   l   m}}
     { 9, {21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 34, 33, 32}},
@@ -86,6 +102,18 @@ static const SegmentGroup14Seg s_segmentGroup14Seg[] PROGMEM =
     { 6, {21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 34, 33, 32}},
     { 5, {21, 22, 23, 24, 25, 26, 27, 28,  7,  8,  7,  0,  9, 36}},
 };
+
+//
+// Region 2
+// 2 x 7-seg standard display
+//
+static const SegmentGroup7Seg s_segmentGroup7Seg2[] PROGMEM =
+{
+// pinG, { a   b   c   d   e   f  g }}
+    { 4, {21, 22, 23, 24, 25, 26, 27}},
+    { 3, {21, 22, 23, 24, 25, 26, 27}},
+};
+
 
 void KenwoodKRV77RLayout::getProperties(
     const Properties **p_properties)
@@ -110,18 +138,48 @@ bool KenwoodKRV77RLayout::getSegmentGroupSymbol(
     return true;
 };
 
+bool KenwoodKRV77RLayout::getSegmentGroup7Seg(
+    UINT8 regionId,
+    const SegmentGroup7Seg **p_segGroup,
+    UINT8 *numEntries)
+{
+    switch (regionId)
+    {
+        case 0:
+        {
+            *p_segGroup = s_segmentGroup7Seg0;
+            *numEntries = ARRAYSIZE(s_segmentGroup7Seg0);
+            break;
+        }
+
+        case 2:
+        {
+            *p_segGroup = s_segmentGroup7Seg2;
+            *numEntries = ARRAYSIZE(s_segmentGroup7Seg2);
+            break;
+        }
+
+        default:
+        {
+            return false;
+        }
+    }
+
+    return true;
+};
+
 bool KenwoodKRV77RLayout::getSegmentGroup14Seg(
     UINT8 regionId,
     const SegmentGroup14Seg **p_segGroup,
     UINT8 *numEntries)
 {
-    if (regionId > 0)
+    if (regionId != 1)
     {
         return false;
     }
 
-    *p_segGroup = s_segmentGroup14Seg;
-    *numEntries = ARRAYSIZE(s_segmentGroup14Seg);
+    *p_segGroup = s_segmentGroup14Seg1;
+    *numEntries = ARRAYSIZE(s_segmentGroup14Seg1);
 
     return true;
 }

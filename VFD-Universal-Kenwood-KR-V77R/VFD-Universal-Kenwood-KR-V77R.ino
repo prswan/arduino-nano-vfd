@@ -25,6 +25,7 @@
 #include "Main.h"
 
 #include "Controller.h"
+#include "Char7Seg.h"
 #include "Char14Seg.h"
 
 #include "KenwoodKRV77RPinout.h"
@@ -54,6 +55,9 @@ void setup() {
 
   controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
   controller.regionSubTypeMap[0].ichar = new Char14Seg();
+
+  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
+  controller.regionSubTypeMap[1].ichar = new Char7Seg();
 
   IVfdPinout *vfdPinout0 = new KenwoodKRV77RPinout();
   IVfdLayout *vfdLayout0 = new KenwoodKRV77RLayout();
@@ -92,7 +96,7 @@ void setup() {
   controller.stdOutRegionId = 0;
 
   controller.uutVfd = &controller.vfd[0][0]; // Kenwood as the UUT 
-  controller.uutRegionId = 0;
+  controller.uutRegionId = 1; // 14-Seg region
 }
 
 void loop() {

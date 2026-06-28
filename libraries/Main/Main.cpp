@@ -299,11 +299,16 @@ void Main(Controller *controller)
                                     continue;
                                 }
 
-                                // Print a whole row to help debug differing digit encodings
-                                for (UINT8 row = 0 ; row < 16 ; row++)
+                                // Print to the first 4 regions on those displays for debug
+                                for (UINT8 region = 0 ; region < 4 ; region++)
                                 {
-                                    character->print(iVfd, controller->uutRegionId, row, ' ');
-                                    character->print(iVfd, controller->uutRegionId, row, currentChar);
+                                    stdOut->printf(iVfd, region, "\r");
+
+                                    // Print a whole row to help debug differing digit encodings
+                                    for (UINT8 row = 0 ; row < 16 ; row++)
+                                    {
+                                        stdOut->printf(iVfd, region, "%c", currentChar);
+                                    }
                                 }
                             }
                         }
