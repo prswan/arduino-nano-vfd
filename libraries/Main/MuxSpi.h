@@ -51,6 +51,9 @@ public:
         bool hi
     )
     {
+        // Wait for any pending SPI transfers to complete
+        while (!(SPSR & _BV(SPIF)));
+
         PORTB = (PORTB & ~0x01) | (hi ? 0x01 : 0x00);
     };
 
@@ -65,6 +68,14 @@ public:
     };
 
     //
+    // Set the SPI multiplexor port to use via SEL0,1,2.
+    // "port" is 0 to 7 for physical ports 1 to 8.
+    //
+    void setPort(
+        UINT8 port
+    );
+
+    //
     // Write "dataLenInBytes" amount of "data" out of the SPI port.
     //
     void writeData(
@@ -72,26 +83,18 @@ public:
         const UINT8 *data,
         UINT8 dataLenInBytes
     );
-/*
-    //
-    // Read "dataLenInBytes" amount of "data" from the SPI port.
-    //
-    void readData(
-        UINT8  port,
-        UINT8 *data,
-        UINT8  dataLenInBytes
-    );
-*/
 
-private:
+    // Write a byte of data to the current port
+    void writeByteAsync(
+        UINT8 data
+    )
+    {
+        // Wait for any pending transfer to finish
+        while (!(SPSR & _BV(SPIF)));
 
-    //
-    // Set the SPI multiplexor port to use via SEL0,1,2.
-    // "port" is 0 to 7 for physical ports 1 to 8.
-    //
-    void setPort(
-        UINT8 port
-    );
+        // Output the next byte
+        SPDR = data;
+    };
 
 private:
 

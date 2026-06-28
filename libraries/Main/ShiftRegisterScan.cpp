@@ -65,8 +65,7 @@ static ShiftRegisterScan *s_thisScan = NULL;
    2) Set the grid scan time between 450uS and perceptable flicker (900uS)
    3) Interleave the SPI transfers with bitmap composition, maybe up to 28uS per display to save.
       - Send a byte, calculate the next byte, wait for transfer, send the next byte.
-      ** OR **
-      - Batch per display, calculate register d+1 interleaved with the transfer of register d.
+      - The prototype for this reduced scan time for 2 registers of 3 displays from 200uS to 128uS.
 */
 
 ShiftRegisterScan::ShiftRegisterScan(
@@ -76,28 +75,7 @@ ShiftRegisterScan::ShiftRegisterScan(
                         m_bitMap(bitMap),
                         m_numBitMaps(numBitMaps)
 {
-    m_maxRegisterLenInBytes = 0;
     m_scanTimeInUs = 0;
-
-    // Find the largest register
-    for (UINT8 i = 0 ; i < numBitMaps ; i++)
-    {
-        ShiftRegisterBitMap *thisBitMap = bitMap[i];
-
-        if (thisBitMap == NULL)
-        {
-            continue;
-        }
-
-        UINT8 curRegLen = thisBitMap->getRegisterLenInBytes();
-
-        if (curRegLen > m_maxRegisterLenInBytes)
-        {
-            m_maxRegisterLenInBytes = curRegLen;
-        }
-    }
-
-    m_register = malloc(m_maxRegisterLenInBytes);
 
     muxSpi->setBlank(true);
     muxSpi->setStrobe(false);
@@ -133,14 +111,6 @@ ShiftRegisterScan::ShiftRegisterScan(
     }
 };
 
-
-ShiftRegisterScan::~ShiftRegisterScan()
-{
-    free(m_register);
-    m_register = NULL;
-};
-
-
 void ShiftRegisterScan::scan()
 {
     static UINT32 s_entryScanTimeStampInUs;
@@ -170,13 +140,7 @@ void ShiftRegisterScan::scan()
             continue;
         }
 
-        UINT8 curRegLen = thisBitMap->getRegisterLenInBytes();
-
-        thisBitMap->getCurrentRegisterData(m_register, curRegLen);
-
-        m_muxSpi->writeData(i, m_register, curRegLen);
-
-        thisBitMap->incGrids();
+        thisBitMap->writeCurrentRegisterData(m_muxSpi, i);
     }
 
     if (m_scanTimeInUs == 0)
@@ -184,7 +148,6 @@ void ShiftRegisterScan::scan()
         m_scanTimeInUs = micros() - s_entryScanTimeStampInUs;
     }
 };
-
 
 ISR(TIMER1_COMPA_vect)
 {

@@ -57,7 +57,6 @@ MuxSpi::MuxSpi(UINT8 bitOrder)
 
     // Small optimization to cache the port setting and skip NO-OP
     m_currentPort = 0xFF;
-    setPort(0);
 
     //
     // Mode 3: CLK Rising Edge data latch, CLK idle state high.
@@ -65,6 +64,9 @@ MuxSpi::MuxSpi(UINT8 bitOrder)
     // port mux is changed because the port mux is idle high.
     //
     SPIClass::beginTransaction(SPISettings(2000000, bitOrder, SPI_MODE3));
+
+    // Initiate 1 transaction to set the initial SPIF (done) flag
+    SPDR = 0;
 };
 
 MuxSpi::~MuxSpi()
@@ -80,6 +82,9 @@ void MuxSpi::setPort(UINT8 port)
     }
 
     m_currentPort = port & 0x7;
+
+    // Wait for any pending SPI transfers to complete
+    while (!(SPSR & _BV(SPIF)));
 
     // SEL[0..2] === [PD5..PD7]
     PORTD = (PORTD & ~(0x07 << 5)) | (m_currentPort << 5);

@@ -115,18 +115,14 @@ ShiftRegisterBitMap::~ShiftRegisterBitMap()
     m_bitMap = NULL;
 };
 
-
-bool ShiftRegisterBitMap::getCurrentRegisterData(
-    UINT8 *data, 
-    UINT8 dataLenInBytes)
+void ShiftRegisterBitMap::writeCurrentRegisterData(
+    MuxSpi *muxSpi,
+    UINT8   port)
 {
-    if (dataLenInBytes != m_registerLenInBytes)
-    {
-        return false;
-    }
+    UINT8  reg[ARRAYSIZE(m_display)];
+    UINT8* mask[ARRAYSIZE(m_display)];
 
-    memset(data, 0, dataLenInBytes);
-
+    // Cache the grid information
     for (int d = 0 ; d < ARRAYSIZE(m_display) ; d++)
     {
         if (m_display[d] == NULL)
@@ -134,24 +130,36 @@ bool ShiftRegisterBitMap::getCurrentRegisterData(
             continue;
         }
 
-        UINT8 reg = m_display[d]->getScanCurrentGrid() * m_registerLenInBytes;
-        UINT8 *mask = m_display[d]->getScanRegisterMask();
-
-        for (UINT8 byte = 0 ; byte < m_registerLenInBytes ; byte++)
-        {
-            UINT8 maskByte = pgm_read_byte_near(&mask[byte]);
-
-            UINT8 mapByte = reg + byte;
-
-            data[byte] |= (m_bitMap[mapByte] & maskByte); 
-        }
+        reg[d]  = m_display[d]->getScanCurrentGrid() * m_registerLenInBytes;
+        mask[d] = m_display[d]->getScanRegisterMask();
     }
 
-    return true;
-};
+    // Set the port
+    muxSpi->setPort(port);
 
-void ShiftRegisterBitMap::incGrids()
-{
+    // Compose the register and transfer byte-by-byte
+    for (UINT8 byte = 0 ; byte < m_registerLenInBytes ; byte++)
+    {
+        UINT8 data = 0;
+
+        for (int d = 0 ; d < ARRAYSIZE(m_display) ; d++)
+        {
+            if (m_display[d] == NULL)
+            {
+                continue;
+            }
+
+            UINT8 maskByte = pgm_read_byte_near(&(mask[d])[byte]);
+
+            UINT8 mapByte = reg[d] + byte;
+
+            data |= (m_bitMap[mapByte] & maskByte);
+        }
+
+        muxSpi->writeByteAsync(data);
+    }
+
+    // After all the data is is written, increment the grid pointers for the displays
     for (int d = 0 ; d < ARRAYSIZE(m_display) ; d++)
     {
         if (m_display[d] == NULL)

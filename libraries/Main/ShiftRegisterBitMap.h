@@ -27,6 +27,7 @@
 
 #include "Arduino.h"
 #include "Types.h"
+#include "MuxSpi.h"
 #include "ShiftRegisterDisplay.h"
 
 //
@@ -60,26 +61,21 @@ public:
     };
 
     //
-    // Get the current register data to display out in the scan.
+    // Write out to SPI the current register data to display out in the scan.
     // This is an aggregate for multiple displays as follows:
     //
-    // - "data" buffer cleared
-    // - Register content for Display 0 Grid x read & masked into "data"
-    // - Register content for Display 1 Grid y read & masked into "data"
-    // - true returned.
+    // - data byte cleared
+    // - Register content for Display 0 Grid x read & masked into data
+    // - Register content for Display 1 Grid y read & masked into data
+    // - Byte is written to SPI
     //
     // false (failure) is returned if the supplied data buffer doesn't
     // match the registerLenInBytes.
     //
-    bool getCurrentRegisterData(
-        UINT8 *data, 
-        UINT8 dataLenInBytes
+    void writeCurrentRegisterData(
+        MuxSpi *muxSpi,
+        UINT8   port
     );
-
-    //
-    // Increment the grid pointers to the next register data line.
-    //
-    void incGrids();
 
 private:
 

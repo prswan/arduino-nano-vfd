@@ -46,16 +46,14 @@ public:
     // Unusued ports have a NULL bitMap entry.
     //
     ShiftRegisterScan(
-        MuxSpi* muxSpi,
+        MuxSpi*               muxSpi,
         ShiftRegisterBitMap** bitMap,
-        UINT8 numBitMaps);
+        UINT8                 numBitMaps);
 
-    ~ShiftRegisterScan();
+    ~ShiftRegisterScan() {};
 
     //
     // Update the display with the bitmap content.
-    // scan should be spin-called and will return immediately if no update
-    // is needed.
     //
     // This is called by the timer ISR.
     //
@@ -72,15 +70,11 @@ public:
     };
 
 private:
-    MuxSpi* m_muxSpi;
-    
+    MuxSpi*               m_muxSpi;
     ShiftRegisterBitMap** m_bitMap;
-    UINT8 m_numBitMaps;
+    UINT8                 m_numBitMaps;
 
-    UINT8 m_maxRegisterLenInBytes;
-    UINT8 *m_register;
-
-    UINT32 m_scanTimeInUs;
+    UINT32                m_scanTimeInUs;
 };
 
 #endif
