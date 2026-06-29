@@ -31,12 +31,15 @@ This was a front panel purchase off eBay so no live data, however the service ma
  - VFIL: 7.40 VAC
  - Vbb: -30.9 VDC
 
-Attached to the Controller PCB the display looks good:
- - VFIL: 5.44 VAC
- - Vbb: +36.5 VDC
- 2 x 1R Fil resistors yield VFIL at VFD of 5.32 VAC. 
+Onkyo HT-R340 NPT-1516D Transformer
+-----------------------------------
+ - VFIL @ Controller PCB Input  : 5.66 VAC
+ - VFIL @ Controller PL7 2x 0   : 5.59 VAC
+ - VFIL @ VFD            2x 1R  : 5.30 VAC
+ Display looks borderline OK.
+ Suspect with 4.25 VAC transformer it would be poor.
 
-*/
+ */
 
 static const UINT8 s_manufacturer[] PROGMEM = "KENWOOD";
 static const UINT8 s_model[]        PROGMEM = "KR-V77R";
