@@ -36,7 +36,14 @@ Attached to the Controller PCB the display is a little dim and uneven:
  - Vbb: +36.1 VDC
  2 x 10R Fil resistors yield VFIL at VFD of 2.57 VAC. 
 
- TODO: VFIL at VFD too low, to replace RFIL with 2 x 2.2R for improved display.
+ VFIL at VFD too low, replaced RFIL with 2x 2.2R for improved display.
+
+Onkyo HT-R340 NPT-1516D Transformer
+-----------------------------------
+ - VFIL @ Controller PCB Input  : 5.66 VAC
+ - VFIL @ Controller PL7 2x 3R9 : 4.00 VAC
+ - VFIL @ VFD            2x 2R2 : 3.47 VAC
+ Display looks good.
 */
 
 static const UINT8 s_manufacturer[] PROGMEM = "PANASONIC";

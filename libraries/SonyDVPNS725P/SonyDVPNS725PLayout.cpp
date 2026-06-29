@@ -36,8 +36,15 @@ Attached to the Controller PCB the display is OK:
  - Vbb: +36.1 VDC
  2 x 10R Fil resistors yield VFIL at VFD of 1.79 VAC. 
 
- TODO: VFIL at VFD slightly too low, to replace RFIL with 2 x 6.8R.
-*/
+ VFIL at VFD slightly too low, replaced RFIL with 2x 6.8R.
+
+Onkyo HT-R340 NPT-1516D Transformer
+-----------------------------------
+ - VFIL @ Controller PCB Input  : 5.66 VAC
+ - VFIL @ Controller PL7 2x 3R9 : 4.00 VAC
+ - VFIL @ VFD            2x 6R8 : 2.51 VAC
+ Display looks good.
+ */
 
 static const UINT8 s_manufacturer[] PROGMEM = "SONY";
 static const UINT8 s_model[]        PROGMEM = "DVP-NS725P";
