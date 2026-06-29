@@ -125,10 +125,10 @@ static const SegmentGroup7Seg s_segmentGroup7Seg2[] PROGMEM =
 //
 static const SegmentGroupBar s_segmentGroupBar0[] PROGMEM =
 {
-// vertical, reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9}}
-    { true,    false,       true,   12, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
-    { true,    false,       true,   16, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
-    { true,    false,       true,   13, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+//    horz., vert., reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9}}
+    { false, true,  false,   true,         12, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+    { false, true,  false,   true,         16, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+    { false, true,  false,   true,         13, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
 };
 
 //
@@ -137,9 +137,9 @@ static const SegmentGroupBar s_segmentGroupBar0[] PROGMEM =
 //
 static const SegmentGroupBar s_segmentGroupBar1[] PROGMEM =
 {
-// vertical, reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9}}
-    { true,    false,      false,   15, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
-    { true,    false,      false,   14, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+//    horz., vert., reverse,  seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9}}
+    { false, true,  false,    false,        15, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
+    { false, true,  false,    false,        14, { 1,  2,  3,  4,  5,  6,  7,  8,  9}},
 };
 
 void KossWMS1100Layout::getProperties(

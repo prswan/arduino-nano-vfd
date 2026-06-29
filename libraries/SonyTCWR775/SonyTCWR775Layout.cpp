@@ -115,9 +115,9 @@ static const SegmentGroup7Seg s_segmentGroup7Seg1[] PROGMEM =
 //
 static const SegmentGroupBar s_segmentGroupBar[] PROGMEM =
 {
-// vertical, reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16}}
-    { false,   false,       true,    7, { 1,  2,  6,  7,  3,  5,  4,  8,  9, 10, 14, 15, 11, 13, 12, 16}},
-    { false,   false,       true,    8, { 1,  2,  6,  7,  3,  5,  4,  8,  9, 10, 14, 15, 11, 13, 12, 16}},
+//    horz., vert.,   reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16}}
+    { true,  false,   false,   true,          7, { 1,  2,  6,  7,  3,  5,  4,  8,  9, 10, 14, 15, 11, 13, 12, 16}},
+    { true,  false,   false,   true,          8, { 1,  2,  6,  7,  3,  5,  4,  8,  9, 10, 14, 15, 11, 13, 12, 16}},
 };
 
 void SonyTCWR775Layout::getProperties(

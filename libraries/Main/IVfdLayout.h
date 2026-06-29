@@ -187,9 +187,16 @@ typedef struct _SegmentGroup14Seg
 // - None yet owned with >16 segments 
 //   (seen photos of some that look longer, though)
 //
+// "horizontal"
+//  - true  -  the bar runs horizontally.
+//  - false -  the bar runs vertically.
+//
 // "vertical" 
 //  - true  -  the bar runs vertically.
 //  - false -  the bar runs horizontally.
+//
+// If both "horizontal" and "vertical" are true, this is a 45 degree triangle style
+// bar graph sometimes used for volume control (e.g. Kenwood KR-V77R)
 //
 // "reverse"
 //  - true  - a horizontal bar runs right to left.
@@ -205,6 +212,7 @@ typedef struct _SegmentGroup14Seg
 //
 typedef struct _SegmentGroupBar
 {
+    bool horizontal;
     bool vertical;
     bool reverse;
     bool seg1Symbol;

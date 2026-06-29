@@ -55,6 +55,8 @@ static const Region s_region[] PROGMEM =
 {
     // type,          subType,                id, len
     {RegionTypeChar,  RegionSubTypeChar7Seg,   0,   3},
+    {RegionTypeBar ,  0,                       0,  11},
+    {RegionTypeBar ,  0,                       1,  11},
     {RegionTypeChar,  RegionSubTypeChar14Seg,  1,   5},
     {RegionTypeChar,  RegionSubTypeChar7Seg,   2,   2},
 };
@@ -77,6 +79,24 @@ static const SegmentGroup7Seg s_segmentGroup7Seg0[] PROGMEM =
     { 5, {29, 30, 31, 32, 33, 34, 35}},
     { 4, {29, 30, 31, 32, 33, 34, 35}},
     { 3, {29, 30, 31, 32, 33, 34, 35}},
+};
+
+//
+// 1x 11-segment 45 degree filled graph bar
+//
+static const SegmentGroupBar s_segmentGroupBar0[] PROGMEM =
+{
+//    horz., vert.,   reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11}}
+    { true,  true,    false,   false,         2, {21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31}},
+};
+
+//
+// 1x 11-segment vertical bar
+//
+static const SegmentGroupBar s_segmentGroupBar1[] PROGMEM =
+{
+//    horz., vert.,   reverse, seg1Symbol, pinG, { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11}}
+    { false, true,    false,   false,         1, {21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31}},
 };
 
 //
@@ -184,3 +204,32 @@ bool KenwoodKRV77RLayout::getSegmentGroup14Seg(
     return true;
 }
 
+bool KenwoodKRV77RLayout::getSegmentGroupBar(
+    UINT8 regionId,
+    const SegmentGroupBar **p_segGroup,
+    UINT8 *numEntries)
+{
+    switch (regionId)
+    {
+        case 0:
+        {
+            *p_segGroup = s_segmentGroupBar0;
+            *numEntries = ARRAYSIZE(s_segmentGroupBar0);
+            break;
+        }
+
+        case 1:
+        {
+            *p_segGroup = s_segmentGroupBar1;
+            *numEntries = ARRAYSIZE(s_segmentGroupBar1);
+            break;
+        }
+
+        default:
+        {
+            return false;
+        }
+    }
+
+    return true;
+}

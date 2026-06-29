@@ -59,6 +59,11 @@ public:
         UINT8 regionId,
         const SegmentGroup14Seg **p_segGroup,
         UINT8 *numEntries);
-};
+
+    bool getSegmentGroupBar(
+        UINT8 regionId,
+        const SegmentGroupBar **p_segGroup,
+        UINT8 *numEntries);
+    };
 
 #endif
