@@ -264,7 +264,7 @@ typedef struct _SegmentGroupNumberList
             UINT8 pinS;
         } list[20];
 
-    } grid[3];
+    } grid[5];
 
 } SegmentGroupNumberList;
 

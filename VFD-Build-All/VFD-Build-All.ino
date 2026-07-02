@@ -50,6 +50,9 @@
 #include "KenwoodKRV77RPinout.h"
 #include "KenwoodKRV77RLayout.h"
 
+#include "SonyCDPC305Pinout.h"
+#include "SonyCDPC305Layout.h"
+
 // Integrated Driver IC Front Panel system
 #include "PT631xDriverIC.h"
 #include "Timer.h"
@@ -101,6 +104,9 @@ void setup() {
   IVfdPinout *vfdPinoutU4 = new KenwoodKRV77RPinout();
   IVfdLayout *vfdLayoutU4 = new KenwoodKRV77RLayout();
 
+  IVfdPinout *vfdPinoutU5 = new SonyCDPC305Pinout();
+  IVfdLayout *vfdLayoutU5 = new SonyCDPC305Layout();
+
   IVfdPinout *vfdPinoutF0 = new SamsungBDP1590Pinout();
   IVfdLayout *vfdLayoutF0 = new SamsungBDP1590Layout();
 
@@ -114,6 +120,7 @@ void setup() {
   ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinoutU2, NULL);
   ShiftRegisterBitMap *bitMap2 = new ShiftRegisterBitMap(vfdPinoutU3, NULL);
   ShiftRegisterBitMap *bitMap3 = new ShiftRegisterBitMap(vfdPinoutU4, NULL);
+  ShiftRegisterBitMap *bitMap4 = new ShiftRegisterBitMap(vfdPinoutU5, NULL);
   
   controller.vfd[0][0].layout  = vfdLayoutU0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
@@ -130,12 +137,16 @@ void setup() {
   controller.vfd[3][0].layout  = vfdLayoutU4;
   controller.vfd[3][0].display = bitMap3->getDisplay(0);
 
+  controller.vfd[4][0].layout  = vfdLayoutU5;
+  controller.vfd[4][0].display = bitMap4->getDisplay(0);
+
   controller.isShiftRegister = true;
 
   controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
   controller.sys.sr.bitMap[1] = bitMap1; // Port Address 1, PL2
   controller.sys.sr.bitMap[2] = bitMap2; // Port Address 2, PL3
   controller.sys.sr.bitMap[3] = bitMap3; // Port Address 3, PL4
+  controller.sys.sr.bitMap[4] = bitMap4; // Port Address 4, PL5
 
   controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
                                                  &(controller.sys.sr.bitMap[0]), 

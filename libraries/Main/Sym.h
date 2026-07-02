@@ -170,6 +170,9 @@ typedef enum {
     SymText_SCAN,
     SymText_Sub_dot_W,
 
+    // Sony CDP-C305 Additions
+    SymText_FADE,
+
     //
     SymEnd
 } Sym;
