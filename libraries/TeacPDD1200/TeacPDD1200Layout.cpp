@@ -61,9 +61,10 @@ static const Properties s_properties PROGMEM =
 //
 static const Region s_region[] PROGMEM =
 {
-    // type,          subType,                 id, len
-    {RegionTypeChar,  RegionSubTypeChar7Seg,    0,   3},
-    {RegionTypeChar,  RegionSubTypeChar7Seg,    1,   4}
+    // type,                subType,                 id, len
+    {RegionTypeChar,        RegionSubTypeChar7Seg,    0,   3},
+    {RegionTypeChar,        RegionSubTypeChar7Seg,    1,   4},
+    {RegionTypeNumberList,  0,                        0,   1}
 };
 
 // TODO: Finish the symbol encoding.
