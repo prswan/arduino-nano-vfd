@@ -65,7 +65,12 @@ static ShiftRegisterScan *s_thisScan = NULL;
    2) Set the grid scan time between 450uS and perceptable flicker (900uS)
    3) Interleave the SPI transfers with bitmap composition, maybe up to 28uS per display to save.
       - Send a byte, calculate the next byte, wait for transfer, send the next byte.
-      - The prototype for this reduced scan time for 2 registers of 3 displays from 200uS to 128uS.
+      - Implemented, this reduced scan time for 3 displays on 2 shift registers from 200uS to 128uS.
+
+Baseline 3 displays on 2 shift registers (64-bit & 96-bit)     : 128uS
+Adding a 4th display (CDP-C305) on a 3rd 96-bit shift register : 184uS
+Adding a 5th display (FC-40)    on a 3rd 96-bit shift register : 196uS
+
 */
 
 ShiftRegisterScan::ShiftRegisterScan(
