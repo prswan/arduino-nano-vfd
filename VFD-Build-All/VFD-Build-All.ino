@@ -53,6 +53,9 @@
 #include "SonyCDPC305Pinout.h"
 #include "SonyCDPC305Layout.h"
 
+#include "PhilipsFC40Pinout.h"
+#include "PhilipsFC40Layout.h"
+
 // Integrated Driver IC Front Panel system
 #include "PT631xDriverIC.h"
 #include "Timer.h"
@@ -107,6 +110,9 @@ void setup() {
   IVfdPinout *vfdPinoutU5 = new SonyCDPC305Pinout();
   IVfdLayout *vfdLayoutU5 = new SonyCDPC305Layout();
 
+  IVfdPinout *vfdPinoutU6 = new PhilipsFC40Pinout();
+  IVfdLayout *vfdLayoutU6 = new PhilipsFC40Layout();
+
   IVfdPinout *vfdPinoutF0 = new SamsungBDP1590Pinout();
   IVfdLayout *vfdLayoutF0 = new SamsungBDP1590Layout();
 
@@ -120,7 +126,7 @@ void setup() {
   ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinoutU2, NULL);
   ShiftRegisterBitMap *bitMap2 = new ShiftRegisterBitMap(vfdPinoutU3, NULL);
   ShiftRegisterBitMap *bitMap3 = new ShiftRegisterBitMap(vfdPinoutU4, NULL);
-  ShiftRegisterBitMap *bitMap4 = new ShiftRegisterBitMap(vfdPinoutU5, NULL);
+  ShiftRegisterBitMap *bitMap4 = new ShiftRegisterBitMap(vfdPinoutU5, vfdPinoutU6);
   
   controller.vfd[0][0].layout  = vfdLayoutU0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
@@ -139,6 +145,9 @@ void setup() {
 
   controller.vfd[4][0].layout  = vfdLayoutU5;
   controller.vfd[4][0].display = bitMap4->getDisplay(0);
+
+  controller.vfd[4][1].layout  = vfdLayoutU6;
+  controller.vfd[4][1].display = bitMap4->getDisplay(1);
 
   controller.isShiftRegister = true;
 
