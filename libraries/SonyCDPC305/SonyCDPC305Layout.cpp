@@ -24,7 +24,7 @@
 //
 #include "SonyCDPC305Layout.h"
 
-/* TODO: **************** TO BE UPDATED ********************
+/*
 Data
 ----
 I can't remember why there were no live measurements, possibly the player died on the bench.
@@ -34,18 +34,12 @@ From the service manual:
 
 Onkyo HT-R340 NPT-1516D Transformer
 -----------------------------------
- - VFIL @ Controller PCB Input  : 5.48 VAC
- - VFIL @ Controller PL7 2x 2R2 : 3.99 VAC
- - VFIL @ VFD            2x 3R9 : 2.52 VAC
+ - VFIL @ Controller PCB Input  : 5.45
+ - VFIL @ Controller PL5 2x 2R2 : 3.80
+ - VFIL @ VFD            2x 1R  : 3.25
 
- Display is a bit dim.
- FC-40 FIL with 2R2 is 3.30V and its PIN ON test looks bright.
-
- Hmm, RFIL seems to need to be 2R2.
-
- Perf: 184uS
-
- */
+ Display seems a little on the dim side.
+*/
 
 static const UINT8 s_manufacturer[] PROGMEM = "SONY";
 static const UINT8 s_model[]        PROGMEM = "CDP-C305";
