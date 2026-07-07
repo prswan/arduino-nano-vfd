@@ -22,6 +22,11 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
+
+//
+// Development configuration for Controller V1.00 Serial No.: CTR20260701
+//
+
 #include "Main.h"
 
 #include "Controller.h"
@@ -36,6 +41,12 @@
 
 #include "SonyDVPNS725PPinout.h"
 #include "SonyDVPNS725PLayout.h"
+
+#include "SonyCDPC305Pinout.h"
+#include "SonyCDPC305Layout.h"
+
+#include "PhilipsFC40Pinout.h"
+#include "PhilipsFC40Layout.h"
 
 // Controller Digital pin mappings
 #define CONTROLLER_PIN_NEXT   (2)
@@ -68,11 +79,20 @@ void setup() {
   IVfdPinout *vfdPinout2 = new SonyDVPNS725PPinout();
   IVfdLayout *vfdLayout2 = new SonyDVPNS725PLayout();
 
+  IVfdPinout *vfdPinout3 = new SonyCDPC305Pinout();
+  IVfdLayout *vfdLayout3 = new SonyCDPC305Layout();
+
+  IVfdPinout *vfdPinout4 = new PhilipsFC40Pinout();
+  IVfdLayout *vfdLayout4 = new PhilipsFC40Layout();
+
   ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, 
                                                          NULL);
 
   ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout1, 
                                                          vfdPinout2);
+
+  ShiftRegisterBitMap *bitMap2 = new ShiftRegisterBitMap(vfdPinout3,
+                                                         vfdPinout4);
 
   controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
@@ -83,10 +103,17 @@ void setup() {
   controller.vfd[1][1].layout  = vfdLayout2;
   controller.vfd[1][1].display = bitMap1->getDisplay(1);
 
+  controller.vfd[2][0].layout  = vfdLayout3;
+  controller.vfd[2][0].display = bitMap2->getDisplay(0);
+
+  controller.vfd[2][1].layout  = vfdLayout4;
+  controller.vfd[2][1].display = bitMap2->getDisplay(1);
+
   controller.isShiftRegister = true;
 
   controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
   controller.sys.sr.bitMap[7] = bitMap1; // Port Address 7, PL8
+  controller.sys.sr.bitMap[4] = bitMap2; // Port Address 4, PL5
 
   controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
                                                  &(controller.sys.sr.bitMap[0]), 
@@ -95,8 +122,8 @@ void setup() {
   controller.stdOutVfd = &controller.vfd[1][1]; // Sony for StdOut
   controller.stdOutRegionId = 0;
 
-  controller.uutVfd = &controller.vfd[0][0]; // Kenwood as the UUT 
-  controller.uutRegionId = 1; // 14-Seg region
+  controller.uutVfd = &controller.vfd[2][1]; // FC-40 as the UUT
+  controller.uutRegionId = 1; // 4x 7-seg region
 }
 
 void loop() {
