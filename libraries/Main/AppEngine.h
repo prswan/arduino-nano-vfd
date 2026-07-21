@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025, Paul R. Swan
+// Copyright (c) 2026, Paul R. Swan
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -22,32 +22,57 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef IApp_h
-#define IApp_h
+#ifndef AppEngine_h
+#define AppEngine_h
 
-#include "Arduino.h"
-#include "Types.h"
-
+#include "Controller.h"
 
 //
-// Interface for the data container class holding the characteristics of the VFD.
+// This is used as the call made based on the timer tick.
+// Background
 //
-class IApp
-{
-    public:
+typedef void (*runCallback)(Controller *controller);
 
-        //
-        // Run the app. 
-        // firstSelect is true to on the first state transition
-        // to indicate the first call of this app.
-        // 
-        // run() is intended to be called in between display scan
-        // and should return immediately if there is nothing to do.
-        //
-        virtual void run(
-            bool firstSelect
-        ) = 0;
-};
+// No callback.
+#define NO_RUN_CALLBACK ((runCallback) (NULL))
 
+//
+// This is used as the call made based on engine state 
+// transitions in response to buttons.
+// Foreground
+//
+typedef void (*onCallback)(Controller *controller);
+
+// No callback.
+#define NO_ON_CALLBACK ((onCallback) (NULL))
+
+//
+// Entry for the AppEngine to interact with applications
+// and utilities comprising one background continuous run
+// callback tied to the coarse timer and various foreground
+// action callbacks from the AppEngine state button inputs.
+//
+// TODO: Needs to move to PROGMEM
+//
+// After power on, for code simplicity, the first entry 0 is skipped
+// and 1+ is selected.
+//
+// The termination of an array is description[0] == 0
+//
+typedef struct _AppEngineMenu {
+
+    UINT8            description[8]; // 7 characters + null
+    runCallback      run;
+    onCallback       onSelect;
+    onCallback       onDeSelect;
+    onCallback       onNextShortPress;
+    onCallback       onNextLongPress;
+
+} AppEngineMenu;
+
+//
+// Does not return
+//
+void AppEngine(Controller *controller, AppEngineMenu *menu);
 
 #endif

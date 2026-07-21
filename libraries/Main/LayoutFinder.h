@@ -25,10 +25,7 @@
 #ifndef LayoutFinder_h
 #define LayoutFinder_h
 
-#include "IApp.h"
-#include "Buttons.h"
-#include "ShiftRegisterBitMap.h"
-#include "ICharacter.h"
+#include "Controller.h"
 
 //
 // Utility app that can be used to find the pin and segment pins, and
@@ -40,56 +37,30 @@
 // Inputs:
 //
 //  Next (Short Press) - Increment Grid or Segment
-//             After the last grid or segment pin the grid pin is reset back to 1
-//  Next (Long Press) - Switch between Grid and Segement increments
-//             
-//  Select   - 1) Clear Display
-//                - Clear the display bitmap back to all OFF.
-//             2) Enable All Segments
-//                - Set all the segement pins in every grid scan to ON.
-//             3) Test All
-//                - Set all pins ON (effectively no scan, full drive)
+//                       After the last grid or segment pin the grid pin is reset back to 1
+//  Next (Long Press)  - Switch between Grid and Segement increments
 //
-class LayoutFinder : public IApp
+class LayoutFinder
 {
     public:
 
-        LayoutFinder(
-            Buttons *buttons,
-            Vfd *stdOutVfd,          // Optional, use NULL if no character print available, blind use.
-            UINT8 stdOutRegionId,
-            ICharacter *stdOutIChar, // Optional, use NULL if no character print available, blind use.
-            Vfd *uutVfd              // The Vfd to Layout Find.
+        static void onSelect(
+            Controller* controller
         );
 
-        ~LayoutFinder() {};
-
-        virtual void run(
-            bool firstSelect
+        static void onNextShortPress(
+            Controller* controller
         );
 
-    private:
-
-        //
-        // Small utility to print the 2 digit decimal valus of the current grid and segment pins
-        // to row col 0,1 and col 2,3.
-        //
-        void printGridSeg(
+        static void onNextLongPress(
+            Controller* controller
         );
 
     private:
 
-        Buttons    *m_buttons;
-        Vfd        *m_stdOutVfd;
-        UINT8       m_stdOutRegionId;
-        ICharacter *m_stdOutIChar;
-        
-        Vfd        *m_uutVfd;
-
-        bool m_gridSelected;
-
-        UINT8 m_grid;
-        UINT8 m_seg;
-};
+        static void next(
+            Controller* controller
+        );
+ };
 
 #endif

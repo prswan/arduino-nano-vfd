@@ -49,6 +49,10 @@ class Buttons
         bool isSelectActive()
         { return isActive(&m_stateSelect); };
 
+        // Live state of the button pin
+        bool isNextActive()
+        { return isActive(&m_stateNext); };
+
         bool isSelectShortPressed()
         { return isShortPressed(&m_stateSelect); };
 

@@ -24,96 +24,88 @@
 //
 #include "LayoutFinder.h"
 
-LayoutFinder::LayoutFinder(
-    Buttons *buttons,
-    Vfd *stdOutVfd,
-    UINT8 stdOutRegionId,
-    ICharacter *stdOutIChar,
-    Vfd *uutVfd) : m_buttons(buttons),
-                   m_stdOutVfd(stdOutVfd),
-                   m_stdOutRegionId(stdOutRegionId),
-                   m_stdOutIChar(stdOutIChar),
-                   m_uutVfd(uutVfd)
-{
-    m_gridSelected = true;
+// Grid or Segment selected for increment
+static bool s_gridSelected;
 
-    m_grid = 1;
-    m_seg = 1;
-};
+// Current grid number
+static UINT8 s_grid;
 
-void LayoutFinder::printGridSeg()
-{
-    if (m_stdOutIChar == NULL)
-    {
-        return;
-    }
+// Current segment number
+static UINT8 s_seg;
 
-    m_stdOutIChar->print(m_stdOutVfd, m_stdOutRegionId, 0, '0' + (m_grid / 10));
-    m_stdOutIChar->print(m_stdOutVfd, m_stdOutRegionId, 1, '0' + (m_grid % 10));
-    m_stdOutIChar->print(m_stdOutVfd, m_stdOutRegionId, 2, '0' + (m_seg / 10));
-    m_stdOutIChar->print(m_stdOutVfd, m_stdOutRegionId, 3, '0' + (m_seg % 10));
-}
-
-void LayoutFinder::run(
-    bool firstSelect
+void LayoutFinder::onSelect(
+    Controller* controller
 )
 {
-    if (firstSelect)
-    {
-        m_gridSelected = true;
+    IDisplay* display = controller->uutVfd->display;
 
-        m_grid = 1;
-        m_seg = 1;
+    s_gridSelected = false;
 
-        m_uutVfd->display->clear();
+    s_grid = 1;
+    s_seg  = 1;
 
-        m_uutVfd->display->setSegment(m_grid, m_seg, true);
+    display->clear();
 
-        printGridSeg();
-    }
+    display->setSegment(s_grid, s_seg, true);
 
-    bool nextShortPress = m_buttons->isNextShortPressed();
-    bool nextLongPress  = m_buttons->isNextLongPressed();
-
-    if (nextLongPress)
-    {
-        if (m_gridSelected)
-        {
-            m_gridSelected = false;
-        }
-        else
-        {
-            m_gridSelected = true;
-        }
-    }
-
-    if (nextShortPress || nextLongPress)
-    {
-       m_uutVfd->display->setSegment(m_grid, m_seg, false);
-
-        if (m_gridSelected)
-        {
-            m_grid++;
-
-            if (!m_uutVfd->display->setSegment(m_grid, m_seg, true))
-            {
-                m_grid = 1;
-
-                m_uutVfd->display->setSegment(m_grid, m_seg, true);
-            }
-        }
-        else
-        {
-            m_seg++;
-
-            if (!m_uutVfd->display->setSegment(m_grid, m_seg, true))
-            {
-                m_seg = 1;
-
-                m_uutVfd->display->setSegment(m_grid, m_seg, true);
-            }
-        }
-
-        printGridSeg();
-    }
+    controller->stdOut->printf("\f%2.2d%2.2d", s_grid, s_seg);
 };
+
+void LayoutFinder::next(
+    Controller* controller
+)
+{
+    IDisplay* display = controller->uutVfd->display;
+
+    display->setSegment(s_grid, s_seg, false);
+
+    if (s_gridSelected)
+    {
+        s_grid++;
+
+        if (!display->setSegment(s_grid, s_seg, true))
+        {
+            s_grid = 1;
+
+            display->setSegment(s_grid, s_seg, true);
+        }
+    }
+    else
+    {
+        s_seg++;
+
+        if (!display->setSegment(s_grid, s_seg, true))
+        {
+            s_seg = 1;
+
+            display->setSegment(s_grid, s_seg, true);
+        }
+    }
+
+    controller->stdOut->printf("\r%2.2d%2.2d", s_grid, s_seg);
+};
+
+void LayoutFinder::onNextShortPress(
+    Controller* controller
+)
+{
+    next(controller);
+};
+
+void LayoutFinder::onNextLongPress(
+    Controller* controller
+)
+{
+    if (s_gridSelected)
+    {
+        s_gridSelected = false;
+    }
+    else
+    {
+        s_gridSelected = true;
+    }
+
+    next(controller);
+};
+
+

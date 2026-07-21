@@ -32,6 +32,7 @@
 #include "Bar.h"
 #include "NumberList.h"
 #include "Symbol.h"
+#include "AppEngine.h"
 
 //
 // I don't remember needing to use an external library in the ICT project for this.
@@ -70,6 +71,43 @@ Step 1
    - Repeat to identify more pins.
 */
 
+/*
+ - Cannot pass a direct pointer to a constructor so a creator stub is needed:
+   IApp* createLayoutFinderApp(Controller *controller) { return new LayoutFinderApp(controller); }
+   - The object should take care of it's own lifetime management w.r.t. background function support
+   - Engine calls "createLayoutFinderApp" on new select and delete on deslect?
+ - It's natural to make this an IApp class BUT each IApp oject will burn RAM with vtable pointers. 
+   - And because background is supported, they all need to remain in existance.
+ - Alternate option is a static function table in PROGMEM and let the app manage durable state. 
+   Many Apps won't have any state.
+   - In this case, create() and delete() are rolled into onSelect(), onDeSelect() and thus implied.
+   - run() will need to take care of it's own state and may be called before any select.
+     - Engine will call all the run() of all apps on every timer tick. Needs to be fast enough for visual effects.
+     - Can allow NULL to skip any unused.
+
+   - run()
+   - onSelect()
+   - onDeSelect()
+   - onNextShortPress()
+   - onNextLongPress()
+
+   Based on select description display 7 char "AppEngine" and StdOut 11 char. All PROGMEM like the ICT.
+   //1234567
+   {"LayFind", LayoutFinderRun, LayoutFinderOnSelect, LayoutFinderOnDeSelect, LayoutFinderOnNextShortPress, LayoutFinderOnNextLongPress }
+
+   What we have so far (should be 7-seg compat unique still for first letter or two): 
+   - "LAYFIND","SEG ON","PIN ON","PERF","ALPHA","BAR","SYM","NUMLIST","FREE"
+
+   At some point we'll need to define some sort of common display features for apps to use
+   e.g. 7 char select, 11 char stdout, 4 digit hex, 2-bar horizontal, 5-bar EQ, number list, 2 digit hex etc.
+*/
+
+static AppEngineMenu s_appEngineMenu[] =
+{
+//   "1234567"
+    {"LAYFIND", NULL, LayoutFinder::onSelect, NULL, LayoutFinder::onNextShortPress, LayoutFinder::onNextLongPress},
+    {0}
+};
 
 void Main(Controller *controller)
 {
@@ -91,18 +129,23 @@ void Main(Controller *controller)
     IDisplay *stdOutDisplay = controller->stdOutVfd->display;
     IDisplay *uutDisplay = controller->uutVfd->display;
 
-    // The LayoutFinder app
-    IApp *app = new LayoutFinder(
-        buttons,
-        controller->stdOutVfd,
-        controller->stdOutRegionId,
-        character,
-        controller->uutVfd);
-
     VfdStdOut *stdOut = new VfdStdOut(controller->regionSubTypeMap,
                                       ARRAYSIZE(controller->regionSubTypeMap),
                                       controller->stdOutVfd,
                                       controller->stdOutRegionId);
+
+    controller->stdOut = stdOut;
+
+    if (buttons->isNextActive())
+    {
+        if (controller->appEngineVfd == NULL)
+        {
+            controller->appEngineVfd      = controller->stdOutVfd;
+            controller->appEngineRegionId = controller->stdOutRegionId;
+        }
+
+        AppEngine(controller, s_appEngineMenu);
+    }
 
     UINT8 currentApp = 0;
     bool newApp = true;
@@ -114,11 +157,14 @@ void Main(Controller *controller)
         {
             switch (currentApp)
             {
-                // The App
+                // Moved to the AppEngine
                 case 0:
                 {
-                    app->run(newApp);
-                    break;
+                    if (newApp)
+                    {
+                        stdOut->printf("\f%s", "UNUSED");
+                        break;
+                    }
                 }
 
                 // Set all the Segment pins active maintaining Grid scan

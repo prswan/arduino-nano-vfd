@@ -119,11 +119,14 @@ void setup() {
                                                  &(controller.sys.sr.bitMap[0]), 
                                                  ARRAYSIZE(controller.sys.sr.bitMap));
 
-  controller.stdOutVfd = &controller.vfd[1][1]; // Sony for StdOut
+  controller.appEngineVfd = &controller.vfd[1][1]; // Sony for AppEngine menu
+  controller.appEngineRegionId = 0;
+
+  controller.stdOutVfd = &controller.vfd[1][0]; // Panasonic for StdOut
   controller.stdOutRegionId = 0;
 
-  controller.uutVfd = &controller.vfd[2][1]; // FC-40 as the UUT
-  controller.uutRegionId = 1; // 4x 7-seg region
+  controller.uutVfd = &controller.vfd[0][0]; // KR-V77R as the UUT
+  controller.uutRegionId = 0; // 5x 14-seg region
 }
 
 void loop() {

@@ -94,13 +94,19 @@ typedef struct _Controller
     // VfdStdOut for the character implementations.
     //
     RegionSubTypeCharMap regionSubTypeMap[2];
+    VfdStdOut* stdOut;
 
-    Vfd  *stdOutVfd;
-    UINT8 stdOutRegionId;
+    // AppEngine menu description output.
+    Vfd*   appEngineVfd;
+    UINT8  appEngineRegionId;
+
+    // StdOut for the Apps.
+    Vfd*   stdOutVfd;
+    UINT8  stdOutRegionId;
 
     // Unit Under Test VFD for bring-up and layout.
-    Vfd  *uutVfd;
-    UINT8 uutRegionId;
+    Vfd*   uutVfd;
+    UINT8  uutRegionId;
 
 } Controller;
 
