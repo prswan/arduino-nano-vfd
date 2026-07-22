@@ -85,6 +85,9 @@ void AppEngine(Controller *controller, AppEngineMenu *menu)
                           appEngineRegionId,
                           menu[currentMenuIndex].description);
 
+            // Clear StdOut ready for the new app
+            stdOut->printf("\f");
+
             menu[currentMenuIndex].onSelect(controller);
 
             firstPass = false;

@@ -33,6 +33,7 @@
 #include "NumberList.h"
 #include "Symbol.h"
 #include "AppEngine.h"
+#include "TestUtils.h"
 
 //
 // I don't remember needing to use an external library in the ICT project for this.
@@ -105,7 +106,10 @@ Step 1
 static AppEngineMenu s_appEngineMenu[] =
 {
 //   "1234567"
+    {"PIN ON ", NULL, PinOn::onSelect,        NULL, NULL                          , NULL},
     {"LAYFIND", NULL, LayoutFinder::onSelect, NULL, LayoutFinder::onNextShortPress, LayoutFinder::onNextLongPress},
+    {"SEG ON ", NULL, SegOn::onSelect,        NULL, NULL                          , NULL},
+    {"MANU   ", NULL, Manufacturer::onSelect, NULL, Manufacturer::onNextShortPress, NULL},
     {0}
 };
 
@@ -159,107 +163,14 @@ void Main(Controller *controller)
             {
                 // Moved to the AppEngine
                 case 0:
+                case 1:
+                case 2:
                 {
                     if (newApp)
                     {
                         stdOut->printf("\f%s", "UNUSED");
                         break;
                     }
-                }
-
-                // Set all the Segment pins active maintaining Grid scan
-                case 1:
-                {
-                    if (newApp)
-                    {
-                        if (uutDisplay != stdOutDisplay)
-                        {
-                            stdOut->printf("\f%s", "SEG ON");
-                        }
-
-                        uutDisplay->setAllSegmentsOn();
-                    }
-                    break;
-                }
-
-                // Set all the pins on, effectively no scan.
-                case 2:
-                {
-                    if (newApp)
-                    {
-                        uutDisplay->clear();
-
-                        // Only applicable to the Universal shift register version.
-                        if (controller->isShiftRegister)
-                        {
-                            if (uutDisplay != stdOutDisplay)
-                            {
-                                stdOut->printf("\f%s", "PIN ON");
-                            }
-
-                            //
-                            // Only applicable to the ShiftRegister implementation.
-                            // The integrated bit map driver IC's don't have pin control.
-                            //
-                            ShiftRegisterDisplay *shiftRegisterDisplay = (ShiftRegisterDisplay *) uutDisplay;
-
-                            shiftRegisterDisplay->setAllPins(true);
-                        }
-                        else
-                        {
-                            stdOut->printf("\f%s", "0123456789");
-
-                            if (uutDisplay != stdOutDisplay)
-                            {
-                                stdOut->printf(controller->uutVfd,
-                                               controller->uutRegionId,
-                                               "\f%s", "0123456789");
-                            }
-                        }
-                    }
-
-                    if (buttons->isNextShortPressed())
-                    {
-                        static bool manu = true;
-                        const UINT8* p_string;
-
-                        uutDisplay->clear();
-
-                        Properties *p_properties;
-
-                        controller->uutVfd->layout->getProperties(&p_properties);
-
-                        if (manu)
-                        {
-                            if (uutDisplay != stdOutDisplay)
-                            {
-                                stdOut->printf("\f%s", "MANUF");
-                            }
-
-                            p_string = pgm_read_ptr(&p_properties->manufacturer);
-                            manu = false;
-                        }
-                        else
-                        {
-                            if (uutDisplay != stdOutDisplay)
-                            {
-                                stdOut->printf("\f%s", "MODEL");
-                            }
-
-                            p_string = pgm_read_ptr(&p_properties->model);
-                            manu = true;
-                        }
-
-                        stdOut->print(controller->uutVfd, 
-                                      controller->uutRegionId,
-                                      "\f");
-
-                        stdOut->print_P(controller->uutVfd, 
-                                        controller->uutRegionId,
-                                        p_string);
-                    }
-
-                    break;
                 }
 
                 // Clear all the Segments back to off

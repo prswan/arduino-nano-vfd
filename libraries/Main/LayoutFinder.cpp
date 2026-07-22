@@ -48,7 +48,7 @@ void LayoutFinder::onSelect(
 
     display->setSegment(s_grid, s_seg, true);
 
-    controller->stdOut->printf("\f%2.2d%2.2d", s_grid, s_seg);
+    controller->stdOut->printf("%2.2d%2.2d", s_grid, s_seg);
 };
 
 void LayoutFinder::next(
