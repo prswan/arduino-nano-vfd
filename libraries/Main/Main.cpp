@@ -106,10 +106,12 @@ Step 1
 static AppEngineMenu s_appEngineMenu[] =
 {
 //   "1234567"
-    {"PIN ON ", NULL, PinOn::onSelect,        NULL, NULL                          , NULL},
-    {"LAYFIND", NULL, LayoutFinder::onSelect, NULL, LayoutFinder::onNextShortPress, LayoutFinder::onNextLongPress},
-    {"SEG ON ", NULL, SegOn::onSelect,        NULL, NULL                          , NULL},
-    {"MANU   ", NULL, Manufacturer::onSelect, NULL, Manufacturer::onNextShortPress, NULL},
+    {"Pin On ", NULL, PinOn::onSelect,        NULL, NULL,                           NULL},
+    {"LayFind", NULL, LayoutFinder::onSelect, NULL, LayoutFinder::onNextShortPress, LayoutFinder::onNextLongPress},
+    {"Seg On ", NULL, SegOn::onSelect,        NULL, NULL,                           NULL},
+    {"Manu   ", NULL, Manufacturer::onSelect, NULL, Manufacturer::onNextShortPress, NULL},
+    {"Perf   ", NULL, Performance::onSelect,  NULL, Performance::onNextShortPress , NULL},
+    {"ASCII  ", NULL, Ascii::onSelect,        NULL, Ascii::onNextShortPress,        NULL},
     {0}
 };
 
@@ -161,121 +163,19 @@ void Main(Controller *controller)
         {
             switch (currentApp)
             {
-                // Moved to the AppEngine
+                // Moved to the AppEngine or deprecated
                 case 0:
                 case 1:
                 case 2:
+                case 3: // Clear rolled into Manu
+                case 4:
+                case 5:
                 {
                     if (newApp)
                     {
                         stdOut->printf("\f%s", "UNUSED");
                         break;
                     }
-                }
-
-                // Clear all the Segments back to off
-                case 3:
-                {
-                    if (newApp)
-                    {
-                        if (uutDisplay != stdOutDisplay)
-                        {
-                            stdOut->printf("\f%s", "CLEAR");
-                        }
-
-                        uutDisplay->clear();
-                    }
-                    break;
-                }
-
-                // Performance measurment for the scan overhead.
-                case 4:
-                {
-                    if (newApp)
-                    {
-                        stdOut->printf("\f%s", "PERF");
-                    }
-
-                    if (buttons->isNextShortPressed())
-                    {
-                        if (controller->isShiftRegister)
-                        {
-                            //
-                            // This print appears to be so slow that it glitches the display.
-                            // The \f clear is really expensive. Still slight glitch though.
-                            // The math parsing must be terrible.
-                            //
-                            stdOut->printf("\r%4.4d", controller->sys.sr.scan->getScanTimeInUs());
-                        }
-                        else
-                        {
-                            stdOut->printf("\r----");
-                        }
-                    }
-                    break;
-                }
-
-                // Walk through the ASCII character set
-                case 5:
-                {
-                    static UCHAR currentChar = 0;
-
-                    if (newApp)
-                    {
-                        currentChar = 0x20;
-
-                        if (uutDisplay != stdOutDisplay)
-                        {
-                            uutDisplay->clear();
-                        }
-
-                        stdOutDisplay->clear();
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, 'A');
-                    }
-
-                    if (buttons->isNextShortPressed())
-                    {
-                        if (++currentChar >= 127)
-                        {
-                            currentChar = 0x20;
-                        }
-                        
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, ' ');
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, currentChar);
-
-                        if (uutDisplay != stdOutDisplay)
-                        {
-                            // Print to all the available displays, up to 16 (8 ports and 2 per port max)
-                            for (UINT8 disp = 0 ; disp < 16 ; disp++)
-                            {
-                                Vfd *iVfd = &controller->vfd[disp / 2][disp % 2];
-
-                                // If there is nothing in this slot or it's the primary StdOut, skip it
-                                if ((iVfd->display == NULL) || (iVfd == controller->stdOutVfd))
-                                {
-                                    continue;
-                                }
-
-                                // Print to the first 4 regions on those displays for debug
-                                for (UINT8 region = 0 ; region < 4 ; region++)
-                                {
-                                    stdOut->printf(iVfd, region, "\r");
-
-                                    // Print a whole row to help debug differing digit encodings
-                                    for (UINT8 row = 0 ; row < 16 ; row++)
-                                    {
-                                        stdOut->printf(iVfd, region, "%c", currentChar);
-                                    }
-                                }
-                            }
-                        }
-
-                        UINT8 charValue = currentChar;
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 2, '0' + (charValue / 10));
-                        charValue = (charValue % 10);
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (charValue / 1));
-                    }
-                    break;
                 }
 
                 // Walk through the Bar settings

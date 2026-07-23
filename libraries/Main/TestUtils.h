@@ -69,4 +69,38 @@ class Manufacturer
         );
 };
 
+//
+// Print the scan Interrupt Service Routine run time overhead
+//
+class Performance
+{
+    public:
+
+        static void onSelect(
+            Controller* controller
+        ) {};
+
+        // Each press prints the ISR time is microseconds
+        static void onNextShortPress(
+            Controller* controller
+        );
+};
+
+//
+// Print the ASCII character encoding
+//
+class Ascii
+{
+    public:
+
+        static void onSelect(
+            Controller* controller
+        );
+
+        // Each press increments to the next character
+        static void onNextShortPress(
+            Controller* controller
+        );
+};
+
 #endif

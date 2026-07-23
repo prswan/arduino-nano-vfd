@@ -42,20 +42,19 @@ void PinOn::onSelect(
 
     uutDisplay->clear();
 
-    // Only applicable to the Universal shift register version.
+    //
+    // Only applicable to the ShiftRegister implementation.
+    // The integrated bit map driver IC's don't have pin control.
+    //
     if (controller->isShiftRegister)
     {
-        //
-        // Only applicable to the ShiftRegister implementation.
-        // The integrated bit map driver IC's don't have pin control.
-        //
         ShiftRegisterDisplay *shiftRegisterDisplay = (ShiftRegisterDisplay *) uutDisplay;
 
         shiftRegisterDisplay->setAllPins(true);
     }
     else
     {
-        controller->stdOut->printf("NOT AVAIL");
+        controller->stdOut->printf("Unavailable");
     }
 };
 
@@ -91,4 +90,74 @@ void Manufacturer::onNextShortPress(
     controller->stdOut->print_P(controller->stdOutVfd, 
                                 controller->stdOutRegionId,
                                 p_string);
+};
+
+void Performance::onNextShortPress(
+    Controller* controller
+)
+{
+    //
+    // Only applicable to the ShiftRegister implementation.
+    // The integrated bit map driver IC's perform the scan.
+    //
+    if (controller->isShiftRegister)
+    {
+        controller->stdOut->printf("\r%4.4d uS", controller->sys.sr.scan->getScanTimeInUs());
+    }
+    else
+    {
+        controller->stdOut->printf("Unavailable");
+    }
+};
+
+
+static UCHAR s_asciiCurrentChar = 0;
+
+void Ascii::onSelect(
+    Controller* controller
+)
+{
+    s_asciiCurrentChar = 0x20;
+
+    controller->stdOut->printf(controller->uutVfd,
+                               controller->uutRegionId,
+                               "\f");
+};
+
+void Ascii::onNextShortPress(
+    Controller* controller
+)
+{
+    VfdStdOut* stdOut = controller->stdOut;
+
+    if (++s_asciiCurrentChar >= 127)
+    {
+        s_asciiCurrentChar = 0x20;
+    }
+
+    stdOut->printf("\r%2.2d %c", s_asciiCurrentChar, s_asciiCurrentChar);
+
+    // Print to all the available displays, up to 16 (8 ports and 2 per port max)
+    for (UINT8 disp = 0 ; disp < 16 ; disp++)
+    {
+        Vfd *iVfd = &controller->vfd[disp / 2][disp % 2];
+
+        // If there is nothing in this slot, or it's the AppEngine menu, or it's the app StdOut, skip it
+        if ((iVfd->display == NULL) || (iVfd == controller->appEngineVfd) || (iVfd == controller->stdOutVfd))
+        {
+            continue;
+        }
+
+        // Print to the first 4 regions on those displays for debug
+        for (UINT8 region = 0 ; region < 4 ; region++)
+        {
+            stdOut->printf(iVfd, region, "\r");
+
+            // Print a whole row to help debug differing digit encodings
+            for (UINT8 row = 0 ; row < 16 ; row++)
+            {
+                stdOut->printf(iVfd, region, "%c", s_asciiCurrentChar);
+            }
+        }
+    }
 };
