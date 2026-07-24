@@ -89,7 +89,7 @@ class Performance
 //
 // Print the ASCII character encoding
 //
-class Ascii
+class TestAscii
 {
     public:
 
@@ -101,6 +101,32 @@ class Ascii
         static void onNextShortPress(
             Controller* controller
         );
+
+    private:
+
+        static UINT8 s_currentChar;
 };
+
+//
+// Walks the bar encoding
+//
+class TestBar
+{
+    public:
+
+        static void onSelect(
+            Controller* controller
+        );
+
+        // Each press increments to the next character
+        static void onNextShortPress(
+            Controller* controller
+        );
+
+    private:
+
+        static UINT8 s_currentPosition;
+        static bool  s_showScale;
+  };
 
 #endif

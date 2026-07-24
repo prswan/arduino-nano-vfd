@@ -23,6 +23,7 @@
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 #include "TestUtils.h"
+#include "Bar.h"
 
 
 void SegOn::onSelect(
@@ -111,31 +112,31 @@ void Performance::onNextShortPress(
 };
 
 
-static UCHAR s_asciiCurrentChar = 0;
+UCHAR TestAscii::s_currentChar;
 
-void Ascii::onSelect(
+void TestAscii::onSelect(
     Controller* controller
 )
 {
-    s_asciiCurrentChar = 0x20;
+    s_currentChar = 0x20;
 
     controller->stdOut->printf(controller->uutVfd,
                                controller->uutRegionId,
                                "\f");
 };
 
-void Ascii::onNextShortPress(
+void TestAscii::onNextShortPress(
     Controller* controller
 )
 {
     VfdStdOut* stdOut = controller->stdOut;
 
-    if (++s_asciiCurrentChar >= 127)
+    if (++s_currentChar >= 127)
     {
-        s_asciiCurrentChar = 0x20;
+        s_currentChar = 0x20;
     }
 
-    stdOut->printf("\r%2.2d %c", s_asciiCurrentChar, s_asciiCurrentChar);
+    stdOut->printf("\r%2.2d %c", s_currentChar, s_currentChar);
 
     // Print to all the available displays, up to 16 (8 ports and 2 per port max)
     for (UINT8 disp = 0 ; disp < 16 ; disp++)
@@ -156,8 +157,44 @@ void Ascii::onNextShortPress(
             // Print a whole row to help debug differing digit encodings
             for (UINT8 row = 0 ; row < 16 ; row++)
             {
-                stdOut->printf(iVfd, region, "%c", s_asciiCurrentChar);
+                stdOut->printf(iVfd, region, "%c", s_currentChar);
             }
         }
+    }
+};
+
+
+UINT8 TestBar::s_currentPosition;
+bool  TestBar::s_showScale;
+
+void TestBar::onSelect(
+    Controller* controller
+)
+{
+    controller->uutVfd->display->clear();
+
+    s_currentPosition = 0;
+    s_showScale = false;
+};
+
+void TestBar::onNextShortPress(
+    Controller* controller
+)
+{
+    controller->stdOut->printf("\r%2.2d %c", s_currentPosition, (s_showScale ? 'S' : ' '));
+
+    // The Koss WMS1100 has 2 regions and up to 3 bars per region.
+    for (UINT8 r = 0 ; r < 2 ; r++)
+    {
+        for (UINT8 i = 0 ; i < 3 ; i++)
+        {
+            Bar::set(controller->uutVfd, r, i, s_showScale, (s_currentPosition + r + i));
+        }
+    }
+
+    if (++s_currentPosition >= (ARRAYSIZE(SegmentGroupBar::pinS) + 2))
+    {
+        s_currentPosition = 0;
+        s_showScale = !s_showScale;
     }
 };

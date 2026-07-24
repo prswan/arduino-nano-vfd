@@ -111,7 +111,8 @@ static AppEngineMenu s_appEngineMenu[] =
     {"Seg On ", NULL, SegOn::onSelect,        NULL, NULL,                           NULL},
     {"Manu   ", NULL, Manufacturer::onSelect, NULL, Manufacturer::onNextShortPress, NULL},
     {"Perf   ", NULL, Performance::onSelect,  NULL, Performance::onNextShortPress , NULL},
-    {"ASCII  ", NULL, Ascii::onSelect,        NULL, Ascii::onNextShortPress,        NULL},
+    {"ASCII  ", NULL, TestAscii::onSelect,    NULL, TestAscii::onNextShortPress,    NULL},
+    {"Bar    ", NULL, TestBar::onSelect,      NULL, TestBar::onNextShortPress,      NULL},
     {0}
 };
 
@@ -142,7 +143,7 @@ void Main(Controller *controller)
 
     controller->stdOut = stdOut;
 
-    if (buttons->isNextActive())
+    if (!buttons->isNextActive())
     {
         if (controller->appEngineVfd == NULL)
         {
@@ -170,57 +171,13 @@ void Main(Controller *controller)
                 case 3: // Clear rolled into Manu
                 case 4:
                 case 5:
+                case 6:
                 {
                     if (newApp)
                     {
                         stdOut->printf("\f%s", "UNUSED");
                         break;
                     }
-                }
-
-                // Walk through the Bar settings
-                case 6:
-                {
-                    static bool  scale = false;
-                    static UINT8 len = 0;
-
-                    if (newApp)
-                    {
-                        scale = false;
-                        len   = 0;
-
-                        if (uutDisplay != stdOutDisplay)
-                        {
-                            uutDisplay->clear();
-                        }
-
-                        stdOutDisplay->clear();
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, 'B');
-                    }
-
-                    if (buttons->isNextShortPressed())
-                    {
-                        UINT8 charValue = len;
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 2, '0' + (charValue / 10));
-                        charValue = (charValue % 10);
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (charValue / 1));
-
-                        // The Koss WMS1100 has 2 regions and up to 3 bars per region.
-                        for (UINT8 r = 0 ; r < 2 ; r++)
-                        {
-                            for (UINT8 i = 0 ; i < 3 ; i++)
-                            {
-                                Bar::set(controller->uutVfd, r, i, scale, (len + r + i));
-                            }
-                        }
-                        
-                        if (++len >= (ARRAYSIZE(SegmentGroupBar::pinS) + 2))
-                        {
-                            len = 0;
-                            scale = !scale;
-                        }
-                    }
-                    break;
                 }
 
                 // Walk through the symbol group
