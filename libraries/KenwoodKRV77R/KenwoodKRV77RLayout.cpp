@@ -56,12 +56,13 @@ static const Properties s_properties PROGMEM =
 //
 static const Region s_region[] PROGMEM =
 {
-    // type,          subType,                id, len
-    {RegionTypeChar,  RegionSubTypeChar7Seg,   0,   3},
-    {RegionTypeBar ,  0,                       0,  11},
-    {RegionTypeBar ,  0,                       1,  11},
-    {RegionTypeChar,  RegionSubTypeChar14Seg,  1,   5},
-    {RegionTypeChar,  RegionSubTypeChar7Seg,   2,   2},
+    // type,                subType,                id, len
+    {RegionTypeChar,        RegionSubTypeChar7Seg,   0,   3},
+    {RegionTypeBar ,        0,                       0,  11},
+    {RegionTypeBar ,        0,                       1,  11},
+    {RegionTypeNumberList,  0,                       0,   1},
+    {RegionTypeChar,        RegionSubTypeChar14Seg,  1,   5},
+    {RegionTypeChar,        RegionSubTypeChar7Seg,   2,   2},
 };
 
 // TODO: Add the symbols for this display
@@ -135,6 +136,21 @@ static const SegmentGroup7Seg s_segmentGroup7Seg2[] PROGMEM =
 // pinG, { a   b   c   d   e   f  g }}
     { 4, {21, 22, 23, 24, 25, 26, 27}},
     { 3, {21, 22, 23, 24, 25, 26, 27}},
+};
+
+//
+// There are numbers 1,2,3 that's useful to represent as a number list to allow
+// this display to have a complete set of all elements for testing.
+//
+static const SegmentGroupNumberList s_segmentGroupNumberList[] PROGMEM =
+{
+    { // numListLen, numCols, numRows, topToBottom
+                  3,       3,       1,       false,
+        {
+            // [] {pinG,{value,pinS},{value,pinS},...}
+            { 9, {{ 1,17},{ 2,18},{ 3,19}}}  // grid[0]
+        }
+    }
 };
 
 
@@ -236,3 +252,19 @@ bool KenwoodKRV77RLayout::getSegmentGroupBar(
 
     return true;
 }
+
+bool KenwoodKRV77RLayout::getSegmentGroupNumberList(
+    UINT8 regionId,
+    const SegmentGroupNumberList **p_segGroup,
+    UINT8 *numEntries)
+{
+    if (regionId != 0)
+    {
+        return false;
+    }
+
+    *p_segGroup = s_segmentGroupNumberList;
+    *numEntries = ARRAYSIZE(s_segmentGroupNumberList);
+
+    return true;
+};
