@@ -25,24 +25,10 @@
 
 #include "Main.h"
 #include "Buttons.h"
-#include "ShiftRegisterDisplay.h"
-#include "Char7Seg.h"
-#include "LayoutFinder.h"
 #include "VfdStdOut.h"
-#include "Bar.h"
-#include "NumberList.h"
-#include "Symbol.h"
 #include "AppEngine.h"
+#include "LayoutFinder.h"
 #include "TestUtils.h"
-
-//
-// I don't remember needing to use an external library in the ICT project for this.
-// Source: https://github.com/mpflaga/Arduino-MemoryFree, Commit Hash: 0083982
-//
-// Unzip To: C:\Users\<user>>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6\libraries\MemoryFree
-//
-#include <MemoryFree.h>
-
 
 /* TODO
 
@@ -106,35 +92,26 @@ Step 1
 static AppEngineMenu s_appEngineMenu[] =
 {
 //   "1234567"
-    {"Pin On ", NULL, PinOn::onSelect,        NULL, NULL,                           NULL},
-    {"LayFind", NULL, LayoutFinder::onSelect, NULL, LayoutFinder::onNextShortPress, LayoutFinder::onNextLongPress},
-    {"Seg On ", NULL, SegOn::onSelect,        NULL, NULL,                           NULL},
-    {"Manu   ", NULL, Manufacturer::onSelect, NULL, Manufacturer::onNextShortPress, NULL},
-    {"Perf   ", NULL, Performance::onSelect,  NULL, Performance::onNextShortPress , NULL},
-    {"ASCII  ", NULL, TestAscii::onSelect,    NULL, TestAscii::onNextShortPress,    NULL},
-    {"Bar    ", NULL, TestBar::onSelect,      NULL, TestBar::onNextShortPress,      NULL},
+    {"Pin On ", NULL, PinOn::onSelect,           NULL, NULL,                              NULL},
+    {"LayFind", NULL, LayoutFinder::onSelect,    NULL, LayoutFinder::onNextShortPress,    LayoutFinder::onNextLongPress},
+    {"Seg On ", NULL, SegOn::onSelect,           NULL, NULL,                              NULL},
+    {"ASCII  ", NULL, TestAscii::onSelect,       NULL, TestAscii::onNextShortPress,       NULL},
+    {"Symbol ", NULL, TestSymbol::onSelect,      NULL, TestSymbol::onNextShortPress,      NULL},
+    {"Bar    ", NULL, TestBar::onSelect,         NULL, TestBar::onNextShortPress,         NULL},
+    {"NumList", NULL, TestNumberList::onSelect,  NULL, TestNumberList::onNextShortPress,  NULL},
+    {"Manu   ", NULL, Manufacturer::onSelect,    NULL, Manufacturer::onNextShortPress,    NULL},
+    {"Perf   ", NULL, Performance::onSelect,     NULL, Performance::onNextShortPress ,    NULL},
+    {"Memory ", NULL, Memory::onSelect,          NULL, Memory::onNextShortPress ,         NULL},
     {0}
 };
 
 void Main(Controller *controller)
 {
-    Buttons *buttons = controller->buttons;
-
-    //
-    // TODO: This doesn't work if stdOutVfd and uutVfd use different character encodings
-    // e.g. using the Pana-Sony as stdOut and TEAC as uut means uut character prints don't work.
-    // printf works OK.
-    // 
-    ICharacter *character = controller->regionSubTypeMap[0].ichar; 
-
     // in case we crash
-    if (buttons->isSelectActive())
+    if (controller->buttons->isSelectActive())
     {
         return;
     }
-
-    IDisplay *stdOutDisplay = controller->stdOutVfd->display;
-    IDisplay *uutDisplay = controller->uutVfd->display;
 
     VfdStdOut *stdOut = new VfdStdOut(controller->regionSubTypeMap,
                                       ARRAYSIZE(controller->regionSubTypeMap),
@@ -143,167 +120,11 @@ void Main(Controller *controller)
 
     controller->stdOut = stdOut;
 
-    if (!buttons->isNextActive())
+    if (controller->appEngineVfd == NULL)
     {
-        if (controller->appEngineVfd == NULL)
-        {
-            controller->appEngineVfd      = controller->stdOutVfd;
-            controller->appEngineRegionId = controller->stdOutRegionId;
-        }
-
-        AppEngine(controller, s_appEngineMenu);
+        controller->appEngineVfd      = controller->stdOutVfd;
+        controller->appEngineRegionId = controller->stdOutRegionId;
     }
 
-    UINT8 currentApp = 0;
-    bool newApp = true;
-
-    // Main loop
-    while (1)
-    {  
-        if (controller->timer->run())
-        {
-            switch (currentApp)
-            {
-                // Moved to the AppEngine or deprecated
-                case 0:
-                case 1:
-                case 2:
-                case 3: // Clear rolled into Manu
-                case 4:
-                case 5:
-                case 6:
-                {
-                    if (newApp)
-                    {
-                        stdOut->printf("\f%s", "UNUSED");
-                        break;
-                    }
-                }
-
-                // Walk through the symbol group
-                case 7:
-                {
-                    static UINT8 symGroupIndex = 0;
-
-                    if (newApp)
-                    {
-                        symGroupIndex = 0;
-
-                        if (uutDisplay != stdOutDisplay)
-                        {
-                            uutDisplay->clear();
-                        }
-
-                        stdOutDisplay->clear();
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, 'S');
-
-                        // Blind symbol set to test out this API, at least 1 activated for each supported display.
-                        Symbol::set(controller->uutVfd, 0, SymPlayForward, true);
-                        Symbol::set(controller->uutVfd, 0, SymPause, true);
-                        Symbol::set(controller->uutVfd, 1, SymPause, true);
-                        Symbol::set(controller->uutVfd, 0, SymText_CD, true);
-                    }
-
-                    if (buttons->isNextShortPressed())
-                    {
-                        if (symGroupIndex == 0)
-                        {
-                            uutDisplay->clear();
-                        }
-
-                        Sym sym = SymNone;
-                        UINT8 instance = 0;
-
-                        bool success = Symbol::set(controller->uutVfd, symGroupIndex, true, &sym, &instance);
-
-                        if (success)
-                        {
-                            character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, '0' + instance);
-
-                            UINT8 value = sym;
-                            character->print(controller->stdOutVfd, controller->stdOutRegionId, 2, '0' + (value / 10));
-                            value = (value % 10);
-                            character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (value / 1));
-
-                            symGroupIndex++;
-                        }
-                        else
-                        {
-                            symGroupIndex = 0;
-                        }
-                    }
-                    break;
-                }
-
-                // Walk through the number list
-                case 8:
-                {
-                    static bool  displayTo = false;
-                    static UINT8 number = 0;
-
-                    if (newApp)
-                    {
-                        displayTo = false;
-                        number    = 0;
-
-                        if (uutDisplay != stdOutDisplay)
-                        {
-                            uutDisplay->clear();
-                        }
-
-                        stdOutDisplay->clear();
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 0, 'L');
-                    }
-
-                    if (buttons->isNextShortPressed())
-                    {
-                        UINT8 charValue = number;
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 2, '0' + (charValue / 10));
-                        charValue = (charValue % 10);
-                        character->print(controller->stdOutVfd, controller->stdOutRegionId, 3, '0' + (charValue / 1));
-
-                        NumberList::set(controller->uutVfd, 0, 0, displayTo, number);
-
-                        if (++number >= (ARRAYSIZE(SegmentGroupNumberList::grid[0].list) + 2))
-                        {
-                            number = 0;
-                            displayTo = !displayTo;
-                        }
-                    }
-                    break;
-                }
-
-                // Report free memory
-                case 9:
-                {
-                    if (newApp)
-                    {
-                        stdOut->printf("\f%s", "FREE");
-                    }
-
-                    if (buttons->isNextShortPressed())
-                    {
-                        stdOut->printf("\r%4.4d", freeMemory());
-                    }
-                    break;
-                }
-
-                default:
-                    break;
-            }
-
-            if (buttons->isSelectShortPressed())
-            {
-                if (++currentApp > 9)
-                {
-                    currentApp = 0;
-                }
-                newApp = true;
-            }
-            else
-            {
-                newApp = false;
-            }
-        }
-    }
+    AppEngine(controller, s_appEngineMenu);
 };

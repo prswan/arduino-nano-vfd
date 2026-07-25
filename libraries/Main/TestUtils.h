@@ -87,6 +87,23 @@ class Performance
 };
 
 //
+// Print the free heap memory
+//
+class Memory
+{
+    public:
+
+        static void onSelect(
+            Controller* controller
+        ) {};
+
+        // Each press prints the free memory
+        static void onNextShortPress(
+            Controller* controller
+        );
+};
+
+//
 // Print the ASCII character encoding
 //
 class TestAscii
@@ -108,7 +125,28 @@ class TestAscii
 };
 
 //
-// Walks the bar encoding
+// Walk the symbol definitions
+//
+class TestSymbol
+{
+    public:
+
+        static void onSelect(
+            Controller* controller
+        );
+
+        // Each press increments to the next character
+        static void onNextShortPress(
+            Controller* controller
+        );
+
+    private:
+
+        static UINT8 s_groupIndex;
+};
+
+//
+// Walk the bar encoding
 //
 class TestBar
 {
@@ -127,6 +165,28 @@ class TestBar
 
         static UINT8 s_currentPosition;
         static bool  s_showScale;
-  };
+};
+
+//
+// Walk the number list encoding
+//
+class TestNumberList
+{
+    public:
+
+        static void onSelect(
+            Controller* controller
+        );
+
+        // Each press increments to the next character
+        static void onNextShortPress(
+            Controller* controller
+        );
+
+    private:
+
+        static UINT8 s_currentNumber;
+        static bool  s_displayAllTo;
+};
 
 #endif

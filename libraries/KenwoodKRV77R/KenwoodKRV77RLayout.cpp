@@ -66,10 +66,19 @@ static const Region s_region[] PROGMEM =
 };
 
 // TODO: Add the symbols for this display
+//
+// EQ & VIDEO MONITOR are tied.
+// MHz & common section of "0" and "5" digit are tied.
+//
 static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
 {
     // sym,        instance, pinG, pinS
-//    {SymText_DVD,         0,   13,    1}, // row 1
+    {SymText_EQ_REC,      0,    9,   35}, // row 1
+    {SymText_AUTO,        0,    9,   12},
+    {SymText_STEREO,      0,    8,   10},
+    {SymText_FM,          0,    6,    6},
+
+    {SymText_DEFEAT,      0,    9,   13}, // row 2
 };
 
 //

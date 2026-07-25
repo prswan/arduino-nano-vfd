@@ -23,7 +23,15 @@
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 #include "TestUtils.h"
+#include "Symbol.h"
 #include "Bar.h"
+#include "NumberList.h"
+
+//
+// Source: https://github.com/mpflaga/Arduino-MemoryFree, Commit Hash: 0083982
+// Unzip To: C:\Users\<user>>\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6\libraries\MemoryFree
+//
+#include <MemoryFree.h>
 
 
 void SegOn::onSelect(
@@ -111,6 +119,13 @@ void Performance::onNextShortPress(
     }
 };
 
+void Memory::onNextShortPress(
+    Controller* controller
+)
+{
+    controller->stdOut->printf("\r%4.4d Bytes", freeMemory());
+};
+
 
 UCHAR TestAscii::s_currentChar;
 
@@ -118,6 +133,8 @@ void TestAscii::onSelect(
     Controller* controller
 )
 {
+    controller->uutVfd->display->clear();
+
     s_currentChar = 0x20;
 
     controller->stdOut->printf(controller->uutVfd,
@@ -164,6 +181,56 @@ void TestAscii::onNextShortPress(
 };
 
 
+UINT8 TestSymbol::s_groupIndex;
+
+void TestSymbol::onSelect(
+    Controller* controller
+)
+{
+    Vfd* uutVfd = controller->uutVfd;
+
+    uutVfd->display->clear();
+
+    s_groupIndex = 0;
+
+    // Blind symbol set to test out this API, at least 1 activated for each supported display.
+    Symbol::set(uutVfd, 0, SymPlayForward, true);
+    Symbol::set(uutVfd, 0, SymPause,       true);
+    Symbol::set(uutVfd, 1, SymPause,       true);
+    Symbol::set(uutVfd, 0, SymText_CD,     true);
+    Symbol::set(uutVfd, 0, SymText_AUTO,   true);
+};
+
+void TestSymbol::onNextShortPress(
+    Controller* controller
+)
+{
+    VfdStdOut* stdOut = controller->stdOut;
+    Vfd* uutVfd = controller->uutVfd;
+
+    if (s_groupIndex == 0)
+    {
+        uutVfd->display->clear();
+    }
+
+    Sym sym = SymNone;
+    UINT8 instance = 0;
+
+    bool success = Symbol::set(uutVfd, s_groupIndex, true, &sym, &instance);
+
+    if (success)
+    {
+        stdOut->printf("\r%1.1d %3.3d", instance, (int) sym);
+
+        s_groupIndex++;
+    }
+    else
+    {
+        s_groupIndex = 0;
+    }
+};
+
+
 UINT8 TestBar::s_currentPosition;
 bool  TestBar::s_showScale;
 
@@ -196,5 +263,33 @@ void TestBar::onNextShortPress(
     {
         s_currentPosition = 0;
         s_showScale = !s_showScale;
+    }
+};
+
+UINT8 TestNumberList::s_currentNumber;
+bool  TestNumberList::s_displayAllTo;
+
+void TestNumberList::onSelect(
+    Controller* controller
+)
+{
+    controller->uutVfd->display->clear();
+
+    s_currentNumber = 0;
+    s_displayAllTo = false;
+};
+
+void TestNumberList::onNextShortPress(
+    Controller* controller
+)
+{
+    controller->stdOut->printf("\r%2.2d %c", s_currentNumber, (s_displayAllTo ? 'A' : '1'));
+
+    NumberList::set(controller->uutVfd, 0, 0, s_displayAllTo, s_currentNumber);
+
+    if (++s_currentNumber >= (ARRAYSIZE(SegmentGroupNumberList::grid[0].list) + 2))
+    {
+        s_currentNumber = 0;
+        s_displayAllTo = !s_displayAllTo;
     }
 };

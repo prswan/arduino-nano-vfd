@@ -170,6 +170,12 @@ typedef enum {
     SymText_SCAN,
     SymText_Sub_dot_W,
 
+    // Kenwood KR-V77R Additions
+    SymText_EQ_REC,
+    SymText_STEREO,
+    SymText_FM,
+    SymText_DEFEAT,
+
     // Sony CDP-C305 Additions
     SymText_FADE,
 
