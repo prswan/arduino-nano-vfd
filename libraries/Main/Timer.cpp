@@ -25,15 +25,10 @@
 #include "Timer.h"
 
 
-//
-// Arbitrary value
-//
-static const UINT32 s_scanPeriodInUS = 1000;
-
-
 Timer::Timer()
 {
-    m_nextUpdateTimeInUS = micros() + s_scanPeriodInUS;
+    m_nextUpdateTimeInUS = micros() + (tickPeriodInMS * 1000);
+    m_tickCount = 0;
 };
 
 
@@ -46,7 +41,8 @@ bool Timer::run()
         return false;
     }
 
-    m_nextUpdateTimeInUS = currentTimeInUS + s_scanPeriodInUS;
+    m_nextUpdateTimeInUS = currentTimeInUS + (tickPeriodInMS * 1000);
+    m_tickCount++;
 
     return true;
 };

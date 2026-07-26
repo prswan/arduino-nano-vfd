@@ -161,10 +161,20 @@ class TestBar
             Controller* controller
         );
 
+        static void onNextLongPress(
+            Controller* controller
+        );
+
+        static void run(
+            Controller* controller
+        );
+
     private:
 
         static UINT8 s_currentPosition;
         static bool  s_showScale;
+
+        static bool  s_runBackground;
 };
 
 //

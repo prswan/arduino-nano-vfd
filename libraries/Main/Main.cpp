@@ -92,16 +92,16 @@ Step 1
 static AppEngineMenu s_appEngineMenu[] =
 {
 //   "1234567"
-    {"Pin On ", NULL, PinOn::onSelect,           NULL, NULL,                              NULL},
-    {"LayFind", NULL, LayoutFinder::onSelect,    NULL, LayoutFinder::onNextShortPress,    LayoutFinder::onNextLongPress},
-    {"Seg On ", NULL, SegOn::onSelect,           NULL, NULL,                              NULL},
-    {"ASCII  ", NULL, TestAscii::onSelect,       NULL, TestAscii::onNextShortPress,       NULL},
-    {"Symbol ", NULL, TestSymbol::onSelect,      NULL, TestSymbol::onNextShortPress,      NULL},
-    {"Bar    ", NULL, TestBar::onSelect,         NULL, TestBar::onNextShortPress,         NULL},
-    {"NumList", NULL, TestNumberList::onSelect,  NULL, TestNumberList::onNextShortPress,  NULL},
-    {"Manu   ", NULL, Manufacturer::onSelect,    NULL, Manufacturer::onNextShortPress,    NULL},
-    {"Perf   ", NULL, Performance::onSelect,     NULL, Performance::onNextShortPress ,    NULL},
-    {"Memory ", NULL, Memory::onSelect,          NULL, Memory::onNextShortPress ,         NULL},
+    {"Pin On ", NULL,         PinOn::onSelect,           NULL, NULL,                              NULL},
+    {"LayFind", NULL,         LayoutFinder::onSelect,    NULL, LayoutFinder::onNextShortPress,    LayoutFinder::onNextLongPress},
+    {"Seg On ", NULL,         SegOn::onSelect,           NULL, NULL,                              NULL},
+    {"ASCII  ", NULL,         TestAscii::onSelect,       NULL, TestAscii::onNextShortPress,       NULL},
+    {"Symbol ", NULL,         TestSymbol::onSelect,      NULL, TestSymbol::onNextShortPress,      NULL},
+    {"Bar    ", TestBar::run, TestBar::onSelect,         NULL, TestBar::onNextShortPress,         TestBar::onNextLongPress},
+    {"NumList", NULL,         TestNumberList::onSelect,  NULL, TestNumberList::onNextShortPress,  NULL},
+    {"Manu   ", NULL,         Manufacturer::onSelect,    NULL, Manufacturer::onNextShortPress,    NULL},
+    {"Perf   ", NULL,         Performance::onSelect,     NULL, Performance::onNextShortPress ,    NULL},
+    {"Memory ", NULL,         Memory::onSelect,          NULL, Memory::onNextShortPress ,         NULL},
     {0}
 };
 

@@ -233,6 +233,7 @@ void TestSymbol::onNextShortPress(
 
 UINT8 TestBar::s_currentPosition;
 bool  TestBar::s_showScale;
+bool  TestBar::s_runBackground;
 
 void TestBar::onSelect(
     Controller* controller
@@ -265,6 +266,45 @@ void TestBar::onNextShortPress(
         s_showScale = !s_showScale;
     }
 };
+
+void TestBar::onNextLongPress(
+    Controller* controller
+)
+{
+    s_runBackground = !s_runBackground;
+
+    controller->stdOut->printf("\f%s", (s_runBackground ? "Background" : "Off"));
+};
+
+void TestBar::run(
+    Controller* controller
+)
+{
+    static UINT8 s_currentIndex;
+
+    if (!s_runBackground)
+    {
+        return;
+    }
+
+    UINT32 tickCount = controller->timer->getTickCount();
+
+    // Every 100ms move a few bars
+    if ((tickCount % (100 / Timer::tickPeriodInMS)) == 0)
+    {
+        Vfd* uutVfd = controller->uutVfd;
+
+        Bar::set(uutVfd, 0, 0, false, s_currentIndex);        // forwards
+        Bar::set(uutVfd, 1, 0, false, (16 - s_currentIndex)); // backwards
+        Bar::set(uutVfd, 0, 1, false, (16 - s_currentIndex)); // backwards
+
+        if (++s_currentIndex > 16)
+        {
+            s_currentIndex = 0;
+        }
+    }
+};
+
 
 UINT8 TestNumberList::s_currentNumber;
 bool  TestNumberList::s_displayAllTo;

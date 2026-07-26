@@ -29,7 +29,7 @@
 #include "Types.h"
 
 //
-// Implementation that just provides a regular 1mS tick indication.
+// Implementation that just provides a regular tick indication.
 //
 class Timer
 {
@@ -38,6 +38,11 @@ public:
 
     ~Timer() {};
 
+    UINT32 getTickCount()
+    {
+        return m_tickCount;
+    };
+
     //
     // The return value can be used to synchronize cooperative tasks
     // - false - No action.
@@ -45,8 +50,12 @@ public:
     //
     bool run();
 
+public:
+    static const UINT32 tickPeriodInMS = 10;
+
 private:
     UINT32 m_nextUpdateTimeInUS;
+    UINT32 m_tickCount;
 };
 
 #endif
