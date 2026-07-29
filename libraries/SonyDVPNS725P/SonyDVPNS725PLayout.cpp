@@ -40,9 +40,9 @@ Attached to the Controller PCB the display is OK:
 
 Onkyo HT-R340 NPT-1516D Transformer
 -----------------------------------
- - VFIL @ Controller PCB Input  : 5.66 VAC
- - VFIL @ Controller PL7 2x 3R9 : 4.00 VAC
- - VFIL @ VFD            2x 6R8 : 2.51 VAC
+ - VFIL @ Controller PCB Input  : 5.35 VAC
+ - VFIL @ Controller PL7 2x 4R7 : 3.66 VAC
+ - VFIL @ VFD            2x 6R8 : 2.31 VAC
  Display looks good.
  */
 
