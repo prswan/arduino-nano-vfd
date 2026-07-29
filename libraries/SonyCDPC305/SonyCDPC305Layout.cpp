@@ -29,22 +29,23 @@ Data
 ----
 I can't remember why there were no live measurements, possibly the player died on the bench.
 From the service manual:
- - VFIL: 3.9 VAC ** SEE TODO **
+ - VFIL: 3.9 VAC ** LIKELY WRONG! SEE TODO **
  - Vbb: -32  VDC
 
 Onkyo HT-R340 NPT-1516D Transformer
 -----------------------------------
- - VFIL @ Controller PCB Input  : 5.45
- - VFIL @ Controller PL5 2x 2R2 : 3.80
- - VFIL @ VFD            2x 1R  : 3.25
+ - VFIL @ Controller PCB Input  : 5.28 VAC
+ - VFIL @ Controller PL5 2x 2R2 : 4.01 VAC
+ - VFIL @ VFD            2x 5R1 : 2.25 VAC
 
  Display seems a little on the dim side.
 
- TODO: The filament is not directly visible but from the slit at the back they are very bright red over voltage.
+ TODO: The filament is not directly visible but from the back they were very bright red over voltage at 3.9 VAC
   - The service manual shows 2 x 8R2 resistors in series with "F"
   - I can't find where the 3.9 VAC stated above came from in the service manual, I suspect this is an error
     in the XLS.
-  - Unplugged for now to swap out the 1R FIL resistors.
+  - Comparing with the original photo taken from the player, that was bright, I suspect the accidental overvoltage
+    has damaged the display :(
 */
 
 static const UINT8 s_manufacturer[] PROGMEM = "SONY";

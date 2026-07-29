@@ -39,10 +39,9 @@ From the FC-60 service manual:
 
 Onkyo HT-R340 NPT-1516D Transformer
 -----------------------------------
- - VFIL @ Controller PCB Input  : 5.45
- - VFIL @ Controller PL5 2x 2R2 : 3.80
- - VFIL @ VFD            2x 1R  : 3.45
-
+ - VFIL @ Controller PCB Input  : 5.28 VAC
+ - VFIL @ Controller PL5 2x 2R2 : 4.01 VAC
+ - VFIL @ VFD            2x 2R2 : 3.37 VAC
  Display is very bright.
 */
 
