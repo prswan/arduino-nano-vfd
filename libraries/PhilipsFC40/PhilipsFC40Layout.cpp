@@ -66,19 +66,43 @@ static const Region s_region[] PROGMEM =
     {RegionTypeBar,   0,                      0,  2},
 };
 
-// TODO: Add the symbols
+
 static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
 {
     // sym,            instance, pinG, pinS
     {SymText_REC,             0,    6,    1}, // row 1
+    {SymPlayForward,          0,    3,    2},
+    {SymText_HX_PRO,          0,    1,    6},
+    {SymText_DOLBY_B,         0,    1,    7},
+    {SymText_DOLBY_C,         0,    1,    8},
+    {SymText_MPX_F,           0,    1,    9},
+    {SymText_NORMAL,          0,    1,   10}, // Also lights the scale marker arrow
+    {SymText_CrO2,            0,    1,   11}, // Also lights the scale marker arrow
+    {SymText_METAL,           0,    1,   12}, // Also lights the scale marker arrow
 
+    {SymPlayReverse,          0,    3,    3}, // row 2
+    {SymText_L,               0,    1,    5}, // This should be part of the Bar handling
+
+    {SymMinus,                0,    6,   21}, // row 3
+    {SymText_BLANK_SKIP,      0,    3,    4},
+    {SymText_R,               0,    2,    5}, // R and bottom white scale, this should be part of the Bar handling
+
+    {SymDecimalPoint,         0,    5,   21}, // row 4
+    {SymText_MEMO,            0,    3,   21},
+    {SymText_dB,              0,    2,   13}, // dB and bottom red scale, this should be part of the Bar handling
 };
 
 //
 // 4x 7-segment display
 // These were documented in the service manual.
+//
 // TODO: There are some extra segments that allow for
 //       specific words, e.g. PLAY, STOP, REW, REC etc.
+//
+// 0329 - region 0 col 4 "Y" segment
+// 0429 - region 0 col 3 "W" segment
+// 0529 - region 0 col 2 "T" segment
+// 0629 - region 0 col 1 "R" segment
 //
 static const SegmentGroup7Seg s_segmentGroup7Seg0[] PROGMEM =
 {
@@ -107,6 +131,8 @@ static const SegmentGroup7Seg s_segmentGroup7Seg1[] PROGMEM =
 // These were documented in the service manual as "t1" to "t16" but 
 // missing the translation to "a" - "p" actual segment pins.
 // LayoutFinder to the recue! 
+//
+// TODO: 10 white plus 6 red, express that somehow?
 //
 static const SegmentGroupBar s_segmentGroupBar[] PROGMEM =
 {

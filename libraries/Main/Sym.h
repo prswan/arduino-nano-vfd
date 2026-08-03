@@ -170,14 +170,25 @@ typedef enum {
     SymText_SCAN,
     SymText_Sub_dot_W,
 
+    // Sony CDP-C305 Additions
+    SymText_FADE,
+
+    // Philips FC-40 Additions
+    SymText_HX_PRO,
+    SymText_DOLBY_B,
+    SymText_DOLBY_C,
+    SymText_MPX_F,
+    SymText_NORMAL,
+    SymText_CrO2,
+    SymText_METAL,
+    SymText_MEMO,
+    SymText_dB,
+
     // Kenwood KR-V77R Additions
     SymText_EQ_REC,
     SymText_STEREO,
     SymText_FM,
     SymText_DEFEAT,
-
-    // Sony CDP-C305 Additions
-    SymText_FADE,
 
     //
     SymEnd
