@@ -58,8 +58,8 @@ static const Region s_region[] PROGMEM =
 {
     // type,                subType,                id, len
     {RegionTypeChar,        RegionSubTypeChar7Seg,   0,   3},
-    {RegionTypeBar ,        0,                       0,  11},
-    {RegionTypeBar ,        0,                       1,  11},
+    {RegionTypeBar ,        0,                       0,   1},
+    {RegionTypeBar ,        0,                       1,   1},
     {RegionTypeNumberList,  0,                       0,   1},
     {RegionTypeChar,        RegionSubTypeChar14Seg,  1,   5},
     {RegionTypeChar,        RegionSubTypeChar7Seg,   2,   2},
@@ -73,12 +73,37 @@ static const Region s_region[] PROGMEM =
 static const SegmentGroupSymbol s_segmentGroupSymbol[] PROGMEM =
 {
     // sym,        instance, pinG, pinS
-    {SymText_EQ_REC,      0,    9,   35}, // row 1
-    {SymText_AUTO,        0,    9,   12},
-    {SymText_STEREO,      0,    8,   10},
-    {SymText_FM,          0,    6,    6},
+    {SymText_EQ_REC,           0,    9,   35}, // row 1
+    {SymText_AUTO,             0,    9,   12},
+    {SymText_STEREO,           0,    8,   10},
+    {SymText_FM,               0,    6,    6},
+    {SymText_MHz,              0,    3,    6},
+    {SymText_VOLUME_LEVEL,     0,    2,   33},
+    {SymText_REAR,             0,    1,   32},
 
-    {SymText_DEFEAT,      0,    9,   13}, // row 2
+    {SymText_DEFEAT,           0,    9,   13}, // row 2
+    {SymText_DELAY,            0,    6,    5},
+    {SymText_ms,               0,    3,    5},
+
+    {SymText_EQ,               0,    9,   20}, // row 3
+    {SymText_ON,               0,    9,   14},
+    {SymText_MEMO,             0,    9,   36},
+    {SymText_TUNED,            0,    8,   11},
+    {SymText_AM,               0,    6,    4},
+    {SymText_KHz,              0,    3,    4},
+    {SymText_MUTING,           0,    2,   32},
+
+    {SymText_AUDIO_INJECTION,  0,    9,   15}, // row 4
+    {SymText_BAL,              0,    6,   36},
+
+    {SymText_TAPE_2,           0,    9,   16}, // row 5
+    {SymText_1_10,             0,    3,    3},
+
+    {SymText_VIDEO_MONITOR,    0,    9,   20}, // row 6
+    {SymText_11_20,            0,    3,    2},
+
+    {SymDecimalPoint,          0,    4,   28}, // row 7
+    {SymText_CH,               0,    3,    1}, // TBD
 };
 
 //

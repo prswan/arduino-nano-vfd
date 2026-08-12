@@ -22,24 +22,24 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef KenwoodKRV77RPinout_h
-#define KenwoodKRV77RPinout_h
+#ifndef KenwoodKRV77REQPinout_h
+#define KenwoodKRV77REQPinout_h
 
 #include "Arduino.h"
 #include "IVfdPinout.h"
 
 //
-// VFD pinout for the Kenwood KR-V77R Receiver.
+// VFD layout for the Kenwood KR-V77R Receiver.
 // Driven by 3 x SN75518 32-bit serial driver ICs.
 //
-// Main Display
+// EQ Display
 //
-class KenwoodKRV77RPinout : public IVfdPinout
+class KenwoodKRV77REQPinout : public IVfdPinout
 {
 public:
-    KenwoodKRV77RPinout() {};
+    KenwoodKRV77REQPinout() {};
 
-    ~KenwoodKRV77RPinout() {};
+    ~KenwoodKRV77REQPinout() {};
 
     void getScanConfig(
         DriverType *driverType,

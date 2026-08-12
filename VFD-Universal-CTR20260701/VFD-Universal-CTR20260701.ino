@@ -33,6 +33,9 @@
 #include "Char7Seg.h"
 #include "Char14Seg.h"
 
+#include "KenwoodKRV77REQPinout.h"
+#include "KenwoodKRV77REQLayout.h"
+
 #include "KenwoodKRV77RPinout.h"
 #include "KenwoodKRV77RLayout.h"
 
@@ -85,8 +88,11 @@ void setup() {
   IVfdPinout *vfdPinout4 = new PhilipsFC40Pinout();
   IVfdLayout *vfdLayout4 = new PhilipsFC40Layout();
 
+  IVfdPinout *vfdPinout5 = new KenwoodKRV77REQPinout();
+  IVfdLayout *vfdLayout5 = new KenwoodKRV77REQLayout();
+
   ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, 
-                                                         NULL);
+                                                         vfdPinout5);
 
   ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout1, 
                                                          vfdPinout2);
@@ -96,6 +102,9 @@ void setup() {
 
   controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
+
+  controller.vfd[0][1].layout  = vfdLayout5;
+  controller.vfd[0][1].display = bitMap0->getDisplay(1);
 
   controller.vfd[1][0].layout  = vfdLayout1;
   controller.vfd[1][0].display = bitMap1->getDisplay(0);
@@ -125,8 +134,8 @@ void setup() {
   controller.stdOutVfd = &controller.vfd[1][0]; // Panasonic for StdOut
   controller.stdOutRegionId = 0;
 
-  controller.uutVfd = &controller.vfd[0][0]; // KR-V77R as the UUT
-  controller.uutRegionId = 0; // 5x 14-seg region
+  controller.uutVfd = &controller.vfd[0][0]; // KR-V77R UUT
+  controller.uutRegionId = 0;
 }
 
 void loop() {

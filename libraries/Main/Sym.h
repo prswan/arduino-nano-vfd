@@ -184,11 +184,41 @@ typedef enum {
     SymText_MEMO,
     SymText_dB,
 
-    // Kenwood KR-V77R Additions
+    // Kenwood KR-V77R Main Display Additions
     SymText_EQ_REC,
     SymText_STEREO,
     SymText_FM,
+    SymText_MHz,            
+    SymText_VOLUME_LEVEL,
+    SymText_REAR,
     SymText_DEFEAT,
+    SymText_DELAY,
+    SymText_ms,
+    SymText_ON,
+    SymText_TUNED,
+    SymText_AM,
+    SymText_KHz,
+    SymText_MUTING,         
+    SymText_AUDIO_INJECTION,
+    SymText_BAL,
+    SymText_TAPE_2,
+    SymText_1_10,
+    SymText_VIDEO_MONITOR,
+    SymText_11_20,
+
+    // Kenwood KR-V77R EQ Display Additions
+    SymDotBar,
+    SymText_SET,
+    SymText_M_A,
+    SymText_M_B,
+    SymText_M_C,
+    SymText_M_D,
+    SymText_M_E,
+    SymText_150,
+    SymText_400,
+    SymText_1K,
+    SymText_2_4K,
+    SymText_6K,
 
     //
     SymEnd

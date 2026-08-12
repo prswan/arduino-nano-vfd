@@ -22,37 +22,39 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef KenwoodKRV77RPinout_h
-#define KenwoodKRV77RPinout_h
+#ifndef KenwoodKRV77REQLayout_h
+#define KenwoodKRV77REQLayout_h
 
 #include "Arduino.h"
-#include "IVfdPinout.h"
+#include "IVfdLayout.h"
 
 //
-// VFD pinout for the Kenwood KR-V77R Receiver.
-// Driven by 3 x SN75518 32-bit serial driver ICs.
+// VFD layout for the Kenwood KR-V77R Receiver.
+// driven by a single A6518 32-bit serial driver IC.
 //
-// Main Display
+// EQ Display
 //
-class KenwoodKRV77RPinout : public IVfdPinout
+class KenwoodKRV77REQLayout : public IVfdLayout
 {
 public:
-    KenwoodKRV77RPinout() {};
+    KenwoodKRV77REQLayout() {};
 
-    ~KenwoodKRV77RPinout() {};
+    ~KenwoodKRV77REQLayout() {};
 
-    void getScanConfig(
-        DriverType *driverType,
-        const UINT8 **registerMask,
-        UINT8 *registerLenInBits,
-        UINT8 *numGrids);
+    void getProperties(
+        const Properties **p_properties);
 
-    void getPinMapGrid(
-        const PinMap **p_pinMap,
+    void getRegionMap(
+        const Region **p_region,
         UINT8 *numEntries);
 
-    void getPinMapSegment(
-        const PinMap **p_pinMap,
+    bool getSegmentGroupSymbol(
+        const SegmentGroupSymbol **p_segGroup,
+        UINT8 *numEntries);
+
+    bool getSegmentGroupBar(
+        UINT8 regionId,
+        const SegmentGroupBar **p_segGroup,
         UINT8 *numEntries);
 };
 

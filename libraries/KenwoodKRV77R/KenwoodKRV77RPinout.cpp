@@ -171,7 +171,3 @@ void KenwoodKRV77RPinout::getPinMapSegment(
     *p_pinMap = s_pinMapSegment;
     *numEntries = ARRAYSIZE(s_pinMapSegment);
 };
-
-//
-// TODO: Add a second Pinout/Layout pair for the EQ display, treated as a fully separate display.
-//

@@ -251,10 +251,13 @@ void TestBar::onNextShortPress(
 {
     controller->stdOut->printf("\r%2.2d %c", s_currentPosition, (s_showScale ? 'S' : ' '));
 
+    //
     // The Koss WMS1100 has 2 regions and up to 3 bars per region.
+    // KR-V77R EQ has 7 bars
+    //
     for (UINT8 r = 0 ; r < 2 ; r++)
     {
-        for (UINT8 i = 0 ; i < 3 ; i++)
+        for (UINT8 i = 0 ; i < 7 ; i++)
         {
             Bar::set(controller->uutVfd, r, i, s_showScale, (s_currentPosition + r + i));
         }
@@ -294,9 +297,13 @@ void TestBar::run(
     {
         Vfd* uutVfd = controller->uutVfd;
 
-        Bar::set(uutVfd, 0, 0, false, s_currentIndex);        // forwards
+        for (UINT8 i = 0 ; i < 7 ; i=i+2)
+        {
+            Bar::set(uutVfd, 0, (i + 0), false, s_currentIndex);        // forwards
+            Bar::set(uutVfd, 0, (i + 1), false, (16 - s_currentIndex)); // backwards
+        }
+
         Bar::set(uutVfd, 1, 0, false, (16 - s_currentIndex)); // backwards
-        Bar::set(uutVfd, 0, 1, false, (16 - s_currentIndex)); // backwards
 
         if (++s_currentIndex > 16)
         {
