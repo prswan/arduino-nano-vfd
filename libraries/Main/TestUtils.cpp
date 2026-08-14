@@ -220,7 +220,7 @@ void TestSymbol::onNextShortPress(
 
     if (success)
     {
-        stdOut->printf("\r%1.1d %3.3d", instance, (int) sym);
+        stdOut->printf("\r%1.1d%3.3d", instance, (int) sym);
 
         s_groupIndex++;
     }

@@ -134,6 +134,15 @@ void setup() {
   controller.stdOutVfd = &controller.vfd[1][0]; // Panasonic for StdOut
   controller.stdOutRegionId = 0;
 
+  /*
+  // Test option to make sure the AppEngine is usable with minimum 4 digit 7-seg StdOut and 2 digit 7-seg Menu
+  controller.appEngineVfd = &controller.vfd[2][1]; // FC40
+  controller.appEngineRegionId = 0;
+
+  controller.stdOutVfd = &controller.vfd[2][1];
+  controller.stdOutRegionId = 1;
+  */
+
   controller.uutVfd = &controller.vfd[0][0]; // KR-V77R UUT
   controller.uutRegionId = 0;
 }

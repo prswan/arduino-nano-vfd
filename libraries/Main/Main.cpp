@@ -98,10 +98,10 @@ static AppEngineMenu s_appEngineMenu[] =
     {"ASCII  ", NULL,         TestAscii::onSelect,       NULL, TestAscii::onNextShortPress,       NULL},
     {"Symbol ", NULL,         TestSymbol::onSelect,      NULL, TestSymbol::onNextShortPress,      NULL},
     {"Bar    ", TestBar::run, TestBar::onSelect,         NULL, TestBar::onNextShortPress,         TestBar::onNextLongPress},
-    {"NumList", NULL,         TestNumberList::onSelect,  NULL, TestNumberList::onNextShortPress,  NULL},
+    {"List   ", NULL,         TestNumberList::onSelect,  NULL, TestNumberList::onNextShortPress,  NULL},
     {"Manu   ", NULL,         Manufacturer::onSelect,    NULL, Manufacturer::onNextShortPress,    NULL},
     {"Perf   ", NULL,         Performance::onSelect,     NULL, Performance::onNextShortPress ,    NULL},
-    {"Memory ", NULL,         Memory::onSelect,          NULL, Memory::onNextShortPress ,         NULL},
+    {"FreeMem", NULL,         Memory::onSelect,          NULL, Memory::onNextShortPress ,         NULL},
     {0}
 };
 
