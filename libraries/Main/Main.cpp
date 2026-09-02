@@ -89,7 +89,7 @@ Step 1
    e.g. 7 char select, 11 char stdout, 4 digit hex, 2-bar horizontal, 5-bar EQ, number list, 2 digit hex etc.
 */
 
-static AppEngineMenu s_appEngineMenu[] =
+static const AppEngineMenu p_appEngineMenu[] PROGMEM =
 {
 //   "1234567"
     {"Pin On ", NULL,         PinOn::onSelect,           NULL, NULL,                              NULL},
@@ -126,5 +126,5 @@ void Main(Controller *controller)
         controller->appEngineRegionId = controller->stdOutRegionId;
     }
 
-    AppEngine(controller, s_appEngineMenu);
+    AppEngine(controller, p_appEngineMenu);
 };

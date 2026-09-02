@@ -54,6 +54,16 @@ typedef void (*onCallback)(Controller *controller);
 //
 // TODO: Needs to move to PROGMEM
 //
+// Before PROGMEM
+// Sketch uses 16456 bytes (53%) of program storage space. Maximum is 30720 bytes.
+// Global variables use 642 bytes (31%) of dynamic memory, leaving 1406 bytes for local variables. Maximum is 2048 bytes.
+// FreeMem: 0809 Bytes
+//
+// After PROGMEM
+// Sketch uses 16456 bytes (53%) of program storage space. Maximum is 30720 bytes.
+// Global variables use 444 bytes (21%) of dynamic memory, leaving 1604 bytes for local variables. Maximum is 2048 bytes.
+// FreeMem: 0975 Bytes
+//
 // After power on, for code simplicity, the first entry 0 is skipped
 // and 1+ is selected.
 //
@@ -73,6 +83,6 @@ typedef struct _AppEngineMenu {
 //
 // Does not return
 //
-void AppEngine(Controller *controller, AppEngineMenu *menu);
+void AppEngine(Controller *controller, AppEngineMenu *p_menu);
 
 #endif

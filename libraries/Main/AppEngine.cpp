@@ -27,7 +27,7 @@
 #include "VfdStdOut.h"
 
 
-void AppEngine(Controller *controller, AppEngineMenu *menu)
+void AppEngine(Controller *controller, AppEngineMenu *p_menu)
 {
     Buttons*   buttons           = controller->buttons;
     VfdStdOut* stdOut            = controller->stdOut;
@@ -46,21 +46,25 @@ void AppEngine(Controller *controller, AppEngineMenu *menu)
         }
 
         // Invoke any defined background tasks
-        for (UINT8 i = 0 ; menu[i].description[0] != 0 ; i++)
+        for (UINT8 i = 0 ; pgm_read_byte_near(&p_menu[i].description[0]) != 0 ; i++)
         {
-            if (menu[i].run != NULL)
+            runCallback callback = pgm_read_ptr_near(&p_menu[i].run);
+
+            if (callback != NULL)
             {
-                menu[i].run(controller);
+                callback(controller);
             }
         }
 
         // Select press or it's the first time through after power on
         if (buttons->isSelectShortPressed() || firstPass)
         {
+            onCallback callback = pgm_read_ptr_near(&p_menu[currentMenuIndex].onDeSelect);
+
             // Deselect the current app
-            if ((menu[currentMenuIndex].onDeSelect != NULL) && !firstPass)
+            if ((callback != NULL) && !firstPass)
             {
-                menu[currentMenuIndex].onDeSelect(controller);
+                callback(controller);
             }
 
             //
@@ -69,43 +73,48 @@ void AppEngine(Controller *controller, AppEngineMenu *menu)
             //
             do
             {
-                if (menu[++currentMenuIndex].description[0] == 0)
+                if (pgm_read_byte_near(&p_menu[++currentMenuIndex].description[0]) == 0)
                 {
                     currentMenuIndex = 0;
                 }
             }
-            while (menu[currentMenuIndex].onSelect == NULL);
+            while (pgm_read_ptr_near(&p_menu[currentMenuIndex].onSelect) == NULL);
 
             // Update the display for the App description we're selecting
             stdOut->print(appEngineVfd, 
                           appEngineRegionId,
                           "\f");
 
-            stdOut->print(appEngineVfd, 
-                          appEngineRegionId,
-                          menu[currentMenuIndex].description);
+            stdOut->print_P(appEngineVfd, 
+                            appEngineRegionId,
+                            p_menu[currentMenuIndex].description);
 
             // Clear StdOut ready for the new app
             stdOut->printf("\f");
 
-            menu[currentMenuIndex].onSelect(controller);
+            callback = pgm_read_ptr_near(&p_menu[currentMenuIndex].onSelect);
+            callback(controller);
 
             firstPass = false;
         }
 
         if (buttons->isNextShortPressed())
         {
-            if (menu[currentMenuIndex].onNextShortPress != NULL)
+            onCallback callback = pgm_read_ptr_near(&p_menu[currentMenuIndex].onNextShortPress);
+
+            if (callback != NULL)
             {
-                menu[currentMenuIndex].onNextShortPress(controller);
+                callback(controller);
             }
         }
 
         if (buttons->isNextLongPressed())
         {
-            if (menu[currentMenuIndex].onNextLongPress != NULL)
+            onCallback callback = pgm_read_ptr_near(&p_menu[currentMenuIndex].onNextLongPress);
+
+            if (callback != NULL)
             {
-                menu[currentMenuIndex].onNextLongPress(controller);
+                callback(controller);
             }
         }
     }
