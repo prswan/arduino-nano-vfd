@@ -29,6 +29,7 @@
 #include "AppEngine.h"
 #include "LayoutFinder.h"
 #include "TestUtils.h"
+#include "Demo.h"
 
 /* TODO
 
@@ -102,6 +103,7 @@ static const AppEngineMenu p_appEngineMenu[] PROGMEM =
     {"Manu   ", NULL,         Manufacturer::onSelect,    NULL, Manufacturer::onNextShortPress,    NULL},
     {"Perf   ", NULL,         Performance::onSelect,     NULL, Performance::onNextShortPress ,    NULL},
     {"FreeMem", NULL,         Memory::onSelect,          NULL, Memory::onNextShortPress ,         NULL},
+    {"Demo   ", Demo::run,    Demo::onSelect,            NULL, Demo::onNextShortPress,            Demo::onNextLongPress},
     {0}
 };
 

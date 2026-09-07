@@ -22,40 +22,69 @@
 // TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-#ifndef Timer_h
-#define Timer_h
+#ifndef Demo_h
+#define Demo_h
 
-#include "Arduino.h"
-#include "Types.h"
+#include "Controller.h"
+
 
 //
-// Implementation that just provides a regular tick indication.
+// Full system demo
 //
-class Timer
+class Demo
 {
-public:
-    Timer();
+    public:
 
-    ~Timer() {};
+        static void onSelect(
+            Controller* controller
+        );
 
-    UINT32 getTickCount()
-    {
-        return m_tickCount;
-    };
+        static void onNextShortPress(
+            Controller* controller
+        );
 
-    //
-    // The return value can be used to synchronize cooperative tasks
-    // - false - No action.
-    // - true  - Timer expired
-    //
-    bool run();
+        static void onNextLongPress(
+            Controller* controller
+        );
 
-public:
-    static const UINT32 tickPeriodInMS = 1;
+        static void run(
+            Controller* controller
+        );
 
-private:
-    UINT32 m_nextUpdateTimeInUS;
-    UINT32 m_tickCount;
+    private:
+
+        static void runAscii(
+            Controller* controller,
+            Vfd*        vfd,
+            UINT8       dispIndex,
+            UINT32      rndNum
+        );
+
+        static void runBar(
+            Controller* controller,
+            Vfd*        vfd,
+            UINT8       dispIndex,
+            UINT32      rndNum
+        );
+
+        static void runNumberList(
+            Controller* controller,
+            Vfd*        vfd,
+            UINT8       dispIndex,
+            UINT32      rndNum
+        );
+
+        static void runSymbols(
+            Controller* controller,
+            Vfd*        vfd,
+            UINT8       dispIndex,
+            UINT32      rndNum
+        );
+
+    private:
+
+        static bool  s_runBackground;
+        static bool  s_debug;
 };
 
 #endif
