@@ -11,7 +11,9 @@ None
 
 
 1. R1 - R4 should be 1W but were placed as 0.25W so the pads, holes and spacing are too small. They should be 0.6" pitch.
-2. The 12-pin header pinout was set based on ease of routing and the Controller PCB designed to match it, however the VFD's are mounted to the underside so the connector is now upside down causing a twist in the cable for bottom pinned VFD that are more common and have the shortest cable to the controller. Top pinned VFD (upside down PCB) are have a straight cable, but in this case the universal connector is at the opposite end leaving a lot of cable length to accommodate a twist. Needs review of the routing impact of flipping the 12-pin header whilst keeping the same pinout. 
+2. The 12-pin header pinout was set based on ease of routing and the Controller PCB designed to match it, however the VFD's are mounted to the underside so the connector is now upside down causing a twist in the cable for bottom pinned VFD that are more common and have the shortest cable to the controller. Top pinned VFD (upside down PCB) are have a straight cable, but in this case the universal connector is at the opposite end leaving a lot of cable length to accommodate a twist. Needs review of the routing impact of flipping the 12-pin header whilst keeping the same pinout.
+3. To support DIL pinned displays, the spare IC area could be replaced with a through connector to allow a 2nd UVFD PCB to be chained on the end to drive the 2nd row of pins.
+4. One of the mounting holes is fouled by the PL1 connector. There is space to move the hole between PL1 and U1 out of the way.
 
 
 
