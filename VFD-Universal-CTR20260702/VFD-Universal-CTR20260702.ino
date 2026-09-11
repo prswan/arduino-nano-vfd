@@ -33,23 +33,23 @@
 #include "Char7Seg.h"
 #include "Char14Seg.h"
 
-#include "KenwoodKRV77REQPinout.h"
-#include "KenwoodKRV77REQLayout.h"
-
 #include "PhilipsFC40Pinout.h"
 #include "PhilipsFC40Layout.h"
 
 #include "SonyCDPC305Pinout.h"
 #include "SonyCDPC305Layout.h"
 
-#include "KenwoodKRV77RPinout.h"
-#include "KenwoodKRV77RLayout.h"
-
 #include "PanasonicDVDRV32Pinout.h"
 #include "PanasonicDVDRV32Layout.h"
 
 #include "SonyDVPNS725PPinout.h"
 #include "SonyDVPNS725PLayout.h"
+
+#include "KenwoodKRV77REQPinout.h"
+#include "KenwoodKRV77REQLayout.h"
+
+#include "KenwoodKRV77RPinout.h"
+#include "KenwoodKRV77RLayout.h"
 
 // Controller Digital pin mappings
 #define CONTROLLER_PIN_NEXT   (2)
@@ -73,12 +73,6 @@ void setup() {
   controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
   controller.regionSubTypeMap[1].ichar = new Char7Seg();
 
-  IVfdPinout *vfdPinout00 = new KenwoodKRV77REQPinout();
-  IVfdLayout *vfdLayout00 = new KenwoodKRV77REQLayout();
-
-  IVfdPinout *vfdPinout01 = new KenwoodKRV77RPinout();
-  IVfdLayout *vfdLayout01 = new KenwoodKRV77RLayout();
-
   IVfdPinout *vfdPinout40 = new PhilipsFC40Pinout();
   IVfdLayout *vfdLayout40 = new PhilipsFC40Layout();
 
@@ -91,59 +85,65 @@ void setup() {
   IVfdPinout *vfdPinout51 = new SonyDVPNS725PPinout();
   IVfdLayout *vfdLayout51 = new SonyDVPNS725PLayout();
 
-  ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout00, 
-                                                         vfdPinout01);
+  IVfdPinout *vfdPinout70 = new KenwoodKRV77REQPinout();
+  IVfdLayout *vfdLayout70 = new KenwoodKRV77REQLayout();
 
-  ShiftRegisterBitMap *bitMap4 = new ShiftRegisterBitMap(vfdPinout40, 
+  IVfdPinout *vfdPinout71 = new KenwoodKRV77RPinout();
+  IVfdLayout *vfdLayout71 = new KenwoodKRV77RLayout();
+
+  ShiftRegisterBitMap *bitMap4 = new ShiftRegisterBitMap(vfdPinout40,
                                                          vfdPinout41);
 
   ShiftRegisterBitMap *bitMap5 = new ShiftRegisterBitMap(vfdPinout50,
                                                          vfdPinout51);
 
-  controller.vfd[0][0].layout  = vfdLayout00;
-  controller.vfd[0][0].display = bitMap0->getDisplay(0);
+  ShiftRegisterBitMap *bitMap7 = new ShiftRegisterBitMap(vfdPinout70,
+                                                         vfdPinout71);
 
-  controller.vfd[0][1].layout  = vfdLayout01;
-  controller.vfd[0][1].display = bitMap0->getDisplay(1);
+  controller.vfd[0][0].layout  = vfdLayout40;
+  controller.vfd[0][0].display = bitMap4->getDisplay(0);
 
-  controller.vfd[1][0].layout  = vfdLayout40;
-  controller.vfd[1][0].display = bitMap4->getDisplay(0);
+  controller.vfd[0][1].layout  = vfdLayout41;
+  controller.vfd[0][1].display = bitMap4->getDisplay(1);
 
-  controller.vfd[1][1].layout  = vfdLayout41;
-  controller.vfd[1][1].display = bitMap4->getDisplay(1);
+  controller.vfd[1][0].layout  = vfdLayout50;
+  controller.vfd[1][0].display = bitMap5->getDisplay(0);
 
-  controller.vfd[2][0].layout  = vfdLayout50;
-  controller.vfd[2][0].display = bitMap5->getDisplay(0);
+  controller.vfd[1][1].layout  = vfdLayout51;
+  controller.vfd[1][1].display = bitMap5->getDisplay(1);
 
-  controller.vfd[2][1].layout  = vfdLayout51;
-  controller.vfd[2][1].display = bitMap5->getDisplay(1);
+  controller.vfd[2][0].layout  = vfdLayout70;
+  controller.vfd[2][0].display = bitMap7->getDisplay(0);
+
+  controller.vfd[2][1].layout  = vfdLayout71;
+  controller.vfd[2][1].display = bitMap7->getDisplay(1);
 
   controller.isShiftRegister = true;
 
-  controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
   controller.sys.sr.bitMap[4] = bitMap4; // Port Address 4, PL5
   controller.sys.sr.bitMap[5] = bitMap5; // Port Address 5, PL6
+  controller.sys.sr.bitMap[7] = bitMap7; // Port Address 7, PL8
 
   controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
                                                  &(controller.sys.sr.bitMap[0]), 
                                                  ARRAYSIZE(controller.sys.sr.bitMap));
 
-  controller.appEngineVfd = &controller.vfd[2][1]; // DVP-NS725P for AppEngine menu
+  controller.appEngineVfd = &controller.vfd[1][1]; // DVP-NS725P for AppEngine menu
   controller.appEngineRegionId = 0;
 
-  controller.stdOutVfd = &controller.vfd[2][0]; // DVD-RV32 for StdOut
+  controller.stdOutVfd = &controller.vfd[1][0]; // DVD-RV32 for StdOut
   controller.stdOutRegionId = 0;
 
   /*
   // Test option to make sure the AppEngine is usable with minimum 4 digit 7-seg StdOut and 2 digit 7-seg Menu
-  controller.appEngineVfd = &controller.vfd[4][1]; // FC40
+  controller.appEngineVfd = &controller.vfd[0][1]; // FC40
   controller.appEngineRegionId = 0;
 
-  controller.stdOutVfd = &controller.vfd[4][1];
+  controller.stdOutVfd = &controller.vfd[0][1];
   controller.stdOutRegionId = 1;
   */
 
-  controller.uutVfd = &controller.vfd[0][1]; // KR-V77R UUT
+  controller.uutVfd = &controller.vfd[2][1]; // KR-V77R UUT
   controller.uutRegionId = 0;
 }
 
