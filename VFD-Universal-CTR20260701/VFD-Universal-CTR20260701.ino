@@ -33,23 +33,11 @@
 #include "Char7Seg.h"
 #include "Char14Seg.h"
 
-#include "KenwoodKRV77REQPinout.h"
-#include "KenwoodKRV77REQLayout.h"
-
-#include "KenwoodKRV77RPinout.h"
-#include "KenwoodKRV77RLayout.h"
-
-#include "PanasonicDVDRV32Pinout.h"
-#include "PanasonicDVDRV32Layout.h"
+#include "TeacPDD1200Pinout.h"
+#include "TeacPDD1200Layout.h"
 
 #include "SonyDVPNS725PPinout.h"
 #include "SonyDVPNS725PLayout.h"
-
-#include "SonyCDPC305Pinout.h"
-#include "SonyCDPC305Layout.h"
-
-#include "PhilipsFC40Pinout.h"
-#include "PhilipsFC40Layout.h"
 
 // Controller Digital pin mappings
 #define CONTROLLER_PIN_NEXT   (2)
@@ -73,77 +61,40 @@ void setup() {
   controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
   controller.regionSubTypeMap[1].ichar = new Char7Seg();
 
-  IVfdPinout *vfdPinout0 = new KenwoodKRV77RPinout();
-  IVfdLayout *vfdLayout0 = new KenwoodKRV77RLayout();
+  IVfdPinout *vfdPinout0 = new TeacPDD1200Pinout();
+  IVfdLayout *vfdLayout0 = new TeacPDD1200Layout();
 
-  IVfdPinout *vfdPinout1 = new PanasonicDVDRV32Pinout();
-  IVfdLayout *vfdLayout1 = new PanasonicDVDRV32Layout();
-
-  IVfdPinout *vfdPinout2 = new SonyDVPNS725PPinout();
-  IVfdLayout *vfdLayout2 = new SonyDVPNS725PLayout();
-
-  IVfdPinout *vfdPinout3 = new SonyCDPC305Pinout();
-  IVfdLayout *vfdLayout3 = new SonyCDPC305Layout();
-
-  IVfdPinout *vfdPinout4 = new PhilipsFC40Pinout();
-  IVfdLayout *vfdLayout4 = new PhilipsFC40Layout();
-
-  IVfdPinout *vfdPinout5 = new KenwoodKRV77REQPinout();
-  IVfdLayout *vfdLayout5 = new KenwoodKRV77REQLayout();
+  IVfdPinout *vfdPinout1 = new SonyDVPNS725PPinout();
+  IVfdLayout *vfdLayout1 = new SonyDVPNS725PLayout();
 
   ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, 
-                                                         vfdPinout5);
+                                                         NULL);
 
   ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout1, 
-                                                         vfdPinout2);
-
-  ShiftRegisterBitMap *bitMap2 = new ShiftRegisterBitMap(vfdPinout3,
-                                                         vfdPinout4);
+                                                         NULL);
 
   controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
 
-  controller.vfd[0][1].layout  = vfdLayout5;
-  controller.vfd[0][1].display = bitMap0->getDisplay(1);
-
   controller.vfd[1][0].layout  = vfdLayout1;
   controller.vfd[1][0].display = bitMap1->getDisplay(0);
-
-  controller.vfd[1][1].layout  = vfdLayout2;
-  controller.vfd[1][1].display = bitMap1->getDisplay(1);
-
-  controller.vfd[2][0].layout  = vfdLayout3;
-  controller.vfd[2][0].display = bitMap2->getDisplay(0);
-
-  controller.vfd[2][1].layout  = vfdLayout4;
-  controller.vfd[2][1].display = bitMap2->getDisplay(1);
 
   controller.isShiftRegister = true;
 
   controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
   controller.sys.sr.bitMap[7] = bitMap1; // Port Address 7, PL8
-  controller.sys.sr.bitMap[4] = bitMap2; // Port Address 4, PL5
 
   controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
                                                  &(controller.sys.sr.bitMap[0]), 
                                                  ARRAYSIZE(controller.sys.sr.bitMap));
 
-  controller.appEngineVfd = &controller.vfd[1][1]; // Sony for AppEngine menu
+  controller.appEngineVfd = &controller.vfd[0][0]; // 3-digit 7-seg PD-D1200
   controller.appEngineRegionId = 0;
 
-  controller.stdOutVfd = &controller.vfd[1][0]; // Panasonic for StdOut
-  controller.stdOutRegionId = 0;
-
-  /*
-  // Test option to make sure the AppEngine is usable with minimum 4 digit 7-seg StdOut and 2 digit 7-seg Menu
-  controller.appEngineVfd = &controller.vfd[2][1]; // FC40
-  controller.appEngineRegionId = 0;
-
-  controller.stdOutVfd = &controller.vfd[2][1];
+  controller.stdOutVfd = &controller.vfd[0][0]; // 4-digit 7-seg PD-D1200
   controller.stdOutRegionId = 1;
-  */
 
-  controller.uutVfd = &controller.vfd[0][0]; // KR-V77R UUT
+  controller.uutVfd = &controller.vfd[1][0]; // NS725 as the UUT, placeholder, not fitted
   controller.uutRegionId = 0;
 }
 
