@@ -68,11 +68,14 @@ public:
     };
 
     //
-    // Set the SPI multiplexor port to use via SEL0,1,2.
+    // Set the SPI multiplexor port to use via SEL0,1,2 and the
+    // associated SPI clock frequency (1,2,4 MHz etc.).
     // "port" is 0 to 7 for physical ports 1 to 8.
+    // "clockFrequency" is 1,2,4 MHz etc for the Nano.
     //
     void setPort(
-        UINT8 port
+        UINT8 port,
+        UINT8 clockFrequency
     );
 
     //
@@ -99,6 +102,7 @@ public:
 private:
 
     UINT8 m_currentPort;
+    UINT8 m_currentClockFrequency;
 };
 
 #endif

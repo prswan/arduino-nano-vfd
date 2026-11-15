@@ -117,16 +117,16 @@ static const UINT8 s_registerMask[] PROGMEM =
     0x00,0x00,0x00,0x00
 };
 
-void PhilipsFC40Pinout::getScanConfig(
-    DriverType *driverType,
-    const UINT8 **registerMask,
-    UINT8 *registerLenInBits,
-    UINT8 *numGrids)
+void PhilipsFC40Pinout::getProperties(
+    PinoutProperties *pinoutProperties)
 {
-    *driverType = DriverTypeSN75518;
-    *registerMask = s_registerMask;
-    *registerLenInBits = 96;
-    *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
+    memset(pinoutProperties, 0x00, sizeof(*pinoutProperties));
+
+    pinoutProperties->driverType        = DriverTypeSN75518;
+    pinoutProperties->spiClockFrequency = 2;
+    pinoutProperties->registerLenInBits = 96;
+    pinoutProperties->p_registerMask    = s_registerMask;
+    pinoutProperties->numGrids          = ARRAYSIZE(s_pinMapGrid) - 1;
 };
 
 void PhilipsFC40Pinout::getPinMapGrid(
@@ -144,4 +144,3 @@ void PhilipsFC40Pinout::getPinMapSegment(
     *p_pinMap = s_pinMapSegment;
     *numEntries = ARRAYSIZE(s_pinMapSegment);
 };
-

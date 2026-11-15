@@ -30,7 +30,7 @@
 
 //
 // VFD pinout for the TEAC PD-D1200 CD Player.
-// Driven by an A6518 32-bit serial driver IC.
+// Driven by an SN75518 32-bit serial driver IC.
 //
 class TeacPDD1200Pinout : public IVfdPinout
 {
@@ -39,11 +39,8 @@ public:
 
     ~TeacPDD1200Pinout() {};
 
-    void getScanConfig(
-        DriverType *driverType,
-        const UINT8 **registerMask,
-        UINT8 *registerLenInBits,
-        UINT8 *numGrids);
+    void getProperties(
+        PinoutProperties *p_pinoutProperties);
 
     void getPinMapGrid(
         const PinMap **p_pinMap,

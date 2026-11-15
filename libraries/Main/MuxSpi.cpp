@@ -63,6 +63,9 @@ MuxSpi::MuxSpi(UINT8 bitOrder)
     // This is need to esnure that there is no spurious CLK when the
     // port mux is changed because the port mux is idle high.
     //
+    // Though the initial SPI clock frequency is 2MHz, it's
+    // overridden when a port is selected.
+    //
     SPIClass::beginTransaction(SPISettings(2000000, bitOrder, SPI_MODE3));
 
     // Initiate 1 transaction to set the initial SPIF (done) flag
@@ -74,7 +77,9 @@ MuxSpi::~MuxSpi()
     SPIClass::endTransaction();
 };
 
-void MuxSpi::setPort(UINT8 port)
+void MuxSpi::setPort(
+    UINT8 port,
+    UINT8 clockFrequency)
 {
     if (port == m_currentPort)
     {
@@ -88,6 +93,38 @@ void MuxSpi::setPort(UINT8 port)
 
     // SEL[0..2] === [PD5..PD7]
     PORTD = (PORTD & ~(0x07 << 5)) | (m_currentPort << 5);
+
+    if (clockFrequency != m_currentClockFrequency)
+    {
+        m_currentClockFrequency = clockFrequency;
+
+        // Mask off the clock control bits
+        UINT8 spcr = SPCR & ~0x03;
+        UINT8 spsr = SPSR & ~0x01;
+
+        // Set the clock control bits
+        switch (clockFrequency)
+        {
+            case 2 : // 2MHz - fosc/8
+            {
+                spcr |= 0x01;
+                spsr |= 0x01;
+                break;
+            }
+            case 4 : // 4MHz - fosc/4
+            {
+                break;
+            }
+
+            default : // 1Mhz - fosc/16
+            {
+                spcr |= 0x01;
+            }
+        }
+
+        SPCR = spcr;
+        SPSR = spsr;
+    }
 };
 
 void MuxSpi::writeData(
@@ -95,7 +132,7 @@ void MuxSpi::writeData(
         const UINT8 *data,
         UINT8 dataLenInBytes)
 {
-    setPort(port);
+    setPort(port, 2); // TODO: Implement differing frequency for Integrated Bitmap Drivers.
 
     //
     // We don't use the SPI library implementation because it clobbers

@@ -83,22 +83,22 @@ static const UINT8 s_registerMask[] PROGMEM =
     0xFF,0xFF,0xFF
 };
 
-void KossWMS1100Pinout::getScanConfig(
-    DriverType *driverType,
-    const UINT8 **registerMask,
-    UINT8 *registerLenInBits,
-    UINT8 *numGrids)
+void KossWMS1100Pinout::getProperties(
+    PinoutProperties *pinoutProperties)
 {
-    // Used to select the flavour in the PT631xDriverIC implementation.
-    *driverType = DriverTypePT6311;
+    memset(pinoutProperties, 0x00, sizeof(*pinoutProperties));
 
-    *registerMask = s_registerMask;
+    // Used to select the flavour in the PT631xDriverIC implementation.
+    pinoutProperties->driverType = DriverTypePT6311;
+
+    pinoutProperties->p_registerMask = s_registerMask;
 
     // Used to calculate the driver IC memory address layout.
-    *registerLenInBits = 24;
+    pinoutProperties->registerLenInBits = 24;
 
     // This sets the driver IC grid configuration register.
-    *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
+    pinoutProperties->numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
+    pinoutProperties->spiClockFrequency = 2;
 };
 
 void KossWMS1100Pinout::getPinMapGrid(

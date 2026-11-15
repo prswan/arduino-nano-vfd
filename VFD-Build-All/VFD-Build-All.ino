@@ -56,6 +56,9 @@
 #include "PhilipsFC40Pinout.h"
 #include "PhilipsFC40Layout.h"
 
+#include "KronosSystem55Pinout.h"
+#include "KronosSystem55Layout.h"
+
 // Integrated Driver IC Front Panel system
 #include "PT631xDriverIC.h"
 #include "Timer.h"
@@ -113,6 +116,9 @@ void setup() {
   IVfdPinout *vfdPinoutU6 = new PhilipsFC40Pinout();
   IVfdLayout *vfdLayoutU6 = new PhilipsFC40Layout();
 
+  IVfdPinout *vfdPinoutU7 = new KronosSystem55Pinout();
+  IVfdLayout *vfdLayoutU7 = new KronosSystem55Layout();
+
   IVfdPinout *vfdPinoutF0 = new SamsungBDP1590Pinout();
   IVfdLayout *vfdLayoutF0 = new SamsungBDP1590Layout();
 
@@ -127,6 +133,7 @@ void setup() {
   ShiftRegisterBitMap *bitMap2 = new ShiftRegisterBitMap(vfdPinoutU3, NULL);
   ShiftRegisterBitMap *bitMap3 = new ShiftRegisterBitMap(vfdPinoutU4, NULL);
   ShiftRegisterBitMap *bitMap4 = new ShiftRegisterBitMap(vfdPinoutU5, vfdPinoutU6);
+  ShiftRegisterBitMap *bitMap5 = new ShiftRegisterBitMap(vfdPinoutU7, NULL);
   
   controller.vfd[0][0].layout  = vfdLayoutU0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
@@ -149,6 +156,9 @@ void setup() {
   controller.vfd[4][1].layout  = vfdLayoutU6;
   controller.vfd[4][1].display = bitMap4->getDisplay(1);
 
+  controller.vfd[5][0].layout  = vfdLayoutU7;
+  controller.vfd[5][0].display = bitMap5->getDisplay(0);
+
   controller.isShiftRegister = true;
 
   controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
@@ -156,6 +166,7 @@ void setup() {
   controller.sys.sr.bitMap[2] = bitMap2; // Port Address 2, PL3
   controller.sys.sr.bitMap[3] = bitMap3; // Port Address 3, PL4
   controller.sys.sr.bitMap[4] = bitMap4; // Port Address 4, PL5
+  controller.sys.sr.bitMap[5] = bitMap5; // Port Address 5, PL6
 
   controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
                                                  &(controller.sys.sr.bitMap[0]), 

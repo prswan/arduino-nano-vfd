@@ -36,8 +36,8 @@
 #include "TeacPDD1200Pinout.h"
 #include "TeacPDD1200Layout.h"
 
-#include "SonyDVPNS725PPinout.h"
-#include "SonyDVPNS725PLayout.h"
+#include "KronosSystem55Pinout.h"
+#include "KronosSystem55Layout.h"
 
 // Controller Digital pin mappings
 #define CONTROLLER_PIN_NEXT   (2)
@@ -61,11 +61,11 @@ void setup() {
   controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
   controller.regionSubTypeMap[1].ichar = new Char7Seg();
 
-  IVfdPinout *vfdPinout0 = new TeacPDD1200Pinout();
-  IVfdLayout *vfdLayout0 = new TeacPDD1200Layout();
+  IVfdPinout *vfdPinout0 = new KronosSystem55Pinout();
+  IVfdLayout *vfdLayout0 = new KronosSystem55Layout();
 
-  IVfdPinout *vfdPinout1 = new SonyDVPNS725PPinout();
-  IVfdLayout *vfdLayout1 = new SonyDVPNS725PLayout();
+  IVfdPinout *vfdPinout1 = new TeacPDD1200Pinout();
+  IVfdLayout *vfdLayout1 = new TeacPDD1200Layout();
 
   ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, 
                                                          NULL);
@@ -82,19 +82,19 @@ void setup() {
   controller.isShiftRegister = true;
 
   controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
-  controller.sys.sr.bitMap[7] = bitMap1; // Port Address 7, PL8
+  controller.sys.sr.bitMap[1] = bitMap1; // Port Address 1, PL2
 
   controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
                                                  &(controller.sys.sr.bitMap[0]), 
                                                  ARRAYSIZE(controller.sys.sr.bitMap));
 
-  controller.appEngineVfd = &controller.vfd[0][0]; // 3-digit 7-seg PD-D1200
+  controller.appEngineVfd = &controller.vfd[1][0]; // 3-digit 7-seg PD-D1200
   controller.appEngineRegionId = 0;
 
-  controller.stdOutVfd = &controller.vfd[0][0]; // 4-digit 7-seg PD-D1200
+  controller.stdOutVfd = &controller.vfd[1][0]; // 4-digit 7-seg PD-D1200
   controller.stdOutRegionId = 1;
 
-  controller.uutVfd = &controller.vfd[1][0]; // NS725 as the UUT, placeholder, not fitted
+  controller.uutVfd = &controller.vfd[0][0]; // System 55 UUT
   controller.uutRegionId = 0;
 }
 

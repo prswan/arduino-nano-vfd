@@ -84,22 +84,22 @@ static const UINT8 s_registerMask[] PROGMEM =
     0xFF,0xFF,0xFF
 };
 
-void PioneerDVR220Pinout::getScanConfig(
-    DriverType *driverType,
-    const UINT8 **registerMask,
-    UINT8 *registerLenInBits,
-    UINT8 *numGrids)
+void PioneerDVR220Pinout::getProperties(
+    PinoutProperties *pinoutProperties)
 {
-    // Used to select the flavour in the PT631xDriverIC implementation.
-    *driverType = DriverTypePT6315;
+    memset(pinoutProperties, 0x00, sizeof(*pinoutProperties));
 
-    *registerMask = s_registerMask;
+    // Used to select the flavour in the PT631xDriverIC implementation.
+    pinoutProperties->driverType = DriverTypePT6315;
+
+    pinoutProperties->p_registerMask = s_registerMask;
 
     // Used to calculate the driver IC memory address layout.
-    *registerLenInBits = 24;
+    pinoutProperties->registerLenInBits = 24;
 
     // This sets the driver IC grid configuration register.
-    *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
+    pinoutProperties->numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
+    pinoutProperties->spiClockFrequency = 2;
 };
 
 void PioneerDVR220Pinout::getPinMapGrid(

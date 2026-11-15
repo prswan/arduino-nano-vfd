@@ -48,9 +48,18 @@ Onkyo HT-R340 NPT-1516D Transformer
  - VFIL @ Controller PCB Input  : 5.33 VAC
  - VFIL @ Controller PL4 2x 15R : 4.28 VAC
  - VFIL @ VFD                   : 4.27 VAC
+ - IFIL (Calculated)            : 35mA
  Display looks good. 
  Very low current with such a small voltage drop accross quite high Fil resistance. 
  Glass is barely warm.
+
+Insignia NS-R2001 Transformer
+-----------------------------
+ - VFIL @ Controller PCB Input  : 4.11 VAC
+ - VFIL @ Controller PL1 2x 0R  : 4.11 VAC
+ - VFIL @ VFD                   : 4.11 VAC
+ Display looks good.
+ VFIL is already less than with the HT-R340 as is, 0R Fil resistance.
  */
 
 static const UINT8 s_manufacturer[] PROGMEM = "KRONOS";

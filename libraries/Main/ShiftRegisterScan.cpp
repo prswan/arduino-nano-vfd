@@ -26,11 +26,11 @@
 
 
 //
-// 450uS per grid.
+// 413uS per grid.
 // Manuals suggest to use something not a multiple of mains 50Hz
 // to avoid alias flickering with the filament AC.
 //
-static const UINT32 s_scanPeriodInHz = 2222;
+static const UINT32 s_scanPeriodInHz = 2422;
 
 // Keep a global copy for the ISR
 static ShiftRegisterScan *s_thisScan = NULL;
@@ -70,6 +70,11 @@ static ShiftRegisterScan *s_thisScan = NULL;
 Baseline 3 displays on 2 shift registers (64-bit & 96-bit)     : 128uS
 Adding a 4th display (CDP-C305) on a 3rd 96-bit shift register : 184uS
 Adding a 5th display (FC-40)    on a 3rd 96-bit shift register : 196uS
+
+Performance Update 11/14/2026
+-----------------------------
+Testing with the Kronos System 55 5x7 matrix showed visible flicker with the 450uS setting. This
+display has 16 grids and after trying a few values changing to 413uS was enough to fix it.
 
 */
 

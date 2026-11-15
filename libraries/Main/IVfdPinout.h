@@ -34,11 +34,52 @@
 //
 typedef enum 
 {
+    // Shift Registers
+    DriverTypeSN75512,
     DriverTypeSN75518,
+    DriverTypeUCN5818,
+
+    // Integrated Bit Map
     DriverTypePT6315,
     DriverTypePT6311
 
 } DriverType;
+
+//
+// Basic pinout & driver properties for the VFD.
+// The registerMask is located in PROGMEM
+//
+typedef struct _PinoutProperties
+{
+    //
+    // The specific type of the driver IC used to accomodate minor variations,
+    // e.g. SPI clock freqency.
+    //
+    DriverType   driverType;
+
+    //
+    // SPI clock frequency in MHz.
+    // Only 1,2 & 4 are supported using the Nano.
+    //
+    UINT8        spiClockFrequency;
+
+    //
+    // The number of bits in the driver IC shift register.
+    //
+    UINT8        registerLenInBits;
+
+    //
+    // Pointer to the driver IC register mask for this display
+    // in PROGMEN bytes rounded up from registerLenInBits.
+    //
+    const UINT8 *p_registerMask;
+
+    //
+    // The number of grids for the bitmap scan, usually the same as the grid pin count.
+    //
+    UINT8        numGrids;
+
+} PinoutProperties;
 
 //
 // This maps the display pin to the driver IC register bit.
@@ -71,20 +112,10 @@ class IVfdPinout
 public:
 
     //
-    // Returns the scan configuration information
+    // Supplies various VFD pinout & associated driver properties.
     //
-    // driverType - The type of driver circuit that this VFD pinout is driven by.
-    //
-    // registerMask - Pointer to the driver IC register mask for this display
-    //                in PROGMEN bytes rounded up from registerLenInBits.
-    // registerLenInBits - The number of bits in the driver IC shift register.
-    // numGrids - The number of grids for the bitmap scan, usually the same as the grid pin count.
-    //
-    virtual void getScanConfig(
-        DriverType *driverType,
-        const UINT8 **registerMask,
-        UINT8 *registerLenInBits,
-        UINT8 *numGrids) = 0;
+    virtual void getProperties(
+        PinoutProperties *pinoutProperties) = 0;
 
     //
     // Returns the physical connection map for the grid pins G1 .. Gx

@@ -84,6 +84,7 @@ private:
     UINT8 m_registerLenInBits;
     UINT8 m_maxNumGrids;
     UINT8 m_registerLenInBytes;
+    UINT8 m_spiClockFrequency;
     UINT8 m_bitMapSizeInBytes;
 
     UINT8 *m_bitMap;

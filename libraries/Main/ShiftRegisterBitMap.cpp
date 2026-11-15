@@ -52,28 +52,26 @@ ShiftRegisterBitMap::ShiftRegisterBitMap(
             continue;
         }
 
-        DriverType driverType;
-        UINT8 *p_registerMask;
-        UINT8  registerLenInBits;
-        UINT8  numGrids;
+        PinoutProperties pinoutProperties;
 
-        // Check dimensions parameters
-        vfd->getScanConfig(
-            &driverType,
-            &p_registerMask,
-            &registerLenInBits,
-            &numGrids);
+        vfd->getProperties(&pinoutProperties);
 
         // We need the maximum grid count for the maximal BitMap
-        if (numGrids > m_maxNumGrids)
+        if (pinoutProperties.numGrids > m_maxNumGrids)
         {
-            m_maxNumGrids = numGrids;
+            m_maxNumGrids = pinoutProperties.numGrids;
         }
 
         // They *should* be the same definition for each display. If not, bad things...
-        if (registerLenInBits > m_registerLenInBits)
+        if (pinoutProperties.registerLenInBits > m_registerLenInBits)
         {
-            m_registerLenInBits = registerLenInBits;
+            m_registerLenInBits = pinoutProperties.registerLenInBits;
+        }
+
+        // They *should* be the same definition for each display. If not, bad things...
+        if (pinoutProperties.spiClockFrequency > m_spiClockFrequency)
+        {
+            m_spiClockFrequency = pinoutProperties.spiClockFrequency;
         }
     }
 
@@ -135,7 +133,7 @@ void ShiftRegisterBitMap::writeCurrentRegisterData(
     }
 
     // Set the port
-    muxSpi->setPort(port);
+    muxSpi->setPort(port, m_spiClockFrequency);
 
     // Compose the register and transfer byte-by-byte
     for (UINT8 byte = 0 ; byte < m_registerLenInBytes ; byte++)

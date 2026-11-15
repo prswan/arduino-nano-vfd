@@ -33,12 +33,14 @@ ShiftRegisterDisplay::ShiftRegisterDisplay(
     m_vfd = vfd;
     m_bitMap = bitMap;
 
-    // Cache the display information we need to manage it.
-    vfd->getScanConfig(
-        &m_driverType,
-        &p_registerMask,
-        &m_registerLenInBits,
-        &m_numGrids);
+    PinoutProperties pinoutProperties;
+
+    vfd->getProperties(&pinoutProperties);
+
+    m_driverType        = pinoutProperties.driverType;
+    p_registerMask      = pinoutProperties.p_registerMask;
+    m_registerLenInBits = pinoutProperties.registerLenInBits;
+    m_numGrids          = pinoutProperties.numGrids;
 
     vfd->getPinMapGrid(
         &p_pinMapGrid,

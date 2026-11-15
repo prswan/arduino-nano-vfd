@@ -36,13 +36,14 @@ DriverICDisplay::DriverICDisplay(
     m_muxSpi = muxSpi;
     m_port = port;
 
+    PinoutProperties pinoutProperties;
 
-    // Cache the display information we need to manage it.
-    vfd->getScanConfig(
-        &m_driverType,
-        &p_registerMask,
-        &m_registerLenInBits,
-        &m_numGrids);
+    vfd->getProperties(&pinoutProperties);
+
+    m_driverType        = pinoutProperties.driverType;
+    p_registerMask      = pinoutProperties.p_registerMask;
+    m_registerLenInBits = pinoutProperties.registerLenInBits;
+    m_numGrids          = pinoutProperties.numGrids;
 
     vfd->getPinMapGrid(
         &p_pinMapGrid,

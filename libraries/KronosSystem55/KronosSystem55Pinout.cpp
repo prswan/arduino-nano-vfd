@@ -127,16 +127,16 @@ static const UINT8 s_registerMask[] PROGMEM =
     0x0F,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF
 };
 
-void KronosSystem55Pinout::getScanConfig(
-    DriverType *driverType,
-    const UINT8 **registerMask,
-    UINT8 *registerLenInBits,
-    UINT8 *numGrids)
+void KronosSystem55Pinout::getProperties(
+    PinoutProperties *pinoutProperties)
 {
-    *driverType = DriverTypeSN75518;
-    *registerMask = s_registerMask;
-    *registerLenInBits = 64;
-    *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
+    memset(pinoutProperties, 0x00, sizeof(*pinoutProperties));
+
+    pinoutProperties->driverType        = DriverTypeSN75512;
+    pinoutProperties->spiClockFrequency = 1;
+    pinoutProperties->registerLenInBits = 64;
+    pinoutProperties->p_registerMask    = s_registerMask;
+    pinoutProperties->numGrids          = ARRAYSIZE(s_pinMapGrid) - 1;
 };
 
 void KronosSystem55Pinout::getPinMapGrid(

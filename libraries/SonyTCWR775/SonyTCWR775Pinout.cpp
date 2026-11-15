@@ -84,16 +84,16 @@ static const UINT8 s_registerMask[] PROGMEM =
     0xFF,0xFF,0xFF,0xFF
 };
 
-void SonyTCWR775Pinout::getScanConfig(
-    DriverType *driverType,
-    const UINT8 **registerMask,
-    UINT8 *registerLenInBits,
-    UINT8 *numGrids)
+void SonyTCWR775Pinout::getProperties(
+    PinoutProperties *pinoutProperties)
 {
-    *driverType = DriverTypeSN75518;
-    *registerMask = s_registerMask;
-    *registerLenInBits = 32;
-    *numGrids = ARRAYSIZE(s_pinMapGrid) - 1;
+    memset(pinoutProperties, 0x00, sizeof(*pinoutProperties));
+
+    pinoutProperties->driverType        = DriverTypeSN75518;
+    pinoutProperties->spiClockFrequency = 2;
+    pinoutProperties->registerLenInBits = 32;
+    pinoutProperties->p_registerMask    = s_registerMask;
+    pinoutProperties->numGrids          = ARRAYSIZE(s_pinMapGrid) - 1;
 };
 
 void SonyTCWR775Pinout::getPinMapGrid(

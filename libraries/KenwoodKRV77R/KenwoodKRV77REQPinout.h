@@ -41,11 +41,8 @@ public:
 
     ~KenwoodKRV77REQPinout() {};
 
-    void getScanConfig(
-        DriverType *driverType,
-        const UINT8 **registerMask,
-        UINT8 *registerLenInBits,
-        UINT8 *numGrids);
+    void getProperties(
+        PinoutProperties *pinoutProperties);
 
     void getPinMapGrid(
         const PinMap **p_pinMap,
