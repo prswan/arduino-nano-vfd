@@ -93,7 +93,7 @@ typedef struct _Controller
     // 
     // VfdStdOut for the character implementations.
     //
-    RegionSubTypeCharMap regionSubTypeMap[2];
+    RegionSubTypeCharMap regionSubTypeMap[3];
     VfdStdOut* stdOut;
 
     // AppEngine menu description output.

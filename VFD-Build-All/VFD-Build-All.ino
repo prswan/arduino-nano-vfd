@@ -30,6 +30,7 @@
 //-----------------------------------------------------------------------------
 
 #include "Controller.h"
+#include "Char5x7Dot.h"
 #include "Char14Seg.h"
 #include "Char7Seg.h"
 
@@ -89,11 +90,14 @@ void setup() {
   controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, 
                                    CONTROLLER_PIN_SELECT);
 
-  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
-  controller.regionSubTypeMap[0].ichar = new Char14Seg();
+  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar5x7Dot;
+  controller.regionSubTypeMap[0].ichar = new Char5x7Dot();
 
-  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
-  controller.regionSubTypeMap[1].ichar = new Char7Seg();
+  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar14Seg;
+  controller.regionSubTypeMap[1].ichar = new Char14Seg();
+
+  controller.regionSubTypeMap[2].subChar = RegionSubTypeChar7Seg;
+  controller.regionSubTypeMap[2].ichar = new Char7Seg();
 
   IVfdPinout *vfdPinoutU0 = new SonyTCWR775Pinout();
   IVfdLayout *vfdLayoutU0 = new SonyTCWR775Layout();

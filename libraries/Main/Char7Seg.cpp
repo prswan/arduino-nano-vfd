@@ -36,15 +36,17 @@ static const UINT8 s_numSegments = 7;
 //
 typedef struct _DisplayGroup7Seg
 {
-    UINT8 a;
-    UINT8 b;
-    UINT8 c;
-    UINT8 d;
-    UINT8 e;
-    UINT8 f;
-    UINT8 g;
+    UINT8 a : 1;
+    UINT8 b : 1;
+    UINT8 c : 1;
+    UINT8 d : 1;
+    UINT8 e : 1;
+    UINT8 f : 1;
+    UINT8 g : 1;
 
 } DisplayGroup7Seg;
+
+static_assert(sizeof(DisplayGroup7Seg) == 1, "7-segment glyphs must use 1 byte");
 
 //
 // Symbols include various but not all ASCII punctuation
@@ -117,12 +119,12 @@ bool Char7Seg::print(
         return false;
     }
 
-    UINT8 *p_on = NULL;
+    const DisplayGroup7Seg *p_on = NULL;
 
     if ((ascii >= '0') && (ascii <= '9'))
     {
         UINT8 index = ascii - '0';
-        p_on = (UINT8 *) &s_displayGroup7SegNumbers[index];
+        p_on = &s_displayGroup7SegNumbers[index];
     }
     else
     {
@@ -133,7 +135,7 @@ bool Char7Seg::print(
             // Limited choice for letters, small selection with enough for hex.
             if ((ascii == value) || (toupper(ascii) == value) || (tolower(ascii) == value))
             {
-                p_on = (UINT8 *) &s_symbolDisplayGroup7Seg[x].group;
+                p_on = &s_symbolDisplayGroup7Seg[x].group;
                 break;
             }
         }
@@ -152,10 +154,22 @@ bool Char7Seg::print(
     UINT8  pinG = pgm_read_byte_near(&p_seg->pinG);
     UINT8* pinS = (UINT8 *) &p_seg->pinS;
 
-    for (int s = 0; s < s_numSegments; s++)
+    for (UINT8 s = 0; s < s_numSegments; s++)
     {
         segState[s].pinS = pgm_read_byte_near(&pinS[s]);
-        segState[s].on = pgm_read_byte_near(&p_on[s]);
+    }
+
+    {
+        DisplayGroup7Seg glyph;
+        memcpy_P(&glyph, p_on, sizeof(glyph));
+
+        segState[0].on = glyph.a;
+        segState[1].on = glyph.b;
+        segState[2].on = glyph.c;
+        segState[3].on = glyph.d;
+        segState[4].on = glyph.e;
+        segState[5].on = glyph.f;
+        segState[6].on = glyph.g;
     }
 
     return vfd->display->setSegments(pinG, segState, ARRAYSIZE(segState));

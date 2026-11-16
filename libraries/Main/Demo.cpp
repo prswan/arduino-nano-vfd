@@ -159,7 +159,8 @@ void Demo::runAscii(
             continue;
         }
 
-        if (controller->regionSubTypeMap[i].subChar == RegionSubTypeChar14Seg)
+        if ((controller->regionSubTypeMap[i].subChar == RegionSubTypeChar5x7Dot) ||
+            (controller->regionSubTypeMap[i].subChar == RegionSubTypeChar14Seg))
         {
             chr = ' ' + (rndNum % (128 - ' '));
         }

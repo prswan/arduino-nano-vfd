@@ -60,7 +60,7 @@ typedef enum
 //
 typedef enum 
 {
-    RegionSubTypeChar5x7,
+    RegionSubTypeChar5x7Dot,
     RegionSubTypeChar14Seg,
     RegionSubTypeChar7Seg,
     RegionSubTypeChar123,
@@ -144,6 +144,17 @@ typedef struct _SegmentGroup7Seg
     } pinS;
 
 } SegmentGroup7Seg;
+
+//
+// Segment group for 5x7 dot matrix characters.
+// pinS is ordered column-by-column, top-to-bottom within each column.
+//
+typedef struct _SegmentGroup5x7Dot
+{
+    UINT8 pinG;
+    UINT8 pinS[35];
+
+} SegmentGroup5x7Dot;
 
 //
 // Segment group for 14 segment display characters, including:
@@ -341,6 +352,21 @@ public:
     virtual bool getSegmentGroup7Seg(
         UINT8 regionId,
         const SegmentGroup7Seg **p_segGroup,
+        UINT8 *numEntries)
+    {
+        return false;
+    };
+
+    //
+    // Returns the groups of 5x7 dot matrix characters for the Region::id.
+    //
+    // numEntries is also equivalent to the number of characters in the region, Region::len.
+    //
+    // returns false if the region doesn't exist.
+    //
+    virtual bool getSegmentGroup5x7Dot(
+        UINT8 regionId,
+        const SegmentGroup5x7Dot **p_segGroup,
         UINT8 *numEntries)
     {
         return false;

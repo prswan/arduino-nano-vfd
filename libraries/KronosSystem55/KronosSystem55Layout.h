@@ -46,7 +46,10 @@ public:
         const Region **p_region,
         UINT8 *numEntries);
 
-// TODO: Add support for 5x7 matrix.
+    bool getSegmentGroup5x7Dot(
+        UINT8 regionId,
+        const SegmentGroup5x7Dot **p_segGroup,
+        UINT8 *numEntries);
 };
 
 #endif

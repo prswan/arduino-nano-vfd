@@ -77,8 +77,41 @@ static const Properties s_properties PROGMEM =
 static const Region s_region[] PROGMEM =
 {
     // type,          subType,                 id, len
-    {RegionTypeChar,  RegionSubTypeChar5x7,     0,  16}
+    {RegionTypeChar,  RegionSubTypeChar5x7Dot,  0,  16}
 };
+
+//
+// The segment pins are mapped column-by-column, top-to-bottom, matching the
+// Kronos pinout's S1..S35 layout. pinG uses the logical G1..G16 index.
+//
+#define KRONOS_5X7_PIN_MAP \
+    { 1,  2,  3,  4,  5,  6,  7, \
+      8,  9, 10, 11, 12, 13, 14, \
+     15, 16, 17, 18, 19, 20, 21, \
+     22, 23, 24, 25, 26, 27, 28, \
+     29, 30, 31, 32, 33, 34, 35 }
+
+static const SegmentGroup5x7Dot s_segmentGroup5x7Dot[] PROGMEM =
+{
+    { 1, KRONOS_5X7_PIN_MAP },
+    { 2, KRONOS_5X7_PIN_MAP },
+    { 3, KRONOS_5X7_PIN_MAP },
+    { 4, KRONOS_5X7_PIN_MAP },
+    { 5, KRONOS_5X7_PIN_MAP },
+    { 6, KRONOS_5X7_PIN_MAP },
+    { 7, KRONOS_5X7_PIN_MAP },
+    { 8, KRONOS_5X7_PIN_MAP },
+    { 9, KRONOS_5X7_PIN_MAP },
+    {10, KRONOS_5X7_PIN_MAP },
+    {11, KRONOS_5X7_PIN_MAP },
+    {12, KRONOS_5X7_PIN_MAP },
+    {13, KRONOS_5X7_PIN_MAP },
+    {14, KRONOS_5X7_PIN_MAP },
+    {15, KRONOS_5X7_PIN_MAP },
+    {16, KRONOS_5X7_PIN_MAP }
+};
+
+#undef KRONOS_5X7_PIN_MAP
 
 void KronosSystem55Layout::getProperties(
     const Properties **p_properties)
@@ -92,4 +125,20 @@ void KronosSystem55Layout::getRegionMap(
 {
     *p_region = s_region;
     *numEntries = ARRAYSIZE(s_region);
+};
+
+bool KronosSystem55Layout::getSegmentGroup5x7Dot(
+    UINT8 regionId,
+    const SegmentGroup5x7Dot **p_segGroup,
+    UINT8 *numEntries)
+{
+    if (regionId != 0)
+    {
+        return false;
+    }
+
+    *p_segGroup = s_segmentGroup5x7Dot;
+    *numEntries = ARRAYSIZE(s_segmentGroup5x7Dot);
+
+    return true;
 };

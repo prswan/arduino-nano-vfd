@@ -35,25 +35,27 @@ static const UINT8 s_numSegments = 17;
 //
 typedef struct _DisplayGroup14Seg
 {
-    UINT8 a;
-    UINT8 b;
-    UINT8 c;
-    UINT8 d;
-    UINT8 e;
-    UINT8 f;
-    UINT8 g1;
-    UINT8 g2;
-    UINT8 h;
-    UINT8 i;
-    UINT8 j;
-    UINT8 k;
-    UINT8 l;
-    UINT8 m;
-    UINT8 gc;
-    UINT8 ac;
-    UINT8 dc;
+    UINT8 a  : 1;
+    UINT8 b  : 1;
+    UINT8 c  : 1;
+    UINT8 d  : 1;
+    UINT8 e  : 1;
+    UINT8 f  : 1;
+    UINT8 g1 : 1;
+    UINT8 g2 : 1;
+    UINT8 h  : 1;
+    UINT8 i  : 1;
+    UINT8 j  : 1;
+    UINT8 k  : 1;
+    UINT8 l  : 1;
+    UINT8 m  : 1;
+    UINT8 gc : 1;
+    UINT8 ac : 1;
+    UINT8 dc : 1;
 
 } DisplayGroup14Seg;
+
+static_assert(sizeof(DisplayGroup14Seg) == 3, "14-segment glyphs must use 3 bytes");
 
 //
 // Symbols include various but not all ASCII punctuation
@@ -153,7 +155,7 @@ bool Char14Seg::print(
         return false;
     }
 
-    UINT8 *p_on = NULL;
+    const DisplayGroup14Seg *p_on = NULL;
 
     // Convert all to upper case
     ascii = toupper(ascii);
@@ -161,12 +163,12 @@ bool Char14Seg::print(
     if ((ascii >= '0') && (ascii <= '9'))
     {
         UINT8 index = ascii - '0';
-        p_on = (UINT8 *) &s_displayGroup14SegNumbers[index];
+        p_on = &s_displayGroup14SegNumbers[index];
     }
     else if ((ascii >= 'A') && (ascii <= 'Z'))
     {
         UINT8 index = ascii - 'A';
-        p_on = (UINT8 *) &s_displayGroup14SegLetters[index];
+        p_on = &s_displayGroup14SegLetters[index];
     }
     else
     {
@@ -176,7 +178,7 @@ bool Char14Seg::print(
 
             if (ascii == value)
             {
-                p_on = (UINT8 *) &s_symbolDisplayGroup14Seg[x].group;
+                p_on = &s_symbolDisplayGroup14Seg[x].group;
                 break;
             }
         }
@@ -195,10 +197,32 @@ bool Char14Seg::print(
     UINT8  pinG = pgm_read_byte_near(&p_seg->pinG);
     UINT8* pinS = (UINT8 *) &p_seg->pinS;
 
-    for (int s = 0; s < s_numSegments; s++)
+    for (UINT8 s = 0; s < s_numSegments; s++)
     {
         segState[s].pinS = pgm_read_byte_near(&pinS[s]);
-        segState[s].on = pgm_read_byte_near(&p_on[s]);
+    }
+
+    {
+        DisplayGroup14Seg glyph;
+        memcpy_P(&glyph, p_on, sizeof(glyph));
+
+        segState[0].on  = glyph.a;
+        segState[1].on  = glyph.b;
+        segState[2].on  = glyph.c;
+        segState[3].on  = glyph.d;
+        segState[4].on  = glyph.e;
+        segState[5].on  = glyph.f;
+        segState[6].on  = glyph.g1;
+        segState[7].on  = glyph.g2;
+        segState[8].on  = glyph.h;
+        segState[9].on  = glyph.i;
+        segState[10].on = glyph.j;
+        segState[11].on = glyph.k;
+        segState[12].on = glyph.l;
+        segState[13].on = glyph.m;
+        segState[14].on = glyph.gc;
+        segState[15].on = glyph.ac;
+        segState[16].on = glyph.dc;
     }
 
     return vfd->display->setSegments(pinG, segState, ARRAYSIZE(segState));
