@@ -29,7 +29,7 @@
 // * The driver IC is the 1st IC in the serial chain.
 // * This is a shared PCB with the Panasonic DVD-RV32 on the 2nd driver IC in the chain.
 // * The display is fitted solder side up lay flat against the PCB.
-// * V2 pins 35 (A62), 36 (A63), 37 (A64) are cut trace isolated for Fil1 & resistor.
+// * V2 pins 35 (A62), 36 (A63), 37 (A64) are cut trace isolated for Fil1 & resistor. ** This incorrect? 35(A32),36(A33),37(A34),38(A35) ? **
 //
 // See Universal VFD V1.00 Pinout.txt
 //

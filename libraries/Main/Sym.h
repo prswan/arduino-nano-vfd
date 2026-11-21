@@ -220,6 +220,27 @@ typedef enum {
     SymText_2_4K,
     SymText_6K,
 
+    // Panasonic SA-BT330 Additions
+    SymText_RDS,
+    SymText_SRD,
+
+    // Toshiba HD-A2 Additions
+    SymText_minus_A,
+    SymText_ADV,
+    SymText_SACD,
+    SymText_2ch,
+    SymFastForward,
+    SymText_CHP,
+    SymText_MULTI,
+    SymText_RANDOM,
+    SymFastReverse,
+    SymText_480,
+    SymText_i,
+    SymText_p,
+    SymText_576,
+    SymText_720p,
+    SymText_1080,
+
     //
     SymEnd
 } Sym;

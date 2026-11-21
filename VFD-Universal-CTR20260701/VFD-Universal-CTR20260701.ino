@@ -37,8 +37,11 @@
 #include "TeacPDD1200Pinout.h"
 #include "TeacPDD1200Layout.h"
 
-#include "KronosSystem55Pinout.h"
-#include "KronosSystem55Layout.h"
+#include "PanasonicSABT330Pinout.h"
+#include "PanasonicSABT330Layout.h"
+
+#include "ToshibaHDA2Pinout.h"
+#include "ToshibaHDA2Layout.h"
 
 // Controller Digital pin mappings
 #define CONTROLLER_PIN_NEXT   (2)
@@ -56,31 +59,34 @@ void setup() {
   controller.buttons = new Buttons(CONTROLLER_PIN_NEXT, 
                                    CONTROLLER_PIN_SELECT);
 
-  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar5x7Dot;
-  controller.regionSubTypeMap[0].ichar = new Char5x7Dot();
+  controller.regionSubTypeMap[0].subChar = RegionSubTypeChar14Seg;
+  controller.regionSubTypeMap[0].ichar = new Char14Seg();
 
-  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar14Seg;
-  controller.regionSubTypeMap[1].ichar = new Char14Seg();
+  controller.regionSubTypeMap[1].subChar = RegionSubTypeChar7Seg;
+  controller.regionSubTypeMap[1].ichar = new Char7Seg();
 
-  controller.regionSubTypeMap[2].subChar = RegionSubTypeChar7Seg;
-  controller.regionSubTypeMap[2].ichar = new Char7Seg();
+  IVfdPinout *vfdPinout0 = new PanasonicSABT330Pinout();
+  IVfdLayout *vfdLayout0 = new PanasonicSABT330Layout();
 
-  IVfdPinout *vfdPinout0 = new KronosSystem55Pinout();
-  IVfdLayout *vfdLayout0 = new KronosSystem55Layout();
+  IVfdPinout *vfdPinout1 = new ToshibaHDA2Pinout();
+  IVfdLayout *vfdLayout1 = new ToshibaHDA2Layout();
 
-  IVfdPinout *vfdPinout1 = new TeacPDD1200Pinout();
-  IVfdLayout *vfdLayout1 = new TeacPDD1200Layout();
+  IVfdPinout *vfdPinout2 = new TeacPDD1200Pinout();
+  IVfdLayout *vfdLayout2 = new TeacPDD1200Layout();
 
   ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, 
-                                                         NULL);
+                                                         vfdPinout1);
 
-  ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout1, 
+  ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout2, 
                                                          NULL);
 
   controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
 
-  controller.vfd[1][0].layout  = vfdLayout1;
+  controller.vfd[0][1].layout  = vfdLayout1;
+  controller.vfd[0][1].display = bitMap0->getDisplay(1);
+
+  controller.vfd[1][0].layout  = vfdLayout2;
   controller.vfd[1][0].display = bitMap1->getDisplay(0);
 
   controller.isShiftRegister = true;
@@ -92,13 +98,13 @@ void setup() {
                                                  &(controller.sys.sr.bitMap[0]), 
                                                  ARRAYSIZE(controller.sys.sr.bitMap));
 
-  controller.appEngineVfd = &controller.vfd[1][0]; // 3-digit 7-seg PD-D1200
+  controller.appEngineVfd = &controller.vfd[0][0]; // 8 digit SA-BT330
   controller.appEngineRegionId = 0;
 
-  controller.stdOutVfd = &controller.vfd[1][0]; // 4-digit 7-seg PD-D1200
-  controller.stdOutRegionId = 1;
+  controller.stdOutVfd = &controller.vfd[0][1]; // 13 digit HD-A2
+  controller.stdOutRegionId = 0;
 
-  controller.uutVfd = &controller.vfd[0][0]; // System 55 UUT
+  controller.uutVfd = &controller.vfd[1][0]; // PD-D1200 UUT
   controller.uutRegionId = 0;
 }
 

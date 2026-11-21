@@ -60,6 +60,12 @@
 #include "KronosSystem55Pinout.h"
 #include "KronosSystem55Layout.h"
 
+#include "PanasonicSABT330Pinout.h"
+#include "PanasonicSABT330Layout.h"
+
+#include "ToshibaHDA2Pinout.h"
+#include "ToshibaHDA2Layout.h"
+
 // Integrated Driver IC Front Panel system
 #include "PT631xDriverIC.h"
 #include "Timer.h"
@@ -123,6 +129,12 @@ void setup() {
   IVfdPinout *vfdPinoutU7 = new KronosSystem55Pinout();
   IVfdLayout *vfdLayoutU7 = new KronosSystem55Layout();
 
+  IVfdPinout *vfdPinoutU8 = new PanasonicSABT330Pinout();
+  IVfdLayout *vfdLayoutU8 = new PanasonicSABT330Layout();
+
+  IVfdPinout *vfdPinoutU9 = new ToshibaHDA2Pinout();
+  IVfdLayout *vfdLayoutU9 = new ToshibaHDA2Layout();
+
   IVfdPinout *vfdPinoutF0 = new SamsungBDP1590Pinout();
   IVfdLayout *vfdLayoutF0 = new SamsungBDP1590Layout();
 
@@ -138,6 +150,7 @@ void setup() {
   ShiftRegisterBitMap *bitMap3 = new ShiftRegisterBitMap(vfdPinoutU4, NULL);
   ShiftRegisterBitMap *bitMap4 = new ShiftRegisterBitMap(vfdPinoutU5, vfdPinoutU6);
   ShiftRegisterBitMap *bitMap5 = new ShiftRegisterBitMap(vfdPinoutU7, NULL);
+  ShiftRegisterBitMap *bitMap6 = new ShiftRegisterBitMap(vfdPinoutU8, vfdPinoutU9);
   
   controller.vfd[0][0].layout  = vfdLayoutU0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
@@ -163,6 +176,12 @@ void setup() {
   controller.vfd[5][0].layout  = vfdLayoutU7;
   controller.vfd[5][0].display = bitMap5->getDisplay(0);
 
+  controller.vfd[6][0].layout  = vfdLayoutU8;
+  controller.vfd[6][0].display = bitMap6->getDisplay(0);
+
+  controller.vfd[6][1].layout  = vfdLayoutU9;
+  controller.vfd[6][1].display = bitMap6->getDisplay(1);
+
   controller.isShiftRegister = true;
 
   controller.sys.sr.bitMap[0] = bitMap0; // Port Address 0, PL1
@@ -171,6 +190,7 @@ void setup() {
   controller.sys.sr.bitMap[3] = bitMap3; // Port Address 3, PL4
   controller.sys.sr.bitMap[4] = bitMap4; // Port Address 4, PL5
   controller.sys.sr.bitMap[5] = bitMap5; // Port Address 5, PL6
+  controller.sys.sr.bitMap[6] = bitMap6; // Port Address 6, PL7
 
   controller.sys.sr.scan = new ShiftRegisterScan(controller.muxSpi, 
                                                  &(controller.sys.sr.bitMap[0]), 
