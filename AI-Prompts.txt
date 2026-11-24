@@ -3,13 +3,29 @@ This is a record of AI prompts that were used to implement portions of the softw
 --------------------
 
 IVfdPinout was updated to replace getScanConfig with getProperties and implemented in the TEAC and Kronos classes. Can you update the remaining IVfdPinout implementations to replace getScanConfig with getProperties.
+* Copilot Fusion (gpt-6-luna) 2 credits
 
 Can you add the Kronos implementation to the check build VFD-Build-All.ino as vfdPinoutU7/vfdLayoutU7 following the existing pattern.
+* Copilot Fusion (gpt-6-luna) 1.2 credits
 
 The implementation Char14Seg uses glyphs that are encoded as 1 byte per segment. This wastes a lot of PROGMEM space on the Arduino. A bitfield encoding would be more efficient if it can be implemented in a way that maintains the clarity of identifying segments. Can you suggest a bitfield version of DisplayGroup14Seg and an implementation of Char14Seg::print to print them?
+* Copilot Fusion (gpt-6-luna) 1.5 credits
 
 That's a lot of encoding, would using a bitfield type and unrolling the "for (UINT8 s = 0; s < s_numSegments; s++)" loop in Char14Seg::print to be 17 direct assigns be clearer and preserve "s_displayGroup14SegLetters" et al nearly as is?
+* Copilot Fusion (gpt-6-luna) 0.3 credits
+
+Make this change in both Char14Seg and Char7Seg.
+* Copilot Fusion (gpt-6-luna) 1.9 credits
 
 The file HD44780UA02Font.h contains the definition for 5x7 dot matrix characters. Create a new file set & class "Char5x7Dot" that uses it to set the segments (dots) for a 5x7 region. The Kronos System 55 is an example of a 5x7 implementation. A new interface IVfdLayout::getSegmentGroup5x7Dot following the existing 7Seg and 14Seg pattern will need to be created and plumbed through to KronosSystem55Layout based on the information in s_pinMapSegment in KronosSystem55Pinout. controller.regionSubTypeMap in the VFD-Universal-CTR20260701.ino will also need the new encoding adding in index [0], moving the others up.
+* Copilot Fusion (gpt-6-luna) 3.7 credits
 
 I have tested this with the real VFD on the bench, and it works. Code review did not detect any significant issues.
+* Copilot Fusion (gpt-6-luna) 0.6 credits
+
+An empty layout for the JvcXVM565 is staged with the observed layout commented at the end of JvcXVM565.cpp. Complete the layout implementation using this information, filling in the region table, symbol table and 7 segment character encodings. The symbol table is in row order as listed in the comment, with any new symbols on this display added to Sym.h. There are two instances of a colon. The display has three 7 segment character regions, region 0 of 1 character, region 1 of 4 characters and region 3 of 5. characters.
+* Copilot Fusion (gpt-6-luna) 5.7 credits
+
+I made a couple of mistakes. CHAP is grid 1 segment 5, TRACK is grid 1 segment 6 and region 3 should be region 2 so there are 7-seg regions 0,1,2. Please correct these.
+* Copilot Fusion (gpt-6-luna) 1 credit
+

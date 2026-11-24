@@ -34,14 +34,17 @@
 #include "Char7Seg.h"
 #include "Char14Seg.h"
 
-#include "TeacPDD1200Pinout.h"
-#include "TeacPDD1200Layout.h"
-
 #include "PanasonicSABT330Pinout.h"
 #include "PanasonicSABT330Layout.h"
 
 #include "ToshibaHDA2Pinout.h"
 #include "ToshibaHDA2Layout.h"
+
+#include "TeacPDD1200Pinout.h"
+#include "TeacPDD1200Layout.h"
+
+#include "JvcXVM565Pinout.h"
+#include "JvcXVM565Layout.h"
 
 // Controller Digital pin mappings
 #define CONTROLLER_PIN_NEXT   (2)
@@ -74,11 +77,14 @@ void setup() {
   IVfdPinout *vfdPinout2 = new TeacPDD1200Pinout();
   IVfdLayout *vfdLayout2 = new TeacPDD1200Layout();
 
+  IVfdPinout *vfdPinout3 = new JvcXVM565Pinout();
+  IVfdLayout *vfdLayout3 = new JvcXVM565Layout();
+
   ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinout0, 
                                                          vfdPinout1);
 
   ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinout2, 
-                                                         NULL);
+                                                         vfdPinout3);
 
   controller.vfd[0][0].layout  = vfdLayout0;
   controller.vfd[0][0].display = bitMap0->getDisplay(0);
@@ -88,6 +94,9 @@ void setup() {
 
   controller.vfd[1][0].layout  = vfdLayout2;
   controller.vfd[1][0].display = bitMap1->getDisplay(0);
+
+  controller.vfd[1][1].layout  = vfdLayout3;
+  controller.vfd[1][1].display = bitMap1->getDisplay(1);
 
   controller.isShiftRegister = true;
 
@@ -104,8 +113,8 @@ void setup() {
   controller.stdOutVfd = &controller.vfd[0][1]; // 13 digit HD-A2
   controller.stdOutRegionId = 0;
 
-  controller.uutVfd = &controller.vfd[1][0]; // PD-D1200 UUT
-  controller.uutRegionId = 0;
+  controller.uutVfd = &controller.vfd[1][1]; // XV-M565  UUT
+  controller.uutRegionId = 1;
 }
 
 void loop() {

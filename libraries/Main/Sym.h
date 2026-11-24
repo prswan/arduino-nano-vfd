@@ -241,6 +241,17 @@ typedef enum {
     SymText_720p,
     SymText_1080,
 
+    // JVC XV-M565 Additions
+    SymText_3D_PHONIC,
+    SymText_PROGRAM,
+    SymText_KEY,
+    SymText_KARAOKE,
+    SymText_RESUME,
+    SymText_THEATER,
+    SymText_V_MASK,
+    SymText_V_REPLACE,
+    SymText_VCD,
+
     //
     SymEnd
 } Sym;

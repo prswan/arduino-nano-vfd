@@ -66,6 +66,9 @@
 #include "ToshibaHDA2Pinout.h"
 #include "ToshibaHDA2Layout.h"
 
+#include "JvcXVM565Pinout.h"
+#include "JvcXVM565Layout.h"
+
 // Integrated Driver IC Front Panel system
 #include "PT631xDriverIC.h"
 #include "Timer.h"
@@ -135,6 +138,9 @@ void setup() {
   IVfdPinout *vfdPinoutU9 = new ToshibaHDA2Pinout();
   IVfdLayout *vfdLayoutU9 = new ToshibaHDA2Layout();
 
+  IVfdPinout *vfdPinoutUA = new JvcXVM565Pinout();
+  IVfdLayout *vfdLayoutUA = new JvcXVM565Layout();
+
   IVfdPinout *vfdPinoutF0 = new SamsungBDP1590Pinout();
   IVfdLayout *vfdLayoutF0 = new SamsungBDP1590Layout();
 
@@ -146,7 +152,7 @@ void setup() {
 
   ShiftRegisterBitMap *bitMap0 = new ShiftRegisterBitMap(vfdPinoutU0, vfdPinoutU1);
   ShiftRegisterBitMap *bitMap1 = new ShiftRegisterBitMap(vfdPinoutU2, NULL);
-  ShiftRegisterBitMap *bitMap2 = new ShiftRegisterBitMap(vfdPinoutU3, NULL);
+  ShiftRegisterBitMap *bitMap2 = new ShiftRegisterBitMap(vfdPinoutU3, vfdPinoutUA);
   ShiftRegisterBitMap *bitMap3 = new ShiftRegisterBitMap(vfdPinoutU4, NULL);
   ShiftRegisterBitMap *bitMap4 = new ShiftRegisterBitMap(vfdPinoutU5, vfdPinoutU6);
   ShiftRegisterBitMap *bitMap5 = new ShiftRegisterBitMap(vfdPinoutU7, NULL);
@@ -163,6 +169,9 @@ void setup() {
 
   controller.vfd[2][0].layout  = vfdLayoutU3;
   controller.vfd[2][0].display = bitMap2->getDisplay(0);
+
+  controller.vfd[2][1].layout  = vfdLayoutUA;
+  controller.vfd[2][1].display = bitMap2->getDisplay(1);
 
   controller.vfd[3][0].layout  = vfdLayoutU4;
   controller.vfd[3][0].display = bitMap3->getDisplay(0);
