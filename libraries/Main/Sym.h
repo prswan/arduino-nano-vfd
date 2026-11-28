@@ -252,6 +252,23 @@ typedef enum {
     SymText_V_REPLACE,
     SymText_VCD,
 
+    // Kenwood RXD-F4 Additions
+    SymText_PRESENCE,
+    SymText_SURROUND,
+    SymText_3_STEREO,
+    SymText_NB,
+    SymText_OTE,
+    SymText_EQ_ON,
+    SymText_DISC_ALL,
+    SymText_VOL,
+    SymText_LLC,
+    SymText_ECHO,
+    SymText_A,
+    SymText_SLEEP,
+    SymText_SINGLE,
+    SymBox,
+    SymCircle,
+
     //
     SymEnd
 } Sym;

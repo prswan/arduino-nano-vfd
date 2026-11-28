@@ -29,3 +29,15 @@ An empty layout for the JvcXVM565 is staged with the observed layout commented a
 I made a couple of mistakes. CHAP is grid 1 segment 5, TRACK is grid 1 segment 6 and region 3 should be region 2 so there are 7-seg regions 0,1,2. Please correct these.
 * Copilot Fusion (gpt-6-luna) 1 credit
 
+The directory KenwoodRXDF4 Data folder contains the service manual information for the Kenwood VFD. The VFD will be mounted to the PCB with VFD Pin 57 starting at Pin 1 on the PCB, where VFD pin 56 is PCB Pin 2 and so on. The VFD is a 2mm pitch VFD. The 2mm pin mapping to driver pin can be found in Universal VFD V1.20 Pinout.txt file. Create the KenwoodRXDF4Pinout class & files, following the existing comment & coding patterns in other pinout implementations.
+* Copilot Fusion (gpt-6-luna) 4.8 credits
+
+The directory KenwoodRXDF4 Data folder contains the service manual information for the Kenwood VFD. The VFD has the following elements: Bar region 0 of 7x 11 segment vertical bars, bar region 1 of 1x 9 segment V/H bar, number list region 0 of 3 elements (1-3), number list region 1 of 20 elements (1-20), character region 0 of 6x 14-segment characters, character region 1 of 4x 7-segment characters (treating the leading "1" as symbol elements). Add the same TODO notes for number list region 0 missing highlight support (the circle around the number and the down arrow above would both be highlights, added as symbol instances 0,1,2). Symbols are added to the symbol table in approximate rows left to right and top to bottom order. Create the KenwoodRXDF4Layout class & files, following the existing comment & coding patterns in other layout implementations.
+* Copilot Fusion (gpt-6-luna) 7.8 credits
+
+This software uses the 14-segment labels defined on the Wiki page https://en.wikipedia.org/wiki/Segment_display#/media/File:14-segment.svg that is different from the RXD4 service manual segment labels. Correct the RXDF4 s_segmentGroup14Seg0 encoding to match the segments.
+* Copilot Fusion (gpt-6-luna) 2.4 credits
+
+Add the KenwoodRXDF4 to the VFD-Build-All check build.
+* Copilot Fusion (gpt-6-luna) 2.3 credits
+
